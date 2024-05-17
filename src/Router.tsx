@@ -1,11 +1,18 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import NotFound from '@/pages/404';
 import App from '@/App.tsx';
+import Home from '@/pages/home';
 
 const routerConfig = [
   {
     path: '/',
-    element: <App />
+    element: <App />,
+    children: [
+      {
+        path: '',
+        element: <Home />
+      }
+    ]
   },
   {
     path: '*',

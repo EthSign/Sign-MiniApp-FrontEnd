@@ -4,6 +4,9 @@ import './index.css';
 import { Router } from '@/Router.tsx';
 import { ThemeProvider, Toaster } from '@ethsign/ui';
 import { TonConnectUIProvider } from '@tonconnect/ui-react';
+import WebApp from '@twa-dev/sdk';
+
+WebApp.ready();
 
 const mainifestUrl = 'https://app.ethsign.xyz/manifest.json';
 
