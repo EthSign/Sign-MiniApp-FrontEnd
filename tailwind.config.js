@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
-import  animatePlugin from 'tailwindcss-animate';
-import  formsPlugin from '@tailwindcss/forms';
+import animatePlugin from 'tailwindcss-animate';
+import formsPlugin from '@tailwindcss/forms';
 export default {
   darkMode: ['class'],
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}', 'node_modules/@ethsign/ui/dist/**/*.{js,ts,tsx}'],
@@ -9,8 +9,8 @@ export default {
       center: true,
       padding: '2rem',
       screens: {
-        '2xl': '1400px',
-      },
+        '2xl': '1400px'
+      }
     },
     extend: {
       fontFamily: {
@@ -20,19 +20,18 @@ export default {
         semiBold: ["'IBM Plex Sans SemiBold'", 'sans-serif'],
         semiBoldItalic: ["'IBM Plex Sans SemiBold Italic'", 'sans-serif'],
         bold: ["'IBM Plex Sans Bold'", 'sans-serif'],
-        boldItalic: ["'IBM Plex Sans Bold Italic'", 'sans-serif'],
+        boldItalic: ["'IBM Plex Sans Bold Italic'", 'sans-serif']
       },
       backgroundImage: {},
       backgroundSize: {
-        '100%': '100% 100%',
+        '100%': '100% 100%'
       },
       boxShadow: {
         menu: '0px 4px 4px rgba(0, 0, 0, 0.25)',
         right: 'inset -1px 0px 0px #EAECF0',
         bottom: 'inset 0px -1px 0px #EAECF0',
         xs: '0px 1px 2px rgba(16, 24, 40, 0.05)',
-        focus:
-            '0px 0px 0px 4px #FEFBF9, 0px 1px 2px 0px rgba(16, 24, 40, 0.05)',
+        focus: '0px 0px 0px 4px #FEFBF9, 0px 1px 2px 0px rgba(16, 24, 40, 0.05)'
       },
       fontSize: {
         h1: ['2.375rem', '3.625rem'], //    [ 38px, 58px ]
@@ -51,7 +50,7 @@ export default {
         md: ['17px', '24px'],
         base: ['17px', '24px'],
         sm: ['15px', '20px'],
-        xs: ['13px', '18px'],
+        xs: ['13px', '18px']
       },
       colors: {
         border: 'hsl(var(--border))',
@@ -69,23 +68,23 @@ export default {
         // },
         destructive: {
           DEFAULT: 'hsl(var(--destructive))',
-          foreground: 'hsl(var(--destructive-foreground))',
+          foreground: 'hsl(var(--destructive-foreground))'
         },
         muted: {
           DEFAULT: 'hsl(var(--muted))',
-          foreground: 'hsl(var(--muted-foreground))',
+          foreground: 'hsl(var(--muted-foreground))'
         },
         accent: {
           DEFAULT: 'hsl(var(--accent))',
-          foreground: 'hsl(var(--accent-foreground))',
+          foreground: 'hsl(var(--accent-foreground))'
         },
         popover: {
           DEFAULT: 'hsl(var(--popover))',
-          foreground: 'hsl(var(--popover-foreground))',
+          foreground: 'hsl(var(--popover-foreground))'
         },
         card: {
           DEFAULT: 'hsl(var(--card))',
-          foreground: 'hsl(var(--card-foreground))',
+          foreground: 'hsl(var(--card-foreground))'
         },
         neutral: '#1B1B1B',
         // dark mode
@@ -101,7 +100,7 @@ export default {
           600: '#475467',
           700: '#344054',
           800: '#1D2939',
-          900: '#101828',
+          900: '#101828'
         },
         primary: {
           25: '#FDFAF9',
@@ -116,7 +115,7 @@ export default {
           800: '#CD7134',
           900: '#CF5C10',
           DEFAULT: 'hsl(var(--primary))',
-          foreground: 'hsl(var(--primary-foreground))',
+          foreground: 'hsl(var(--primary-foreground))'
         },
         secondary: {
           25: '#F5F8FF',
@@ -131,7 +130,7 @@ export default {
           800: '#0040C1',
           900: '#00359E',
           DEFAULT: 'hsl(var(--secondary))',
-          foreground: 'hsl(var(--secondary-foreground))',
+          foreground: 'hsl(var(--secondary-foreground))'
         },
         purple: {
           25: '#FCFAFF',
@@ -144,7 +143,7 @@ export default {
           600: '#7F56D9',
           700: '#6941C6',
           800: '#6A1B9A',
-          900: '#4A148C',
+          900: '#4A148C'
         },
         red: {
           25: '#FFFBFA',
@@ -157,7 +156,7 @@ export default {
           600: '#D92D20',
           700: '#B42318',
           800: '#912018',
-          900: '#7A271A',
+          900: '#7A271A'
         },
         yellow: {
           25: '#FFFCF5',
@@ -170,7 +169,7 @@ export default {
           600: '#DC6803',
           700: '#B54708',
           800: '#93370D',
-          900: '#7A2E0E',
+          900: '#7A2E0E'
         },
         green: {
           25: '#FAFDF7',
@@ -183,7 +182,7 @@ export default {
           600: '#4F7A21',
           700: '#3F621A',
           800: '#335015',
-          900: '#2B4212',
+          900: '#2B4212'
         },
         slime: {
           25: '#F6FEF9',
@@ -196,7 +195,7 @@ export default {
           600: '#039855',
           700: '#027A48',
           800: '#05603A',
-          900: '#054F31',
+          900: '#054F31'
         },
         tangerine: {
           25: '#FEFAF5',
@@ -209,7 +208,7 @@ export default {
           600: '#E04F16',
           700: '#B93815',
           800: '#932F19',
-          900: '#772917',
+          900: '#772917'
         },
         blue: {
           25: '#F5FAFF',
@@ -222,7 +221,7 @@ export default {
           600: '#1570EF',
           700: '#175CD3',
           800: '#1849A9',
-          900: '#194185',
+          900: '#194185'
         },
         teal: {
           25: '#F6FEFC',
@@ -235,7 +234,7 @@ export default {
           600: '#0E9384',
           700: '#107569',
           800: '#125D56',
-          900: '#134E48',
+          900: '#134E48'
         },
         cyan: {
           25: '#F5FEFF',
@@ -248,7 +247,7 @@ export default {
           600: '#088AB2',
           700: '#0E7090',
           800: '#155B75',
-          900: '#164C63',
+          900: '#164C63'
         },
         darkMatter: {
           25: '#F5F2F8',
@@ -261,42 +260,41 @@ export default {
           600: '#764C97',
           700: '#633389',
           800: '#501A7A',
-          900: '#3C006B',
+          900: '#3C006B'
         },
         shareBorder: '#E0E0E0',
         shareBackground: '#F9F9F9',
         coolPurple: {
           100: '#957FEB',
           200: '#603FE0',
-          300: '#4E2ADD',
+          300: '#4E2ADD'
         },
         coolBlue: {
           100: '#B9C4ED',
           200: '#7289DA',
-          300: '#5978E4',
-        },
+          300: '#5978E4'
+        }
       },
       borderRadius: {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
-        sm: 'calc(var(--radius) - 4px)',
+        sm: 'calc(var(--radius) - 4px)'
       },
       keyframes: {
         'accordion-down': {
           from: { height: 0 },
-          to: { height: 'var(--radix-accordion-content-height)' },
+          to: { height: 'var(--radix-accordion-content-height)' }
         },
         'accordion-up': {
           from: { height: 'var(--radix-accordion-content-height)' },
-          to: { height: 0 },
-        },
+          to: { height: 0 }
+        }
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
-        'accordion-up': 'accordion-up 0.2s ease-out',
-      },
-    },
+        'accordion-up': 'accordion-up 0.2s ease-out'
+      }
+    }
   },
-  plugins: [animatePlugin, formsPlugin],
-}
-
+  plugins: [animatePlugin, formsPlugin]
+};
