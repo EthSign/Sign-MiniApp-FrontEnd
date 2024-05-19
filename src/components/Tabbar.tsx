@@ -16,8 +16,6 @@ export const Tabbar: React.FC<TabbarProps> = (props) => {
 
   const location = useLocation();
 
-  console.log(location.pathname);
-
   return (
     <div className="flex shrink-0 items-center justify-center gap-10 border-t border-[#1D2939]">
       {tabs.map((tab) => (
