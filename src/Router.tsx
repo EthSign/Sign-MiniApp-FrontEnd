@@ -1,18 +1,21 @@
 import App from '@/App.tsx';
 import NotFound from '@/pages/404';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, redirect, RouteObject, RouterProvider } from 'react-router-dom';
 import { LuckyWheelPage } from './pages/LuckyWheel';
 import { RankPage } from './pages/Rank';
 
-const routerConfig = [
+const routerConfig: RouteObject[] = [
   {
     path: '/',
     element: <App />,
     children: [
-      // {
-      //   path: '',
-      //   element: <Home />
-      // }
+      {
+        path: '',
+        // element: <Home />
+        loader: () => {
+          return redirect('/lucky-wheel');
+        }
+      },
       {
         path: '/lucky-wheel',
         element: <LuckyWheelPage />
