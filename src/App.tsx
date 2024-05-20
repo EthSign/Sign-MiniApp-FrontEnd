@@ -1,11 +1,11 @@
-import eruda from 'eruda';
 import { useEffect } from 'react';
-import { Outlet, useSearchParams } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import { Header } from './components/Header';
 import { TabItem, Tabbar } from './components/Tabbar';
 import { ScrollArea } from '@ethsign/ui';
-import { getTMAInitData } from '@/utils/common.ts';
+import { getTMAInitData, isTelegramApp } from '@/utils/common.ts';
 import { auth } from '@/services';
+import { useDebug } from '@/hooks/useDebug.tsx';
 
 const TABS: TabItem[] = [
   {
@@ -18,20 +18,22 @@ const TABS: TabItem[] = [
   }
 ];
 
+const TGAPP = () => {
+  const isTg = isTelegramApp();
+  const { debug } = useDebug();
+  console.log(debug, 'debug');
+
+  if (!isTg && !debug) {
+    return (
+      <div className="flex h-screen w-screen justify-center items-center text-white">
+        <h1>Please open in Telegram</h1>
+      </div>
+    );
+  }
+  return <App />;
+};
+
 function App() {
-  const [searchParams] = useSearchParams();
-  const isDebug = searchParams.get('debug');
-  const debug = localStorage.getItem('debug');
-
-  useEffect(() => {
-    if (isDebug) {
-      if (!debug) {
-        localStorage.setItem('debug', isDebug);
-      }
-      eruda.init();
-    }
-  }, [isDebug, debug]);
-
   const handleAuth = async () => {
     const authData = getTMAInitData();
     console.log(authData, 'authData');
@@ -60,4 +62,4 @@ function App() {
   );
 }
 
-export default App;
+export default TGAPP;

@@ -36,3 +36,7 @@ export const getTMAInitData = (): {
   console.log(initData);
   return initData;
 };
+
+export const isTelegramApp = (): boolean => {
+  return !!window.TelegramWebviewProxy;
+};
