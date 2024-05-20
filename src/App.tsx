@@ -47,8 +47,6 @@ function App() {
     handleAuth();
   }, []);
 
-  console.log(window.location.href, 'ww');
-
   return (
     <div className="flex h-screen w-screen flex-col overflow-hidden bg-[#05051E] text-white">
       <Header />

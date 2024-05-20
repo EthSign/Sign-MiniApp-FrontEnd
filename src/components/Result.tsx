@@ -1,6 +1,8 @@
 import { CountDown } from '@/components/Countdown.tsx';
 import { Button, Modal, Progress, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@ethsign/ui';
 import { Send01 } from '@ethsign/icons';
+import { initUtils } from '@tma.js/sdk';
+import { ENVS } from '@/constants/config.ts';
 
 const RulesModal = () => {
   return (
@@ -47,6 +49,15 @@ const RulesModal = () => {
 };
 
 export const Result = () => {
+  const handleInvite = () => {
+    console.log('Invite');
+    const utils = initUtils();
+    const desc =
+      "💰Catizen: Unleash, Play, Earn - Where Every Game Leads to an Airdrop Adventure!\n🎁Let's play-to-earn airdrop right now!";
+    utils.openTelegramLink(
+      `https://t.me/share/url?url=${ENVS.TG_APP_LINK}?startapp=rp_1365932&text=${encodeURIComponent(desc)}`
+    );
+  };
   return (
     <div className={'w-full border border-grey-700 bg-popover-hover p-7 rounded-[6px]'}>
       <h1 className={'text-center font-bold text-xl text-white'}>Boost your score</h1>
@@ -55,7 +66,7 @@ export const Result = () => {
         <span className={'text-tangerine-500 font-bold'}>10x points</span>. <RulesModal />
       </div>
       <CountDown targetDate={new Date('2024-05-20 18:00:00')} />
-      <Button className={'gap-4 w-full mt-5'}>
+      <Button className={'gap-4 w-full mt-5'} onClick={handleInvite}>
         <Send01 color={'#FFF'} /> Ask Friends
       </Button>
       <div className={'text-gray-100 text-sm font-normal mt-7'}>

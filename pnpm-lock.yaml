@@ -23,6 +23,9 @@ importers:
       '@tanstack/react-query':
         specifier: ^5.18.1
         version: 5.37.1(react@18.3.1)
+      '@tma.js/sdk':
+        specifier: ^2.2.0
+        version: 2.2.0
       '@tonconnect/ui-react':
         specifier: ^2.0.2
         version: 2.0.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -2472,6 +2475,9 @@ packages:
     resolution: {integrity: sha512-EhtBNA8GL3XFeSx6VYUjXQ96n44xe3JGKZCzBINrCYlxbZP6UwBafv7ti4eSRWc2Fy+fybQre0w17gR6lMzULA==}
     peerDependencies:
       react: ^18.0.0
+
+  '@tma.js/sdk@2.2.0':
+    resolution: {integrity: sha512-Dn2Rg248NCCidI8qia77PJheDx2KDvHn6Fg3AHmOdv7DEMMfNf8D4o5DFHtZzGoMvvNTrrYrqK/KQxbs0wpYTg==}
 
   '@tonconnect/isomorphic-eventsource@0.0.2':
     resolution: {integrity: sha512-B4UoIjPi0QkvIzZH5fV3BQLWrqSYABdrzZQSI9sJA9aA+iC0ohOzFwVVGXanlxeDAy1bcvPbb29f6sVUk0UnnQ==}
@@ -8788,6 +8794,8 @@ snapshots:
     dependencies:
       '@tanstack/query-core': 5.36.1
       react: 18.3.1
+
+  '@tma.js/sdk@2.2.0': {}
 
   '@tonconnect/isomorphic-eventsource@0.0.2':
     dependencies:

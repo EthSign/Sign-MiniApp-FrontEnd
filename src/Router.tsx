@@ -3,6 +3,7 @@ import NotFound from '@/pages/404';
 import { createBrowserRouter, redirect, RouteObject, RouterProvider } from 'react-router-dom';
 import { LuckyWheelPage } from './pages/LuckyWheel';
 import { RankPage } from './pages/Rank';
+import AttestPage from '@/pages/attest';
 
 const routerConfig: RouteObject[] = [
   {
@@ -23,6 +24,10 @@ const routerConfig: RouteObject[] = [
       {
         path: '/rank',
         element: <RankPage />
+      },
+      {
+        path: '/attest',
+        element: <AttestPage />
       }
     ]
   },
