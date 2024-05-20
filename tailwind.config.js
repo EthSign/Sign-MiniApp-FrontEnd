@@ -31,7 +31,8 @@ export default {
         right: 'inset -1px 0px 0px #EAECF0',
         bottom: 'inset 0px -1px 0px #EAECF0',
         xs: '0px 1px 2px rgba(16, 24, 40, 0.05)',
-        focus: '0px 0px 0px 4px #FEFBF9, 0px 1px 2px 0px rgba(16, 24, 40, 0.05)'
+        focus: '0px 0px 0px 4px #FEFBF9, 0px 1px 2px 0px rgba(16, 24, 40, 0.05)',
+        focusPrimary: '0px 1px 2px 0px rgba(254, 250, 245, 0.05), 0px 0px 0px 4px rgba(254, 250, 245, 0.15)'
       },
       fontSize: {
         h1: ['2.375rem', '3.625rem'], //    [ 38px, 58px ]
@@ -80,7 +81,8 @@ export default {
         },
         popover: {
           DEFAULT: 'hsl(var(--popover))',
-          foreground: 'hsl(var(--popover-foreground))'
+          foreground: 'hsl(var(--popover-foreground))',
+          hover: 'hsl(var(--popover-hover))'
         },
         card: {
           DEFAULT: 'hsl(var(--card))',
@@ -101,6 +103,24 @@ export default {
           700: '#344054',
           800: '#1D2939',
           900: '#101828'
+        },
+        grey: {
+          10: 'rgba(234, 236, 240, 0.1)',
+          20: 'rgba(234, 236, 240, 0.20)',
+          60: 'rgba(234, 236, 240, 0.60)',
+          100: '#EAECF0',
+          200: '#D0D5DD',
+          300: '#98A2B3',
+          400: '#667085',
+          500: '#525A6A',
+          600: '#3D4350',
+          650: '#272B40',
+          700: '#262B3E',
+          730: '#1D2939',
+          750: '#181E33',
+          800: '#1A2038',
+          850: '#131B2F',
+          900: '#05051E'
         },
         primary: {
           25: '#FDFAF9',

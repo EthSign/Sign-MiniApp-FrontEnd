@@ -3,6 +3,9 @@ import { useEffect } from 'react';
 import { Outlet, useSearchParams } from 'react-router-dom';
 import { Header } from './components/Header';
 import { TabItem, Tabbar } from './components/Tabbar';
+import { ScrollArea } from '@ethsign/ui';
+import { getTMAInitData } from '@/utils/common.ts';
+import { auth } from '@/services';
 
 const TABS: TabItem[] = [
   {
@@ -29,13 +32,28 @@ function App() {
     }
   }, [isDebug, debug]);
 
+  const handleAuth = async () => {
+    const authData = getTMAInitData();
+    console.log(authData, 'authData');
+    if (authData) {
+      const res = await auth({ webappData: authData, referenceCode: '' });
+      console.log(res, 'res');
+    }
+  };
+
+  useEffect(() => {
+    handleAuth();
+  }, []);
+
+  console.log(window.location.href, 'ww');
+
   return (
     <div className="flex h-screen w-screen flex-col overflow-hidden bg-[#05051E] text-white">
       <Header />
 
-      <div className="flex-1 p-6 ">
+      <ScrollArea className="flex-1 px-6 h-[calc(100vh-72px-95px)]">
         <Outlet />
-      </div>
+      </ScrollArea>
 
       <Tabbar tabs={TABS} />
     </div>
