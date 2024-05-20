@@ -1,11 +1,10 @@
+import { auth } from '@/services';
+import { getTMAInitData } from '@/utils/common.ts';
 import eruda from 'eruda';
 import { useEffect } from 'react';
 import { Outlet, useSearchParams } from 'react-router-dom';
 import { Header } from './components/Header';
 import { TabItem, Tabbar } from './components/Tabbar';
-import { ScrollArea } from '@ethsign/ui';
-import { getTMAInitData } from '@/utils/common.ts';
-import { auth } from '@/services';
 
 const TABS: TabItem[] = [
   {
@@ -51,9 +50,9 @@ function App() {
     <div className="flex h-screen w-screen flex-col overflow-hidden bg-[#05051E] text-white">
       <Header />
 
-      <ScrollArea className="flex-1 px-6 h-[calc(100vh-72px-95px)]">
+      <div className="flex-1 overflow-auto p-6">
         <Outlet />
-      </ScrollArea>
+      </div>
 
       <Tabbar tabs={TABS} />
     </div>
