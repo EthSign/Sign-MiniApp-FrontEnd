@@ -1,7 +1,6 @@
-import { CountDown } from '@/components/Countdown';
 import { LuckyWheel } from '@/components/LuckyWheel';
-import React from 'react';
 import { Result } from '@/components/Result.tsx';
+import React from 'react';
 
 export const LuckyWheelPage: React.FC = () => {
   return (
