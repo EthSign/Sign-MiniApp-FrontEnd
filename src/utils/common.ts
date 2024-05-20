@@ -1,6 +1,6 @@
 import queryString from 'query-string';
 
-export const stringifyQueryString = (obj: Record<string, any>): string => {
+export const stringifyQueryString = (obj: Recordstring, any): string => {
   return queryString.stringify(obj, { skipNull: true, skipEmptyString: true });
 };
 

@@ -1,10 +1,10 @@
 import { CountDown } from '@/components/Countdown.tsx';
-import { Button, Modal, Progress, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@ethsign/ui';
 import { Send01 } from '@ethsign/icons';
-import React from 'react';
+import { Button, Modal, Progress, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@ethsign/ui';
 import classNames from 'classnames';
 import { initUtils } from '@tma.js/sdk';
 import { ENVS } from '@/constants/config.ts';
+import React from 'react';
 
 const RulesModal: React.FC = () => {
   return (
@@ -64,7 +64,7 @@ export const Result: React.FC<{ className?: string }> = (props) => {
   };
 
   return (
-    <div className={classNames('w-full rounded-[6px] border border-grey-700 bg-popover-hover p-7', className)}>
+    <div className={classNames('rounded-[6px] border border-grey-700 bg-popover-hover p-7', className)}>
       <h1 className={'text-center font-bold text-xl text-white'}>Boost your score</h1>
       <div className={'mb-5 mt-2.5 text-sm font-normal text-white'}>
         Ask friends to make attestations to boost your score up to{' '}

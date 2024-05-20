@@ -1,43 +1,18 @@
 import { LuckyWheelPageContext } from '@/pages/LuckyWheel/context';
 import classNames from 'classnames';
-import React, { useContext, useMemo, useState } from 'react';
-import { Card } from './Card';
-import { Result } from './Result';
+import React, { useContext, useState } from 'react';
+import { Card } from '../../../components/Card';
+import { Result } from '../../../components/Result';
+import { Score } from './Score';
+import { Transition } from 'react-transition-group';
 
 async function getWheelResult() {
   // TODO: get result from server
   return Math.ceil(Math.random() * 10) % 6;
 }
 
-export const Score: React.FC<{ value: number }> = (props) => {
-  const { value } = props;
-
-  const cells = useMemo(() => {
-    const result = value.toString().split('');
-
-    if (result.length < 5) {
-      result.unshift(...Array.from({ length: 5 - result.length }, () => '0'));
-    }
-
-    return result;
-  }, [value]);
-
-  return (
-    <div className="flex gap-2">
-      {cells.map((cell, index) => (
-        <div
-          key={index}
-          className="flex h-[46px] w-[35px] items-center justify-center rounded-[4px] border border-[rgba(17,17,17,0.20)] bg-white font-bold text-2xl text-[#111]"
-        >
-          {cell}
-        </div>
-      ))}
-    </div>
-  );
-};
-
-export const Wheel: React.FC<{ onResult?: () => void; onStopped?: () => void }> = (props) => {
-  const { onResult, onStopped } = props;
+export const Wheel: React.FC<{ className?: string; onResult?: () => void; onStopped?: () => void }> = (props) => {
+  const { className, onResult, onStopped } = props;
 
   const [isSpining, setIsSpining] = useState(false);
 
@@ -56,7 +31,12 @@ export const Wheel: React.FC<{ onResult?: () => void; onStopped?: () => void }> 
   };
 
   return (
-    <div className="relative flex aspect-square w-[420px] shrink-0 items-center justify-center overflow-hidden">
+    <div
+      className={classNames(
+        'relative flex aspect-square w-[420px] shrink-0 items-center justify-center overflow-hidden',
+        className
+      )}
+    >
       <div className="absolute inset-0">
         <img src="/wheel-bg.svg" className="object-cover" alt="" />
       </div>
@@ -113,18 +93,34 @@ export const LuckyWheel: React.FC = () => {
         </div>
       </div>
 
-      <div className="mt-6 flex justify-center overflow-hidden">
-        {hasSpinedToday ? (
-          <Result className="mx-6" />
-        ) : (
-          <Wheel
-            onStopped={() => {
-              setTimeout(() => {
-                refresh();
-              }, 1000);
-            }}
-          />
-        )}
+      <div className="relative mt-6 flex min-h-[416px] w-full justify-center overflow-hidden">
+        <Transition in={hasSpinedToday} unmountOnExit timeout={200}>
+          {(state) => (
+            <Result
+              className={classNames(
+                'absolute h-[416px] inset-0 mx-6 transition-all opacity-0 duration-200 scale-50 origin-center',
+                {
+                  '!scale-100 relative opacity-100': state === 'entered'
+                }
+              )}
+            />
+          )}
+        </Transition>
+
+        <Transition in={!hasSpinedToday} unmountOnExit timeout={200}>
+          {(state) => (
+            <Wheel
+              className={classNames('scale-100 transition-all duration-200 origin-center', {
+                '!scale-50 opacity-0': state === 'exiting'
+              })}
+              onStopped={() => {
+                setTimeout(() => {
+                  refresh();
+                }, 1000);
+              }}
+            />
+          )}
+        </Transition>
       </div>
     </Card>
   );

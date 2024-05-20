@@ -21,7 +21,7 @@ export const raffle = async (data: { campaignId: string }) => {
 };
 
 //GET /mini/campaigns/lottery
-export const getLottery = async () => {
+export const getLotteryInfo = async () => {
   return await apiClient.get('/mini/campaigns/lottery');
 };
 

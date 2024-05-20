@@ -1,29 +1,38 @@
 import { Card } from '@/components/Card';
-import { LuckyWheel } from '@/components/LuckyWheel';
+import { LuckyWheel } from '@/pages/LuckyWheel/components/LuckyWheel';
 import { CoinsStacked01 } from '@ethsign/icons';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { LuckyWheelPageContext, LuckyWheelPageData, initPageData } from './context';
-
-let debugFlag = false;
+// import { getLotteryInfo } from '@/services';
 
 export const LuckyWheelPage: React.FC = () => {
   const [pageData, setPageDate] = useState<LuckyWheelPageData>(initPageData);
 
+  const debugSpinedFlag = useRef(false);
+  const loaded = useRef(false);
+
   const fetchPageData = async () => {
-    // TODO: fetch page data from server
+    // const response = await getLotteryInfo();
+
+    const debugSpined = debugSpinedFlag.current;
+
     setPageDate({
       ...initPageData,
-      totalScore: !debugFlag ? 1000 : 0,
-      currentScore: !debugFlag ? 1000 : 0,
-      hasSpinedToday: !debugFlag
+      totalScore: debugSpined ? 1000 : 0,
+      currentScore: debugSpined ? 1000 : 0,
+      hasSpinedToday: debugSpined
     });
 
-    debugFlag = true;
+    debugSpinedFlag.current = true;
   };
 
   useEffect(() => {
-    fetchPageData;
-  }, [setPageDate]);
+    if (loaded.current) return;
+
+    fetchPageData();
+
+    loaded.current = true;
+  }, []);
 
   return (
     <LuckyWheelPageContext.Provider
