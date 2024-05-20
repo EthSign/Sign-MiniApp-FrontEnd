@@ -1,6 +1,6 @@
 import { LuckyWheelPageContext } from '@/pages/LuckyWheel/context';
 import classNames from 'classnames';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useMemo, useState } from 'react';
 import { Card } from './Card';
 import { Result } from './Result';
 
@@ -8,6 +8,33 @@ async function getWheelResult() {
   // TODO: get result from server
   return Math.ceil(Math.random() * 10) % 6;
 }
+
+export const Score: React.FC<{ value: number }> = (props) => {
+  const { value } = props;
+
+  const cells = useMemo(() => {
+    const result = value.toString().split('');
+
+    if (result.length < 5) {
+      result.unshift(...Array.from({ length: 5 - result.length }, () => '0'));
+    }
+
+    return result;
+  }, [value]);
+
+  return (
+    <div className="flex gap-2">
+      {cells.map((cell, index) => (
+        <div
+          key={index}
+          className="flex h-[46px] w-[35px] items-center justify-center rounded-[4px] border border-[rgba(17,17,17,0.20)] bg-white font-bold text-2xl text-[#111]"
+        >
+          {cell}
+        </div>
+      ))}
+    </div>
+  );
+};
 
 export const Wheel: React.FC<{ onResult?: () => void; onStopped?: () => void }> = (props) => {
   const { onResult, onStopped } = props;
@@ -68,7 +95,7 @@ export const Wheel: React.FC<{ onResult?: () => void; onStopped?: () => void }> 
 };
 
 export const LuckyWheel: React.FC = () => {
-  const { hasSpinedToday, refresh } = useContext(LuckyWheelPageContext);
+  const { hasSpinedToday, currentScore, refresh } = useContext(LuckyWheelPageContext);
 
   return (
     <Card className="relative px-0 py-6">
@@ -77,16 +104,18 @@ export const LuckyWheel: React.FC = () => {
           <span>Lucky Wheel</span>
         </div>
 
-        <div className="flex items-center justify-center text-sm">
+        <div className="mt-2 flex items-center justify-center gap-4 text-sm">
           <span>You won</span>
-          <div className=""></div>
+          <div className="">
+            <Score value={currentScore} />
+          </div>
           <span>points</span>
         </div>
       </div>
 
       <div className="mt-6 flex justify-center overflow-hidden">
         {hasSpinedToday ? (
-          <Result />
+          <Result className="mx-6" />
         ) : (
           <Wheel
             onStopped={() => {

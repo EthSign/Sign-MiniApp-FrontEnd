@@ -1,8 +1,10 @@
 import { CountDown } from '@/components/Countdown.tsx';
 import { Button, Modal, Progress, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@ethsign/ui';
 import { Send01 } from '@ethsign/icons';
+import React from 'react';
+import classNames from 'classnames';
 
-const RulesModal = () => {
+const RulesModal: React.FC = () => {
   return (
     <Modal
       className={'w-[95vw] rounded-[12px] border border-white/20 bg-[#1B253D] p-4 pt-6 sm:w-[410px]'}
@@ -46,15 +48,21 @@ const RulesModal = () => {
   );
 };
 
-export const Result = () => {
+export const Result: React.FC<{ className?: string }> = (props) => {
+  const { className } = props;
+
   return (
-    <div className={'w-full rounded-[6px] border border-grey-700 bg-popover-hover p-7'}>
+    <div className={classNames('w-full rounded-[6px] border border-grey-700 bg-popover-hover p-7', className)}>
       <h1 className={'text-center font-bold text-xl text-white'}>Boost your score</h1>
       <div className={'mb-5 mt-2.5 text-sm font-normal text-white'}>
         Ask friends to make attestations to boost your score up to{' '}
         <span className={'font-bold text-tangerine-500'}>10x points</span>. <RulesModal />
       </div>
-      <CountDown targetDate={new Date('2024-05-20 18:00:00')} />
+
+      <div className="flex justify-center">
+        <CountDown targetDate={new Date('2024-05-20 18:00:00')} />
+      </div>
+
       <Button className={'mt-5 w-full gap-4'}>
         <Send01 color={'#FFF'} /> Ask Friends
       </Button>

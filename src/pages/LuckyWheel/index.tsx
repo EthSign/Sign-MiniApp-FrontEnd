@@ -13,7 +13,8 @@ export const LuckyWheelPage: React.FC = () => {
     // TODO: fetch page data from server
     setPageDate({
       ...initPageData,
-      currentScore: debugFlag ? 1000 : 0,
+      totalScore: !debugFlag ? 1000 : 0,
+      currentScore: !debugFlag ? 1000 : 0,
       hasSpinedToday: !debugFlag
     });
 
