@@ -116,7 +116,7 @@ export const LuckyWheel: React.FC = () => {
               onStopped={() => {
                 setTimeout(() => {
                   refresh();
-                }, 1000);
+                }, 500);
               }}
             />
           )}

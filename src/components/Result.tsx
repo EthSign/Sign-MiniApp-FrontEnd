@@ -82,7 +82,10 @@ export const Result: React.FC<{ className?: string }> = (props) => {
         <span className={'font-semiBold'}>10</span> more steps to level up
       </div>
 
-      <Progress value={50} className={'mt-4'} />
+      <Progress
+        value={50}
+        className="mt-4 bg-[#475467] [&>div]:rounded-full [&>div]:bg-[linear-gradient(90deg,#F76200_0%,#F2C045_100%)]"
+      />
 
       <div className={'mt-3 flex items-center justify-between text-xs font-normal text-gray-100'}>
         <div>Current: 300 pts</div>
