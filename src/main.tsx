@@ -7,6 +7,7 @@ import { TonConnectUIProvider } from '@tonconnect/ui-react';
 import WebApp from '@twa-dev/sdk';
 import { ENVS } from '@/constants/config.ts';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { LotteryInfoProvider } from './providers/LotteryInfoProvider';
 
 WebApp.ready();
 
@@ -24,8 +25,10 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     >
       <QueryClientProvider client={queryClient}>
         <ThemeProvider defaultTheme={'dark'} storageKey={'theme'}>
-          <Router />
-          <Toaster />
+          <LotteryInfoProvider>
+            <Router />
+            <Toaster />
+          </LotteryInfoProvider>
         </ThemeProvider>
       </QueryClientProvider>
     </TonConnectUIProvider>

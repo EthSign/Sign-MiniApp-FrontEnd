@@ -1,17 +1,15 @@
-import { LuckyWheelPageContext } from '@/pages/LuckyWheel/context';
+import { useLotteryInfo } from '@/providers/LotteryInfoProvider';
+import { raffle } from '@/services';
 import classNames from 'classnames';
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
+import { Transition } from 'react-transition-group';
 import { Card } from '../../../components/Card';
 import { Result } from '../../../components/Result';
 import { Score } from './Score';
-import { Transition } from 'react-transition-group';
-
-async function getWheelResult() {
-  // TODO: get result from server
-  return Math.ceil(Math.random() * 10) % 6;
-}
 
 export const Wheel: React.FC<{ className?: string; onResult?: () => void; onStopped?: () => void }> = (props) => {
+  const { loading, prizes } = useLotteryInfo();
+
   const { className, onResult, onStopped } = props;
 
   const [isSpining, setIsSpining] = useState(false);
@@ -19,13 +17,15 @@ export const Wheel: React.FC<{ className?: string; onResult?: () => void; onStop
   const [degree, setDegree] = useState(0);
 
   const onSpinButtonClick = async () => {
-    if (isSpining) return;
+    if (loading || isSpining) return;
 
-    const level = await getWheelResult();
+    const raffleResult = await raffle();
+
+    const prizeIndex = prizes.findIndex((item) => item.id === raffleResult.prizeId);
 
     onResult?.();
 
-    setDegree(level * 60 + 3600);
+    setDegree(prizeIndex * 60 + 3600 || 0);
 
     setIsSpining(true);
   };
@@ -33,7 +33,7 @@ export const Wheel: React.FC<{ className?: string; onResult?: () => void; onStop
   return (
     <div
       className={classNames(
-        'relative flex aspect-square w-[420px] shrink-0 items-center justify-center overflow-hidden',
+        'relative flex aspect-square w-[420px] shrink-0 items-center justify-center overflow-hidden select-none',
         className
       )}
     >
@@ -75,7 +75,7 @@ export const Wheel: React.FC<{ className?: string; onResult?: () => void; onStop
 };
 
 export const LuckyWheel: React.FC = () => {
-  const { hasSpinedToday, currentScore, refresh } = useContext(LuckyWheelPageContext);
+  const { hasSpinedToday, currentScore, refresh } = useLotteryInfo();
 
   return (
     <Card className="relative px-0 py-6">
@@ -98,7 +98,7 @@ export const LuckyWheel: React.FC = () => {
           {(state) => (
             <Result
               className={classNames(
-                'absolute h-[416px] inset-0 mx-6 transition-all opacity-0 duration-200 scale-50 origin-center',
+                'absolute inset-0 mx-4 origin-center scale-50 px-4 opacity-0 transition-all duration-200',
                 {
                   '!scale-100 relative opacity-100': state === 'entered'
                 }

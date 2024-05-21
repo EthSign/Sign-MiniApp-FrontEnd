@@ -1,13 +1,36 @@
 import { CountDown } from '@/components/Countdown.tsx';
-import { Send01 } from '@ethsign/icons';
-import { Button, Modal, Progress, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@ethsign/ui';
-import classNames from 'classnames';
-import { initUtils } from '@tma.js/sdk';
 import { ENVS } from '@/constants/config.ts';
-import React, { useContext, useMemo } from 'react';
-import { LuckyWheelPageContext } from '@/pages/LuckyWheel/context';
+import { useLotteryInfo } from '@/providers/LotteryInfoProvider';
+import { Send01 } from '@ethsign/icons';
+import { Button, Modal, Progress, Table, TableBody, TableCell, TableRow } from '@ethsign/ui';
+import { initUtils } from '@tma.js/sdk';
+import classNames from 'classnames';
+import React, { useMemo } from 'react';
 
 export const RulesModal: React.FC = () => {
+  const { currentDayRaffleResult } = useLotteryInfo();
+
+  const tableData = useMemo(() => {
+    const levels = currentDayRaffleResult?.levels ?? [];
+
+    const data = [
+      {
+        label: 'Levels',
+        values: levels.map((item) => 'Level' + item.level)
+      },
+      {
+        label: 'Bonus',
+        values: levels.map((item) => item.multiplier + 'x')
+      },
+      {
+        label: 'Level up',
+        values: levels.map((item) => item.steps)
+      }
+    ];
+
+    return data;
+  }, [currentDayRaffleResult?.levels]);
+
   return (
     <Modal
       className={'w-[95vw] rounded-[12px] border border-white/20 bg-[#1B253D] p-4 pt-6 sm:w-[410px]'}
@@ -21,30 +44,18 @@ export const RulesModal: React.FC = () => {
         </div>
       </div>
       <Table className={'overflow-hidden rounded-[6px] text-xs'}>
-        <TableHeader className={'text-white'}>
-          <TableRow>
-            <TableHead className="bg-[#2E2F49] px-2 text-white">Levels</TableHead>
-            <TableHead className="px-2 text-white">Level 0</TableHead>
-            <TableHead className="px-2 text-white">Level 1</TableHead>
-            <TableHead className="px-2 text-white">Level 2</TableHead>
-            <TableHead className="px-2 text-white">Level 3</TableHead>
-          </TableRow>
-        </TableHeader>
         <TableBody>
-          <TableRow>
-            <TableCell className="bg-[#2E2F49] px-2 font-medium">Bonus</TableCell>
-            <TableCell className="px-2">1x</TableCell>
-            <TableCell className="px-2">10x</TableCell>
-            <TableCell className="px-2">50x</TableCell>
-            <TableCell className="px-2">100x</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="w-[76px] bg-[#2E2F49] px-2 font-medium">Level Up</TableCell>
-            <TableCell className="w-[75px] px-2">10 steps</TableCell>
-            <TableCell className="w-[75px] px-2">15 steps</TableCell>
-            <TableCell className="w-[76px] px-2">25 steps</TableCell>
-            <TableCell className="px-2">Max</TableCell>
-          </TableRow>
+          {tableData.map((row, index) => (
+            <TableRow key={index} className="border-[#475467]">
+              <TableCell className="w-[76px] bg-[#2E2F49] px-2 font-medium text-white">{row.label}</TableCell>
+
+              {row.values.map((value, index) => (
+                <TableCell key={index} className="w-[75px] bg-[#252740] px-2">
+                  {value}
+                </TableCell>
+              ))}
+            </TableRow>
+          ))}
         </TableBody>
       </Table>
     </Modal>
@@ -52,61 +63,74 @@ export const RulesModal: React.FC = () => {
 };
 
 export const Result: React.FC<{ className?: string }> = (props) => {
+  const { currentDayRaffleResult, refresh } = useLotteryInfo();
+
   const { className } = props;
 
-  const { refresh } = useContext(LuckyWheelPageContext);
-
   const dueDate = useMemo(() => {
-    const date = new Date();
+    if (!currentDayRaffleResult?.dayEnd) return null;
+    return new Date(currentDayRaffleResult.dayEnd);
+  }, [currentDayRaffleResult?.dayEnd]);
 
-    date.setDate(date.getDate() + 1);
-    date.setHours(0, 0, 0, 0);
-
-    return date;
-  }, []);
+  const levelInfo = currentDayRaffleResult?.levelInfo;
 
   const handleInvite = () => {
     const utils = initUtils();
     const desc =
       "💰Catizen: Unleash, Play, Earn - Where Every Game Leads to an Airdrop Adventure!\n🎁Let's play-to-earn airdrop right now!";
     utils.openTelegramLink(
-      `https://t.me/share/url?url=${ENVS.TG_APP_LINK}?startapp=rp_1365932&text=${encodeURIComponent(desc)}`
+      `https://t.me/share/url?url=${ENVS.TG_APP_LINK}?startapp=${
+        currentDayRaffleResult?.raffleId
+      }&text=${encodeURIComponent(desc)}`
     );
   };
 
   return (
     <div className={classNames('rounded-[6px] border border-grey-700 bg-popover-hover p-7', className)}>
       <h1 className={'text-center font-bold text-xl text-white'}>Boost your score</h1>
-      <div className={'mb-5 mt-2.5 text-sm font-normal text-white'}>
-        Ask friends to make attestations to boost your score up to{' '}
-        <span className={'font-bold text-tangerine-500'}>10x points</span>. <RulesModal />
-      </div>
 
-      <div className="flex justify-center">
-        <CountDown
-          targetDate={dueDate}
-          onFinish={() => {
-            refresh();
-          }}
-        />
-      </div>
+      {levelInfo?.nextLevel && (
+        <div className={'mb-5 mt-2.5 text-sm font-normal text-white'}>
+          Ask friends to make attestations to boost your score up to{' '}
+          <span className={'font-bold text-tangerine-500'}>{levelInfo?.nextLevel.multiplier}x points</span>.{' '}
+          <RulesModal />
+        </div>
+      )}
 
-      <Button className={'mt-5 w-full gap-4'} onClick={handleInvite}>
-        <Send01 color={'#FFF'} /> Ask Friends
-      </Button>
-      <div className={'mt-7 text-sm font-normal text-gray-100'}>
-        <span className={'font-semiBold'}>10</span> more steps to level up
-      </div>
+      {dueDate && (
+        <div className="flex justify-center">
+          <CountDown
+            targetDate={dueDate}
+            onFinish={() => {
+              refresh();
+            }}
+          />
+        </div>
+      )}
 
-      <Progress
-        value={50}
-        className="mt-4 bg-[#475467] [&>div]:rounded-full [&>div]:bg-[linear-gradient(90deg,#F76200_0%,#F2C045_100%)]"
-      />
+      {levelInfo?.nextLevel && (
+        <Button className={'mt-5 w-full gap-4'} onClick={handleInvite}>
+          <Send01 color={'#FFF'} /> Ask Friends
+        </Button>
+      )}
 
-      <div className={'mt-3 flex items-center justify-between text-xs font-normal text-gray-100'}>
-        <div>Current: 300 pts</div>
-        <div>Next Level: 3000 pts</div>
-      </div>
+      {levelInfo && (
+        <>
+          <div className={'mt-7 text-sm font-normal text-gray-100'}>
+            <span className={'font-semiBold'}>{levelInfo.nextLevel.steps - levelInfo.currentSteps}</span> more steps to
+            level up
+          </div>
+
+          <Progress
+            value={(levelInfo.currentSteps / levelInfo.nextLevel.steps) * 100}
+            className="mt-4 bg-[#475467] [&>div]:rounded-full [&>div]:bg-[linear-gradient(90deg,#F76200_0%,#F2C045_100%)]"
+          />
+          <div className={'mt-3 flex items-center justify-between text-xs font-normal text-gray-100'}>
+            <div>Current: {levelInfo.currentSteps} steps</div>
+            {levelInfo.nextLevel && <div>Next Level: {levelInfo.nextLevel.steps} steps</div>}
+          </div>
+        </>
+      )}
     </div>
   );
 };

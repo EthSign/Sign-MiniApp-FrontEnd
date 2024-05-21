@@ -1,4 +1,4 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import { Header } from './components/Header';
 import { TabItem, Tabbar } from './components/Tabbar';
 import { isTelegramApp } from '@/utils/common.ts';
@@ -6,7 +6,7 @@ import { useDebug } from '@/hooks/useDebug.tsx';
 import { BarChart01, Diamond01 } from '@ethsign/icons';
 import { ScrollArea } from '@ethsign/ui';
 import { UserInfoProvider } from '@/hooks/useUserInfo.tsx';
-import React from 'react';
+import { useMemo } from 'react';
 
 const TABS: TabItem[] = [
   {
@@ -41,6 +41,12 @@ const TGAPP = () => {
 };
 
 function App() {
+  const location = useLocation();
+
+  const tabbarVisible = useMemo(() => {
+    if (location.pathname === '/attest') return false;
+    return true;
+  }, [location.pathname]);
   return (
     <div className="flex h-screen w-screen flex-col overflow-hidden bg-[#05051E] text-white">
       <ScrollArea className="flex-1 [&>[data-radix-scroll-area-viewport]>div]:!block">
@@ -50,7 +56,7 @@ function App() {
         </div>
       </ScrollArea>
 
-      <Tabbar tabs={TABS} />
+      {tabbarVisible && <Tabbar tabs={TABS} />}
     </div>
   );
 }
