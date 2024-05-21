@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
-import { Outlet } from 'react-router-dom';
+import { useEffect, useMemo } from 'react';
+import { Outlet, useLocation } from 'react-router-dom';
 import { Header } from './components/Header';
 import { TabItem, Tabbar } from './components/Tabbar';
 import { getTMAInitData, isTelegramApp } from '@/utils/common.ts';
@@ -39,6 +39,14 @@ const TGAPP = () => {
 
 function App() {
   const { user, fetchUser } = useUserInfo();
+
+  const location = useLocation();
+
+  const tabbarVisible = useMemo(() => {
+    if (location.pathname === '/attest') return false;
+    return true;
+  }, [location.pathname]);
+
   const handleAuth = async () => {
     const authData = getTMAInitData();
     console.log(authData, 'authData');
@@ -53,7 +61,7 @@ function App() {
     handleAuth();
   }, []);
 
-  // if (!user) return null;
+  if (!user) return null;
 
   return (
     <div className="flex h-screen w-screen flex-col overflow-hidden bg-[#05051E] text-white">
@@ -64,7 +72,7 @@ function App() {
         </div>
       </ScrollArea>
 
-      <Tabbar tabs={TABS} />
+      {tabbarVisible && <Tabbar tabs={TABS} />}
     </div>
   );
 }
