@@ -12,11 +12,12 @@ function formatCountdownTime(milliseconds: number) {
 
 export interface CountDownProps {
   targetDate: Date;
+  onFinish?: () => void;
 }
 
 // eslint-disable-next-line react-refresh/only-export-components
-export const useCountDown = (props: { targetDate: Date }) => {
-  const { targetDate } = props;
+export const useCountDown = (props: { targetDate: Date; onFinish?: () => void }) => {
+  const { targetDate, onFinish } = props;
 
   const [now, setNow] = useState(Date.now());
 
@@ -31,7 +32,12 @@ export const useCountDown = (props: { targetDate: Date }) => {
   }, [now, targetDate]);
 
   useEffect(() => {
-    if (targetDate.getTime() - Date.now() <= 0) return;
+    const ms = targetDate.getTime() - Date.now();
+
+    if (ms <= 0) {
+      onFinish?.();
+      return;
+    }
 
     const timer = setInterval(() => {
       setNow(Date.now());
@@ -42,16 +48,17 @@ export const useCountDown = (props: { targetDate: Date }) => {
         clearInterval(timer);
       }
     };
-  }, [targetDate]);
+  }, [onFinish, targetDate]);
 
   return remain;
 };
 
 export const CountDown: React.FC<CountDownProps> = (props) => {
-  const { targetDate } = props;
+  const { targetDate, onFinish } = props;
 
   const { hours, minutes, seconds } = useCountDown({
-    targetDate
+    targetDate,
+    onFinish
   });
 
   const formatCountdownTime = (time: number) => (time < 10 ? ['0', time.toString()] : time.toString().split(''));

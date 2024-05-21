@@ -84,7 +84,7 @@ export const LuckyWheel: React.FC = () => {
           <span>Lucky Wheel</span>
         </div>
 
-        <div className="mt-2 flex items-center justify-center gap-4 text-sm">
+        <div className="mt-2 flex items-center justify-center gap-2 text-sm">
           <span>You won</span>
           <div className="">
             <Score value={currentScore} />
@@ -116,7 +116,7 @@ export const LuckyWheel: React.FC = () => {
               onStopped={() => {
                 setTimeout(() => {
                   refresh();
-                }, 1000);
+                }, 500);
               }}
             />
           )}

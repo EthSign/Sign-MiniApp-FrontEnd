@@ -4,7 +4,8 @@ import { Button, Modal, Progress, Table, TableBody, TableCell, TableHead, TableH
 import classNames from 'classnames';
 import { initUtils } from '@tma.js/sdk';
 import { ENVS } from '@/constants/config.ts';
-import React from 'react';
+import React, { useContext, useMemo } from 'react';
+import { LuckyWheelPageContext } from '@/pages/LuckyWheel/context';
 
 const RulesModal: React.FC = () => {
   return (
@@ -53,8 +54,18 @@ const RulesModal: React.FC = () => {
 export const Result: React.FC<{ className?: string }> = (props) => {
   const { className } = props;
 
+  const { refresh } = useContext(LuckyWheelPageContext);
+
+  const dueDate = useMemo(() => {
+    const date = new Date();
+
+    date.setDate(date.getDate() + 1);
+    date.setHours(0, 0, 0, 0);
+
+    return date;
+  }, []);
+
   const handleInvite = () => {
-    console.log('Invite');
     const utils = initUtils();
     const desc =
       "💰Catizen: Unleash, Play, Earn - Where Every Game Leads to an Airdrop Adventure!\n🎁Let's play-to-earn airdrop right now!";
@@ -72,7 +83,12 @@ export const Result: React.FC<{ className?: string }> = (props) => {
       </div>
 
       <div className="flex justify-center">
-        <CountDown targetDate={new Date('2024-05-20 18:00:00')} />
+        <CountDown
+          targetDate={dueDate}
+          onFinish={() => {
+            refresh();
+          }}
+        />
       </div>
 
       <Button className={'mt-5 w-full gap-4'} onClick={handleInvite}>
@@ -82,7 +98,10 @@ export const Result: React.FC<{ className?: string }> = (props) => {
         <span className={'font-semiBold'}>10</span> more steps to level up
       </div>
 
-      <Progress value={50} className={'mt-4'} />
+      <Progress
+        value={50}
+        className="mt-4 bg-[#475467] [&>div]:rounded-full [&>div]:bg-[linear-gradient(90deg,#F76200_0%,#F2C045_100%)]"
+      />
 
       <div className={'mt-3 flex items-center justify-between text-xs font-normal text-gray-100'}>
         <div>Current: 300 pts</div>

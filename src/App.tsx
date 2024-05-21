@@ -6,6 +6,7 @@ import { getTMAInitData, isTelegramApp } from '@/utils/common.ts';
 import { auth } from '@/services';
 import { useDebug } from '@/hooks/useDebug.tsx';
 import { BarChart01, Diamond01 } from '@ethsign/icons';
+import { ScrollArea } from '@ethsign/ui';
 import { useUserInfo } from '@/hooks/useUserInfo.tsx';
 
 const TABS: TabItem[] = [
@@ -56,15 +57,17 @@ function App() {
 
   return (
     <div className="flex h-screen w-screen flex-col overflow-hidden bg-[#05051E] text-white">
-      <Header />
-
-      <div className="flex-1 overflow-auto p-6">
-        <Outlet />
-      </div>
+      <ScrollArea className="flex-1 [&>[data-radix-scroll-area-viewport]>div]:!block">
+        <Header />
+        <div className="p-6">
+          <Outlet />
+        </div>
+      </ScrollArea>
 
       <Tabbar tabs={TABS} />
     </div>
   );
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export default TGAPP;
