@@ -13,7 +13,9 @@ export const bindWallet = async (data: { publicKey: string; message: string; sig
 
 // GET /mini/me
 export const getMyInfo = async () => {
-  return await apiClient.get<IUser>('/mini/me');
+  return await apiClient.get<IUser>('/mini/me', {
+    skipHandleError: true
+  });
 };
 
 // POST mini/campaigns/lottery/raffle
@@ -28,5 +30,7 @@ export const getLotteryInfo = async () => {
 
 //GET /mini/campaigns/lottery/tx-check
 export const getTxCheck = async (data: { txHash: string }) => {
-  return await apiClient.get('/mini/campaigns/lottery/tx-check', data);
+  return await apiClient.get('/mini/campaigns/lottery/tx-check', {
+    params: data
+  });
 };

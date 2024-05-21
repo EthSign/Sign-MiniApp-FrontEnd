@@ -1,13 +1,12 @@
-import { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import { Header } from './components/Header';
 import { TabItem, Tabbar } from './components/Tabbar';
-import { getTMAInitData, isTelegramApp } from '@/utils/common.ts';
-import { auth } from '@/services';
+import { isTelegramApp } from '@/utils/common.ts';
 import { useDebug } from '@/hooks/useDebug.tsx';
 import { BarChart01, Diamond01 } from '@ethsign/icons';
 import { ScrollArea } from '@ethsign/ui';
-import { useUserInfo } from '@/hooks/useUserInfo.tsx';
+import { UserInfoProvider } from '@/hooks/useUserInfo.tsx';
+import React from 'react';
 
 const TABS: TabItem[] = [
   {
@@ -34,27 +33,14 @@ const TGAPP = () => {
       </div>
     );
   }
-  return <App />;
+  return (
+    <UserInfoProvider>
+      <App />
+    </UserInfoProvider>
+  );
 };
 
 function App() {
-  const { user, fetchUser } = useUserInfo();
-  const handleAuth = async () => {
-    const authData = getTMAInitData();
-    console.log(authData, 'authData');
-    if (authData) {
-      const res = await auth({ webappData: authData, referenceCode: '' });
-      console.log(res, 'res');
-      fetchUser();
-    }
-  };
-
-  useEffect(() => {
-    handleAuth();
-  }, []);
-
-  // if (!user) return null;
-
   return (
     <div className="flex h-screen w-screen flex-col overflow-hidden bg-[#05051E] text-white">
       <ScrollArea className="flex-1 [&>[data-radix-scroll-area-viewport]>div]:!block">

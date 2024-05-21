@@ -1,5 +1,5 @@
 import { useTonConnectModal, useTonConnectUI, useTonWallet } from '@tonconnect/ui-react';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { Button } from '@ethsign/ui';
 import { getCustomNaNoId } from '@/utils/common.ts';
 import { hashSha256 } from '@ethsign/utils-web';
@@ -13,6 +13,7 @@ function Home() {
   const { open } = useTonConnectModal();
   const { user, fetchUser } = useUserInfo();
   const navigate = useNavigate();
+  const loadingRef = useRef(false);
 
   const fullMessage = {
     statement: 'Welcome to Sign Mini APP',
@@ -23,15 +24,20 @@ function Home() {
   const originMsg = JSON.stringify(fullMessage, null, '  ');
 
   const handleBindWallet = async (data: { message: string; signature: string; publicKey: string }) => {
-    await bindWallet(data);
-    fetchUser();
+    if (loadingRef.current) return;
+    try {
+      loadingRef.current = true;
+      await bindWallet(data);
+      fetchUser();
+    } finally {
+      loadingRef.current = false;
+    }
   };
 
   useEffect(() => {
     tonConnectUI.onStatusChange((wallet) => {
       console.log(wallet, 'ww');
       if (wallet?.connectItems?.tonProof && 'proof' in wallet!.connectItems!.tonProof) {
-        console.log(wallet.connectItems.tonProof.proof, wallet.account);
         const connectItems = wallet.connectItems;
         const proof = (connectItems?.tonProof as any)!.proof;
         const publicKey = wallet.account.publicKey!; //使用walletStateInit，publicKey由后端计算
@@ -67,15 +73,13 @@ function Home() {
   };
 
   useEffect(() => {
-    console.log(user, 'uu');
+    console.log(user, 'user');
     if (user?.walletAddress) {
       navigate('/lucky-wheel', {
         replace: true
       });
     }
   }, [user]);
-
-  console.log(wallet, window.location.href, 'wallet');
   return (
     <div className={'py-8'}>
       <div className="flex justify-center">
