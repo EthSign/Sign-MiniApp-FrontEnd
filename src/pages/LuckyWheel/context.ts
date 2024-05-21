@@ -1,15 +1,21 @@
+import { LotteryInfo } from '@/types';
 import { createContext } from 'react';
 
 export interface LuckyWheelPageData {
-  totalScore: number;
+  loading: boolean;
+  totalPoint: number;
   hasSpinedToday: boolean;
   currentScore: number;
+  prizes: LotteryInfo['prizes'];
+  currentDayRaffleResult?: LotteryInfo['currentDayRaffleResult'];
 }
 
-export const initPageData = {
-  totalScore: 0,
+export const initPageData: LuckyWheelPageData = {
+  loading: true,
+  totalPoint: 0,
   currentScore: 0,
-  hasSpinedToday: false
+  hasSpinedToday: false,
+  prizes: []
 };
 
 export const LuckyWheelPageContext = createContext<
@@ -17,8 +23,10 @@ export const LuckyWheelPageContext = createContext<
     refresh: () => Promise<void>;
   }
 >({
-  totalScore: 0,
+  loading: true,
+  totalPoint: 0,
   currentScore: 0,
   hasSpinedToday: false,
+  prizes: [],
   refresh: async () => {}
 });

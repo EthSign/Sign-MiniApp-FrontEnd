@@ -1,6 +1,6 @@
 // POST /mini/auth
 import { apiClient } from '@/utils/api-client.ts';
-import { IUser } from '@/types';
+import { IUser, LotteryInfo } from '@/types';
 
 export const auth = async (data: { webappData: Record<string, any>; referenceCode: string }) => {
   return await apiClient.post('/mini/auth', data);
@@ -23,7 +23,7 @@ export const raffle = async (data: { campaignId: string }) => {
 
 //GET /mini/campaigns/lottery
 export const getLotteryInfo = async () => {
-  return await apiClient.get('/mini/campaigns/lottery');
+  return await apiClient.get<LotteryInfo>('/mini/campaigns/lottery');
 };
 
 //GET /mini/campaigns/lottery/tx-check

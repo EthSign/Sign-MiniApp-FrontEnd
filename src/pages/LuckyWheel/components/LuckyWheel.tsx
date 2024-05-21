@@ -12,6 +12,8 @@ async function getWheelResult() {
 }
 
 export const Wheel: React.FC<{ className?: string; onResult?: () => void; onStopped?: () => void }> = (props) => {
+  const { loading } = useContext(LuckyWheelPageContext);
+
   const { className, onResult, onStopped } = props;
 
   const [isSpining, setIsSpining] = useState(false);
@@ -19,7 +21,7 @@ export const Wheel: React.FC<{ className?: string; onResult?: () => void; onStop
   const [degree, setDegree] = useState(0);
 
   const onSpinButtonClick = async () => {
-    if (isSpining) return;
+    if (loading || isSpining) return;
 
     const level = await getWheelResult();
 
@@ -33,7 +35,7 @@ export const Wheel: React.FC<{ className?: string; onResult?: () => void; onStop
   return (
     <div
       className={classNames(
-        'relative flex aspect-square w-[420px] shrink-0 items-center justify-center overflow-hidden',
+        'relative flex aspect-square w-[420px] shrink-0 items-center justify-center overflow-hidden select-none',
         className
       )}
     >
@@ -98,7 +100,7 @@ export const LuckyWheel: React.FC = () => {
           {(state) => (
             <Result
               className={classNames(
-                'absolute h-[416px] inset-0 mx-6 transition-all opacity-0 duration-200 scale-50 origin-center',
+                'absolute inset-0 mx-4 origin-center scale-50 px-4 opacity-0 transition-all duration-200',
                 {
                   '!scale-100 relative opacity-100': state === 'entered'
                 }

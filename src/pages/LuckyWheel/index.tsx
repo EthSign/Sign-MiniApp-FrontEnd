@@ -1,29 +1,28 @@
 import { Card } from '@/components/Card';
 import { LuckyWheel } from '@/pages/LuckyWheel/components/LuckyWheel';
+import { getLotteryInfo } from '@/services';
 import { CoinsStacked01 } from '@ethsign/icons';
 import React, { useEffect, useRef, useState } from 'react';
 import { LuckyWheelPageContext, LuckyWheelPageData, initPageData } from './context';
-// import { getLotteryInfo } from '@/services';
 
 export const LuckyWheelPage: React.FC = () => {
-  const [pageData, setPageDate] = useState<LuckyWheelPageData>(initPageData);
+  const [pageData, setPageData] = useState<LuckyWheelPageData>(initPageData);
 
-  const debugSpinedFlag = useRef(false);
   const loaded = useRef(false);
 
   const fetchPageData = async () => {
-    // const response = await getLotteryInfo();
+    const response = await getLotteryInfo();
 
-    const debugSpined = debugSpinedFlag.current;
+    setPageData((old) => ({ ...old, loading: true }));
 
-    setPageDate({
-      ...initPageData,
-      totalScore: debugSpined ? 1000 : 0,
-      currentScore: debugSpined ? 1000 : 0,
-      hasSpinedToday: debugSpined
+    setPageData({
+      loading: false,
+      totalPoint: response.totalPoint,
+      currentScore: response.currentDayRaffleResult?.currentScore ?? 0,
+      hasSpinedToday: response.currentDayRaffleResult !== null,
+      prizes: response.prizes,
+      currentDayRaffleResult: response.currentDayRaffleResult
     });
-
-    debugSpinedFlag.current = true;
   };
 
   useEffect(() => {
@@ -47,7 +46,7 @@ export const LuckyWheelPage: React.FC = () => {
           <div className="mt-2 flex items-center justify-center gap-2 text-3xl">
             <CoinsStacked01 size={24} color="#FCFCFD" />
 
-            <span> {pageData.totalScore}</span>
+            <span> {pageData.totalPoint}</span>
           </div>
         </Card>
 
