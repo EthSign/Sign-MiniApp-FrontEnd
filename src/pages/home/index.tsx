@@ -91,7 +91,7 @@ function Home() {
       <div className="flex justify-center">
         <Button onClick={handleConnect}>Connect Wallet</Button>
       </div>
-      <h1 className={'text-center mt-5'}>Please Connect your Ton Wallet first!</h1>
+      <h1 className={'mt-5 text-center'}>Please Connect your Ton Wallet first!</h1>
     </div>
   );
 }

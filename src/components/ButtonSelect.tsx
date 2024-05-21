@@ -23,8 +23,8 @@ export const ButtonSelect = ({
           variant="outline"
           key={index}
           onClick={() => onChange(option.value)}
-          className={`flex-1 flex-col h-auto py-2.5 text-sm rounded-none border-none hover:bg-gray-700 hover:text-white ${
-            value === option.value ? 'bg-grey-650 text-white' : 'text-gray-500 bg-card'
+          className={`h-auto flex-1 flex-col rounded-none border-none py-2.5 text-sm hover:bg-gray-700 hover:text-white ${
+            value === option.value ? 'bg-grey-650 text-white' : 'bg-card text-gray-500'
           }`}
         >
           <div>{option.label}</div>

@@ -7,13 +7,13 @@ import { useUserInfo } from '@/hooks/useUserInfo.tsx';
 export const Header: React.FC = () => {
   const { user } = useUserInfo();
   return (
-    <div className="h-[72px] shrink-0 border-b border-[#1D2939] flex justify-between items-center px-4">
+    <div className="flex h-[72px] shrink-0 items-center justify-between border-b border-[#1D2939] px-4">
       <SignIcon />
 
       {user?.walletAddress ? (
-        <Button className={'rounded-[12px] gap-2 dark:border-grey-650 dark:bg-gray-900'} variant={'outline'}>
+        <Button className={'gap-2 rounded-[12px] dark:border-grey-650 dark:bg-gray-900'} variant={'outline'}>
           {shortenWalletAddress(user?.walletAddress, 'shorter')}
-          <span className="w-[11px] h-[11px] inline-block rounded-full bg-[#99F36F]"></span>
+          <span className="inline-block size-[11px] rounded-full bg-[#99F36F]"></span>
         </Button>
       ) : null}
     </div>
