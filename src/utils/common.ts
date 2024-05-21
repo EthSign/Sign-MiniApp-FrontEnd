@@ -1,4 +1,5 @@
 import queryString from 'query-string';
+import { customAlphabet } from 'nanoid';
 
 export const stringifyQueryString = (obj: Recordstring, any): string => {
   return queryString.stringify(obj, { skipNull: true, skipEmptyString: true });
@@ -39,4 +40,9 @@ export const getTMAInitData = (): {
 
 export const isTelegramApp = (): boolean => {
   return !!window.TelegramWebviewProxy;
+};
+
+export const getCustomNaNoId = (): string => {
+  const nanoid = customAlphabet('1234567890abcdefghijklmnopqrstuvwxyz', 10);
+  return nanoid();
 };

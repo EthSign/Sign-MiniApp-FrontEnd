@@ -1,9 +1,10 @@
 import App from '@/App.tsx';
 import NotFound from '@/pages/404';
-import { createBrowserRouter, redirect, RouteObject, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, RouteObject, RouterProvider } from 'react-router-dom';
 import { LuckyWheelPage } from './pages/LuckyWheel';
 import { RankPage } from './pages/Rank';
 import AttestPage from '@/pages/attest';
+import Home from '@/pages/home';
 
 const routerConfig: RouteObject[] = [
   {
@@ -12,10 +13,10 @@ const routerConfig: RouteObject[] = [
     children: [
       {
         path: '',
-        // element: <Home />
-        loader: () => {
-          return redirect('/lucky-wheel');
-        }
+        element: <Home />
+        // loader: () => {
+        //   return redirect('/lucky-wheel');
+        // }
       },
       {
         path: '/lucky-wheel',

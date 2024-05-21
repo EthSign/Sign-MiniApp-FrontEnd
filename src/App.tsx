@@ -6,6 +6,7 @@ import { getTMAInitData, isTelegramApp } from '@/utils/common.ts';
 import { auth } from '@/services';
 import { useDebug } from '@/hooks/useDebug.tsx';
 import { BarChart01, Diamond01 } from '@ethsign/icons';
+import { useUserInfo } from '@/hooks/useUserInfo.tsx';
 
 const TABS: TabItem[] = [
   {
@@ -36,18 +37,22 @@ const TGAPP = () => {
 };
 
 function App() {
+  const { user, fetchUser } = useUserInfo();
   const handleAuth = async () => {
     const authData = getTMAInitData();
     console.log(authData, 'authData');
     if (authData) {
       const res = await auth({ webappData: authData, referenceCode: '' });
       console.log(res, 'res');
+      fetchUser();
     }
   };
 
   useEffect(() => {
     handleAuth();
   }, []);
+
+  if (!user) return null;
 
   return (
     <div className="flex h-screen w-screen flex-col overflow-hidden bg-[#05051E] text-white">
