@@ -4,11 +4,15 @@ import { CoinsStacked01 } from '@ethsign/icons';
 import React, { useEffect } from 'react';
 import { useLotteryInfo } from '../../providers/LotteryInfoProvider';
 import { Link } from 'react-router-dom';
+import { useUserInfo } from '@/hooks/useUserInfo';
 
 export const LuckyWheelPage: React.FC = () => {
+  const { user } = useUserInfo();
   const { totalPoint, refresh } = useLotteryInfo();
 
   useEffect(() => {
+    if (!user) return;
+
     refresh();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

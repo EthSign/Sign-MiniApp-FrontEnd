@@ -79,7 +79,7 @@ export default function AttestPage() {
           <AboutModal />
         </div>
 
-        <div className="borde rounded-[6px] border-grey-650 bg-gray-900 p-6">
+        <div className="rounded-[6px] border border-grey-650 bg-gray-900 p-6">
           <ButtonSelect
             options={[
               {
