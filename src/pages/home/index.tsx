@@ -1,7 +1,6 @@
-import { TonConnectButton, useTonConnectModal, useTonConnectUI, useTonWallet } from '@tonconnect/ui-react';
+import { useTonConnectModal, useTonConnectUI, useTonWallet } from '@tonconnect/ui-react';
 import { useEffect } from 'react';
 import { Button } from '@ethsign/ui';
-import { ENVS } from '@/constants/config.ts';
 import { getCustomNaNoId } from '@/utils/common.ts';
 import { hashSha256 } from '@ethsign/utils-web';
 import { bindWallet } from '@/services';
@@ -11,7 +10,7 @@ import { useNavigate } from 'react-router-dom';
 function Home() {
   const wallet = useTonWallet();
   const [tonConnectUI] = useTonConnectUI();
-  const { state, open, close } = useTonConnectModal();
+  const { open } = useTonConnectModal();
   const { user, fetchUser } = useUserInfo();
   const navigate = useNavigate();
 
@@ -31,10 +30,10 @@ function Home() {
   useEffect(() => {
     tonConnectUI.onStatusChange((wallet) => {
       console.log(wallet, 'ww');
-      if (wallet?.connectItems?.tonProof && 'proof' in wallet?.connectItems?.tonProof) {
+      if (wallet?.connectItems?.tonProof && 'proof' in wallet!.connectItems!.tonProof) {
         console.log(wallet.connectItems.tonProof.proof, wallet.account);
         const connectItems = wallet.connectItems;
-        const proof = connectItems?.tonProof?.proof;
+        const proof = (connectItems?.tonProof as any)!.proof;
         const publicKey = wallet.account.publicKey!; //使用walletStateInit，publicKey由后端计算
         const fullMessage = JSON.stringify({
           timestamp: proof.timestamp,

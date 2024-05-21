@@ -53,7 +53,7 @@ function App() {
     handleAuth();
   }, []);
 
-  if (!user) return null;
+  // if (!user) return null;
 
   return (
     <div className="flex h-screen w-screen flex-col overflow-hidden bg-[#05051E] text-white">

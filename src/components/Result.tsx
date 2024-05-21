@@ -7,7 +7,7 @@ import { ENVS } from '@/constants/config.ts';
 import React, { useContext, useMemo } from 'react';
 import { LuckyWheelPageContext } from '@/pages/LuckyWheel/context';
 
-const RulesModal: React.FC = () => {
+export const RulesModal: React.FC = () => {
   return (
     <Modal
       className={'w-[95vw] rounded-[12px] border border-white/20 bg-[#1B253D] p-4 pt-6 sm:w-[410px]'}
