@@ -8,12 +8,12 @@ import WebApp from '@twa-dev/sdk';
 
 WebApp.ready();
 
-const mainifestUrl = 'https://app.ethsign.xyz/manifest.json';
+const manifestUrl = 'https://app.ethsign.xyz/manifest.json';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <TonConnectUIProvider
-      manifestUrl={mainifestUrl}
+      manifestUrl={manifestUrl}
       actionsConfiguration={{
         twaReturnUrl: 'https://t.me/sign-bot'
       }}
