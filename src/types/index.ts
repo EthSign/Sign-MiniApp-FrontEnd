@@ -34,3 +34,8 @@ export interface LotteryInfo {
     };
   };
 }
+
+export interface RaffleResult {
+  raffleId: string;
+  prizeId: string;
+}

@@ -1,4 +1,5 @@
 import { useLotteryInfo } from '@/providers/LotteryInfoProvider';
+import { raffle } from '@/services';
 import classNames from 'classnames';
 import React, { useState } from 'react';
 import { Transition } from 'react-transition-group';
@@ -6,13 +7,8 @@ import { Card } from '../../../components/Card';
 import { Result } from '../../../components/Result';
 import { Score } from './Score';
 
-async function getWheelResult() {
-  // TODO: get result from server
-  return Math.ceil(Math.random() * 10) % 6;
-}
-
 export const Wheel: React.FC<{ className?: string; onResult?: () => void; onStopped?: () => void }> = (props) => {
-  const { loading } = useLotteryInfo();
+  const { loading, prizes } = useLotteryInfo();
 
   const { className, onResult, onStopped } = props;
 
@@ -23,11 +19,13 @@ export const Wheel: React.FC<{ className?: string; onResult?: () => void; onStop
   const onSpinButtonClick = async () => {
     if (loading || isSpining) return;
 
-    const level = await getWheelResult();
+    const raffleResult = await raffle();
+
+    const prizeIndex = prizes.findIndex((item) => item.id === raffleResult.prizeId);
 
     onResult?.();
 
-    setDegree(level * 60 + 3600);
+    setDegree(prizeIndex * 60 + 3600 || 0);
 
     setIsSpining(true);
   };

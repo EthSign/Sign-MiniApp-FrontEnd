@@ -1,11 +1,16 @@
 import { Card } from '@/components/Card';
 import { LuckyWheel } from '@/pages/LuckyWheel/components/LuckyWheel';
 import { CoinsStacked01 } from '@ethsign/icons';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useLotteryInfo } from '../../providers/LotteryInfoProvider';
 
 export const LuckyWheelPage: React.FC = () => {
-  const { totalPoint } = useLotteryInfo();
+  const { totalPoint, refresh } = useLotteryInfo();
+
+  useEffect(() => {
+    refresh();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="space-y-5">

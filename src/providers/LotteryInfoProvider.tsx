@@ -1,6 +1,6 @@
 import { getLotteryInfo } from '@/services';
 import { LotteryInfo } from '@/types';
-import React, { PropsWithChildren, createContext, useContext, useEffect, useRef, useState } from 'react';
+import React, { PropsWithChildren, createContext, useCallback, useContext, useState } from 'react';
 
 export interface LotteryInfoContextData {
   loading: boolean;
@@ -38,9 +38,7 @@ export const LotteryInfoProvider: React.FC<PropsWithChildren> = (props) => {
 
   const [pageData, setPageData] = useState<LotteryInfoContextData>(DEFAULT_LOTTERY_INFO);
 
-  const loaded = useRef(false);
-
-  const fetchPageData = async () => {
+  const fetchPageData = useCallback(async () => {
     const response = await getLotteryInfo();
 
     setPageData((old) => ({ ...old, loading: true }));
@@ -53,14 +51,6 @@ export const LotteryInfoProvider: React.FC<PropsWithChildren> = (props) => {
       prizes: response.prizes,
       currentDayRaffleResult: response.currentDayRaffleResult
     });
-  };
-
-  useEffect(() => {
-    if (loaded.current) return;
-
-    fetchPageData();
-
-    loaded.current = true;
   }, []);
 
   return (
