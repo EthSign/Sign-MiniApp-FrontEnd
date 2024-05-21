@@ -1,10 +1,10 @@
-import { LuckyWheelPageContext } from '@/pages/LuckyWheel/context';
+import { useLotteryInfo } from '@/providers/LotteryInfoProvider';
 import classNames from 'classnames';
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
+import { Transition } from 'react-transition-group';
 import { Card } from '../../../components/Card';
 import { Result } from '../../../components/Result';
 import { Score } from './Score';
-import { Transition } from 'react-transition-group';
 
 async function getWheelResult() {
   // TODO: get result from server
@@ -12,7 +12,7 @@ async function getWheelResult() {
 }
 
 export const Wheel: React.FC<{ className?: string; onResult?: () => void; onStopped?: () => void }> = (props) => {
-  const { loading } = useContext(LuckyWheelPageContext);
+  const { loading } = useLotteryInfo();
 
   const { className, onResult, onStopped } = props;
 
@@ -77,7 +77,7 @@ export const Wheel: React.FC<{ className?: string; onResult?: () => void; onStop
 };
 
 export const LuckyWheel: React.FC = () => {
-  const { hasSpinedToday, currentScore, refresh } = useContext(LuckyWheelPageContext);
+  const { hasSpinedToday, currentScore, refresh } = useLotteryInfo();
 
   return (
     <Card className="relative px-0 py-6">

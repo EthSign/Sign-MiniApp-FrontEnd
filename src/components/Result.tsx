@@ -1,14 +1,14 @@
 import { CountDown } from '@/components/Countdown.tsx';
 import { ENVS } from '@/constants/config.ts';
-import { LuckyWheelPageContext } from '@/pages/LuckyWheel/context';
+import { useLotteryInfo } from '@/providers/LotteryInfoProvider';
 import { Send01 } from '@ethsign/icons';
 import { Button, Modal, Progress, Table, TableBody, TableCell, TableRow } from '@ethsign/ui';
 import { initUtils } from '@tma.js/sdk';
 import classNames from 'classnames';
-import React, { useContext, useMemo } from 'react';
+import React, { useMemo } from 'react';
 
 export const RulesModal: React.FC = () => {
-  const { currentDayRaffleResult } = useContext(LuckyWheelPageContext);
+  const { currentDayRaffleResult } = useLotteryInfo();
 
   const tableData = useMemo(() => {
     const levels = currentDayRaffleResult?.levels ?? [];
@@ -63,7 +63,7 @@ export const RulesModal: React.FC = () => {
 };
 
 export const Result: React.FC<{ className?: string }> = (props) => {
-  const { currentDayRaffleResult, refresh } = useContext(LuckyWheelPageContext);
+  const { currentDayRaffleResult, refresh } = useLotteryInfo();
 
   const { className } = props;
 
