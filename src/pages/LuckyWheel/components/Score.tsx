@@ -14,7 +14,7 @@ export const Score: React.FC<{ value: number }> = (props) => {
   }, [value]);
 
   return (
-    <div className="flex gap-2">
+    <div className="flex gap-[5px]">
       {cells.map((cell, index) => (
         <div
           key={index}
