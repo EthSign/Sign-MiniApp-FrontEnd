@@ -2,6 +2,7 @@ export interface IUser {
   userId: string;
   username: string;
   walletAddress: string;
+  code?: string;
 }
 
 export interface LotteryInfo {

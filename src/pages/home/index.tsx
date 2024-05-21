@@ -74,6 +74,12 @@ function Home() {
 
   useEffect(() => {
     console.log(user, 'user');
+    if (user?.code) {
+      navigate('/attest', {
+        replace: true
+      });
+      return;
+    }
     if (user?.walletAddress) {
       navigate('/lucky-wheel', {
         replace: true

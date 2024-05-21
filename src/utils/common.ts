@@ -1,7 +1,7 @@
 import queryString from 'query-string';
 import { customAlphabet } from 'nanoid';
 
-export const stringifyQueryString = (obj: Recordstring, any): string => {
+export const stringifyQueryString = (obj: Record<string, any>): string => {
   return queryString.stringify(obj, { skipNull: true, skipEmptyString: true });
 };
 
@@ -18,22 +18,20 @@ export const safeParseJSON = (str: string): any => {
   }
 };
 
-export const getTMAInitData = (): {
-  auth_date: string;
-  hash: string;
-  query_id: string;
+interface ITMAInitData {
   user: string;
-} | null => {
+  query_id: string;
+  hash: string;
+  auth_date: string;
+  start_param?: string; //code
+}
+
+export const getTMAInitData = (): ITMAInitData | null => {
   const initDataRaw = window.Telegram.WebApp?.initData; // user=...&query_id=...&...
   console.log(initDataRaw, 'initDataRaw');
 
   if (!initDataRaw) return null;
-  const initData = parseQuery(initDataRaw) as {
-    user: string;
-    query_id: string;
-    hash: string;
-    auth_date: string;
-  };
+  const initData = parseQuery(initDataRaw) as ITMAInitData;
   console.log(initData);
   return initData;
 };

@@ -1,6 +1,8 @@
-import { Button, Label, Modal, Select, Tabs } from '@ethsign/ui';
+import { Button, Label, Modal, Select, toast } from '@ethsign/ui';
 import { useState } from 'react';
 import { ButtonSelect } from '@/components/ButtonSelect.tsx';
+import { checkTx } from '@/services';
+import { useUserInfo } from '@/hooks/useUserInfo.tsx';
 import { ChevronLeft } from '@ethsign/icons';
 import { useNavigate } from 'react-router-dom';
 
@@ -29,8 +31,28 @@ const AboutModal = () => {
 
 export default function AttestPage() {
   const [type, setType] = useState('onchain');
+  const [template, setTemplate] = useState('template1');
+  const [loading, setLoading] = useState(false);
+  const { user } = useUserInfo();
 
   const navigate = useNavigate();
+
+  const handleSubmit = async () => {
+    try {
+      setLoading(true);
+      await checkTx({
+        txHash: '0x123',
+        raffleId: user?.code
+      });
+      toast({
+        title: 'Success',
+        description: 'Attestation has been made successfully',
+        variant: 'success'
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="">
@@ -47,7 +69,7 @@ export default function AttestPage() {
         <span className="font-bold text-md">attest</span>
       </div>
 
-      <div className={'pt-12'}>
+      <div className={'pt-10'}>
         <h1 className={'text-center text-md font-normal text-white'}>
           Sign any event <span className={'font-bold text-tangerine-500'}>ATTESTATION</span> on Sign Protocol to earn
           Sign points
@@ -73,13 +95,22 @@ export default function AttestPage() {
             onChange={(v) => setType(v as string)}
           />
           <div className="space-y-6 py-6">
-            <div>
+            <div className={'space-y-1'}>
               <Label>Choose a template</Label>
-              <Select options={[{ label: 'Template 1', value: 'template1' }]} />
+              <Select
+                options={[
+                  { label: 'Template 1', value: 'template1' },
+                  { label: 'Template 2', value: 'template2' }
+                ]}
+                value={template}
+                onChange={setTemplate}
+              />
             </div>
 
             <div>
-              <Button className={'w-full'}>Make Attestation</Button>
+              <Button loading={loading} className={'w-full'} onClick={handleSubmit}>
+                Make Attestation
+              </Button>
             </div>
           </div>
         </div>

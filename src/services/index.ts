@@ -29,8 +29,6 @@ export const getLotteryInfo = async () => {
 };
 
 //GET /mini/campaigns/lottery/tx-check
-export const getTxCheck = async (data: { txHash: string }) => {
-  return await apiClient.get('/mini/campaigns/lottery/tx-check', {
-    params: data
-  });
+export const checkTx = async (data: { txHash: string; raffleId?: string }) => {
+  return await apiClient.post('/mini/campaigns/lottery/tx-check', data);
 };
