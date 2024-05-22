@@ -1,13 +1,16 @@
 import { useLotteryInfo } from '@/providers/LotteryInfoProvider';
 import { raffle } from '@/services';
 import classNames from 'classnames';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Transition } from 'react-transition-group';
 import { Card } from '../../../components/Card';
 import { Result } from '../../../components/Result';
 import { Score } from './Score';
 
-export const Wheel: React.FC<{ className?: string; onResult?: () => void; onStopped?: () => void }> = (props) => {
+export const Wheel = React.forwardRef<
+  HTMLDivElement,
+  { className?: string; onResult?: () => void; onStopped?: () => void }
+>((props, ref) => {
   const { loading, prizes } = useLotteryInfo();
 
   const { className, onResult, onStopped } = props;
@@ -32,6 +35,7 @@ export const Wheel: React.FC<{ className?: string; onResult?: () => void; onStop
 
   return (
     <div
+      ref={ref}
       className={classNames(
         'relative flex aspect-square w-[420px] shrink-0 items-center justify-center overflow-hidden select-none',
         className
@@ -72,10 +76,13 @@ export const Wheel: React.FC<{ className?: string; onResult?: () => void; onStop
       </div>
     </div>
   );
-};
+});
 
 export const LuckyWheel: React.FC = () => {
   const { hasSpinedToday, currentScore, refresh } = useLotteryInfo();
+
+  const resultRef = useRef<HTMLDivElement>(null);
+  const wheelRef = useRef<HTMLDivElement>(null);
 
   return (
     <Card className="relative px-0 py-6">
@@ -94,9 +101,10 @@ export const LuckyWheel: React.FC = () => {
       </div>
 
       <div className="relative mt-6 flex min-h-[416px] w-full justify-center overflow-hidden">
-        <Transition in={hasSpinedToday} unmountOnExit timeout={200}>
+        <Transition nodeRef={resultRef} in={hasSpinedToday} unmountOnExit timeout={200}>
           {(state) => (
             <Result
+              ref={resultRef}
               className={classNames(
                 'absolute inset-0 mx-4 origin-center scale-50 px-4 opacity-0 transition-all duration-200',
                 {
@@ -107,9 +115,10 @@ export const LuckyWheel: React.FC = () => {
           )}
         </Transition>
 
-        <Transition in={!hasSpinedToday} unmountOnExit timeout={200}>
+        <Transition nodeRef={wheelRef} in={!hasSpinedToday} unmountOnExit timeout={200}>
           {(state) => (
             <Wheel
+              ref={wheelRef}
               className={classNames('scale-100 transition-all duration-200 origin-center', {
                 '!scale-50 opacity-0': state === 'exiting'
               })}
