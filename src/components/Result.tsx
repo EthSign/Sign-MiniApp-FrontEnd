@@ -62,7 +62,7 @@ export const RulesModal: React.FC = () => {
   );
 };
 
-export const Result: React.FC<{ className?: string }> = (props) => {
+export const Result = React.forwardRef<HTMLDivElement, { className?: string }>((props, ref) => {
   const { currentDayRaffleResult, refresh } = useLotteryInfo();
 
   const { className } = props;
@@ -73,6 +73,7 @@ export const Result: React.FC<{ className?: string }> = (props) => {
   }, [currentDayRaffleResult?.dayEnd]);
 
   const levelInfo = currentDayRaffleResult?.levelInfo;
+  const nextLevel = levelInfo?.nextLevel;
 
   const handleInvite = () => {
     const utils = initUtils();
@@ -86,10 +87,13 @@ export const Result: React.FC<{ className?: string }> = (props) => {
   };
 
   return (
-    <div className={classNames('rounded-[6px] border border-grey-700 bg-popover-hover p-7', className)}>
+    <div
+      ref={ref}
+      className={classNames('rounded-[6px] border border-grey-700 bg-popover-hover p-7 w-full', className)}
+    >
       <h1 className={'text-center font-bold text-xl text-white'}>Boost your score</h1>
 
-      {levelInfo?.nextLevel && (
+      {nextLevel && (
         <div className={'mb-5 mt-2.5 text-sm font-normal text-white'}>
           Ask friends to make attestations to boost your score up to{' '}
           <span className={'font-bold text-tangerine-500'}>{levelInfo?.nextLevel.multiplier}x points</span>.{' '}
@@ -99,38 +103,38 @@ export const Result: React.FC<{ className?: string }> = (props) => {
 
       {dueDate && (
         <div className="flex justify-center">
-          <CountDown
-            targetDate={dueDate}
-            onFinish={() => {
-              refresh();
-            }}
-          />
+          <CountDown targetDate={dueDate} onFinish={() => refresh()} />
         </div>
-      )}
-
-      {levelInfo?.nextLevel && (
-        <Button className={'mt-5 w-full gap-4'} onClick={handleInvite}>
-          <Send01 color={'#FFF'} /> Ask Friends
-        </Button>
       )}
 
       {levelInfo && (
         <>
-          <div className={'mt-7 text-sm font-normal text-gray-100'}>
-            <span className={'font-semiBold'}>{levelInfo.nextLevel.steps - levelInfo.currentSteps}</span> more steps to
-            level up
-          </div>
+          {nextLevel && (
+            <>
+              <Button className={'mt-5 w-full gap-4'} onClick={handleInvite}>
+                <Send01 color={'#FFF'} /> Ask Friends
+              </Button>
+            </>
+          )}
+
+          {nextLevel && (
+            <div className={'mt-7 text-sm font-normal text-gray-100'}>
+              <span className={'font-semiBold'}>{nextLevel.steps - levelInfo.currentSteps}</span> more steps to level up
+            </div>
+          )}
 
           <Progress
-            value={(levelInfo.currentSteps / levelInfo.nextLevel.steps) * 100}
+            value={nextLevel ? (levelInfo.currentSteps / nextLevel.steps) * 100 : 100}
             className="mt-4 bg-[#475467] [&>div]:rounded-full [&>div]:bg-[linear-gradient(90deg,#F76200_0%,#F2C045_100%)]"
           />
+
           <div className={'mt-3 flex items-center justify-between text-xs font-normal text-gray-100'}>
             <div>Current: {levelInfo.currentSteps} steps</div>
-            {levelInfo.nextLevel && <div>Next Level: {levelInfo.nextLevel.steps} steps</div>}
+
+            {nextLevel && <div>Next Level: {nextLevel.steps} steps</div>}
           </div>
         </>
       )}
     </div>
   );
-};
+});

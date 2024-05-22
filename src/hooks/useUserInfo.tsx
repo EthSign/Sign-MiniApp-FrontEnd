@@ -1,10 +1,11 @@
 'use client';
-import { useQuery } from '@tanstack/react-query';
 import { auth, getMyInfo } from '@/services';
 import { IUser } from '@/types';
-import { createContext, ReactNode, useContext, useEffect } from 'react';
 import { getTMAInitData } from '@/utils/common.ts';
+import { useQuery } from '@tanstack/react-query';
+import { ReactNode, createContext, useContext, useEffect } from 'react';
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const getUserData = async () => {
   const user = await getMyInfo();
   return user;
@@ -24,6 +25,7 @@ const UserInfoContext = createContext<UserInfoContextProps>({
   needAuth: true
 });
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useFetchUser = () => {
   const {
     data,
@@ -49,7 +51,6 @@ export const UserInfoProvider = ({ children }: { children: ReactNode }) => {
   const authData = getTMAInitData();
 
   const handleAuth = async () => {
-    console.log(authData, 'authData');
     if (authData) {
       const res = await auth({ webappData: authData, referenceCode: authData.start_param || '' });
       console.log(res, 'res');
@@ -79,6 +80,7 @@ export const UserInfoProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useUserInfo = () => {
   return useContext(UserInfoContext);
 };

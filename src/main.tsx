@@ -11,6 +11,9 @@ import { LotteryInfoProvider } from './providers/LotteryInfoProvider';
 
 WebApp.ready();
 
+WebApp.setBackgroundColor('#05051E');
+WebApp.setHeaderColor('#05051E');
+
 const manifestUrl = 'https://app.ethsign.xyz/manifest.json';
 
 const queryClient = new QueryClient();
