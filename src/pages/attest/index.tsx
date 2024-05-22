@@ -60,7 +60,7 @@ export default function AttestPage() {
         <div
           className="absolute left-0 top-0 flex aspect-square h-full items-center justify-center px-[18px]"
           onClick={() => {
-            navigate(-1);
+            navigate('/lucky-wheel');
           }}
         >
           <ChevronLeft size={24} color="#F9FAFB" />
