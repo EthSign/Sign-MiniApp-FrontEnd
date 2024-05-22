@@ -1,7 +1,21 @@
 import React from 'react';
 import { RulesModal } from '@/components/Result.tsx';
+import { useQuery } from '@tanstack/react-query';
+import { getRank } from '@/services';
+import { Loading } from '@/components/Loading.tsx';
 
 export const RankPage: React.FC = () => {
+  const { data } = useQuery({
+    queryKey: ['rank'],
+    queryFn: () => getRank()
+  });
+  console.log(data, 'data');
+
+  const userData = data?.rows;
+
+  if (!userData) return <Loading />;
+
+  const restUsers = userData.slice(3);
   return (
     <div className={'pt-5'}>
       <h1 className={'text-center font-bold text-xl'}>Sign Open Competition</h1>
@@ -18,9 +32,8 @@ export const RankPage: React.FC = () => {
           >
             <span className={'-rotate-45'}>2</span>
           </div>
-          <div className={'mt-2 font-medium text-xs'}>Jackson</div>
-          <div className={'mt-1.5 font-bold text-sm text-[#009BD6]'}>22,490,000</div>
-          <div className={'text-xs'}>@username</div>
+          <div className={'mt-2 font-medium text-xs'}>{userData[1].username}</div>
+          <div className={'mt-1.5 font-bold text-sm text-[#009BD6]'}>{userData[1].score}</div>
         </div>
         <div className="flex h-[175px] flex-1 flex-col items-center rounded-t-[32px] bg-grey-650 py-6">
           <div
@@ -30,9 +43,9 @@ export const RankPage: React.FC = () => {
           >
             <span className={'-rotate-45'}>1</span>
           </div>
-          <div className={'mt-5 font-medium text-xs'}>Jackson</div>
-          <div className={'mt-3 font-bold text-sm text-[#FFAA00]'}>22,490,000</div>
-          <div className={'mt-2 text-xs'}>@username</div>
+          <div className={'mt-5 font-medium text-xs'}>{userData[0].username}</div>
+          <div className={'mt-3 font-bold text-sm text-[#FFAA00]'}>{userData[0].score}</div>
+          {/*<div className={'mt-2 text-xs'}>@username</div>*/}
         </div>
         <div className="flex h-[124px] flex-1 flex-col items-center rounded-r-[12px] bg-grey-750 py-6">
           <div
@@ -42,9 +55,9 @@ export const RankPage: React.FC = () => {
           >
             <span className={'-rotate-45'}>3</span>
           </div>
-          <div className={'mt-2 font-medium text-xs'}>Jackson</div>
-          <div className={'mt-1.5 font-bold text-sm text-[#00D95F]'}>22,490,000</div>
-          <div className={'text-xs'}>@username</div>
+          <div className={'mt-2 font-medium text-xs'}>{userData[2].username}</div>
+          <div className={'mt-1.5 font-bold text-sm text-[#00D95F]'}>{userData[2].score}</div>
+          {/*<div className={'text-xs'}>@username</div>*/}
         </div>
       </div>
       <div className={'mt-4'}>
@@ -55,19 +68,19 @@ export const RankPage: React.FC = () => {
         </div>
       </div>
       <div className={'mt-3 space-y-2'}>
-        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item, index) => {
+        {restUsers?.map((item, index) => {
           return (
             <div key={index} className={'flex items-center justify-around rounded-[4px] bg-gray-800 px-2 py-2.5'}>
               <div className={'flex flex-1 gap-4'}>
                 <span
                   className={'flex size-6 items-center justify-center rounded-full bg-gray-600 font-medium text-xs'}
                 >
-                  {item}
+                  {index + 3}
                 </span>
-                <span>username1</span>
+                <span>{item.username}</span>
               </div>
-              <div className={'flex-[0_0_100px] px-2 text-center'}>100</div>
-              <div className={'flex-[0_0_100px] px-2 text-right'}>100</div>
+              <div className={'flex-[0_0_100px] px-2 text-center'}>{item.score}</div>
+              <div className={'flex-[0_0_100px] px-2 text-right'}>-</div>
             </div>
           );
         })}

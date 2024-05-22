@@ -1,5 +1,5 @@
 import { useTonConnectModal, useTonConnectUI, useTonWallet } from '@tonconnect/ui-react';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Button, ScrollArea } from '@ethsign/ui';
 import { getCustomNaNoId, getTMAInitData } from '@/utils/common.ts';
 import { hashSha256 } from '@ethsign/utils-web';
@@ -9,6 +9,7 @@ import { Outlet, useNavigate, useSearchParams } from 'react-router-dom';
 import { Tabbar, TabItem } from '@/components/Tabbar.tsx';
 import { BarChart01, Diamond01 } from '@ethsign/icons';
 import { Header } from '@/components/Header.tsx';
+import { Loading } from '@/components/Loading.tsx';
 
 const TABS: TabItem[] = [
   {
@@ -33,6 +34,8 @@ function Home() {
   const [searchParams] = useSearchParams();
   const isBack = searchParams.get('back');
 
+  const [binding, setBinding] = useState(false);
+
   const fullMessage = {
     statement: 'Welcome to Sign Mini APP',
     issuedAt: new Date().toISOString(),
@@ -49,6 +52,7 @@ function Home() {
       fetchUser();
     } finally {
       loadingRef.current = false;
+      setBinding(false);
     }
   };
 
@@ -56,6 +60,7 @@ function Home() {
     tonConnectUI.onStatusChange((wallet) => {
       console.log(wallet, 'ww');
       if (wallet?.connectItems?.tonProof && 'proof' in wallet!.connectItems!.tonProof) {
+        setBinding(true);
         const connectItems = wallet.connectItems;
         const proof = (connectItems?.tonProof as any)!.proof;
         const publicKey = wallet.account.publicKey!; //使用walletStateInit，publicKey由后端计算
@@ -117,10 +122,16 @@ function Home() {
 
   return (
     <div className={'h-screen flex flex-col justify-center'}>
-      <div className="flex justify-center">
-        <Button onClick={handleConnect}>Connect Wallet</Button>
-      </div>
-      <h1 className={'mt-5 text-center'}>Please Connect your Ton Wallet first!</h1>
+      {binding ? (
+        <Loading />
+      ) : (
+        <>
+          <div className="flex justify-center">
+            <Button onClick={handleConnect}>Connect Wallet</Button>
+          </div>
+          <h1 className={'mt-5 text-center'}>Please Connect your Ton Wallet first!</h1>
+        </>
+      )}
     </div>
   );
 }

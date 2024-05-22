@@ -40,3 +40,15 @@ export interface RaffleResult {
   raffleId: string;
   prizeId: string;
 }
+
+export interface IRankData {
+  total: number;
+  rows: IRank[];
+  size: number;
+}
+
+export interface IRank {
+  score: string;
+  username: string;
+  walletAddress: string;
+}
