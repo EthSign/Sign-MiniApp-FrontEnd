@@ -6,6 +6,7 @@ import { Transition } from 'react-transition-group';
 import { Card } from '../../../components/Card';
 import { Result } from '../../../components/Result';
 import { Score } from './Score';
+import WebApp from '@twa-dev/sdk';
 
 export const Wheel = React.forwardRef<
   HTMLDivElement,
@@ -23,6 +24,12 @@ export const Wheel = React.forwardRef<
     if (loading || isSpining) return;
 
     const raffleResult = await raffle();
+
+    try {
+      WebApp.HapticFeedback.impactOccurred('heavy');
+    } catch (error) {
+      console.error(error);
+    }
 
     const prizeIndex = prizes.findIndex((item) => item.id === raffleResult.prizeId);
 
