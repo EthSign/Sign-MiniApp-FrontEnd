@@ -6,7 +6,7 @@ export const RankPage: React.FC = () => {
     <div className={'pt-5'}>
       <h1 className={'text-center font-bold text-xl'}>Sign Open Competition</h1>
       <div className={'mt-5 px-2 text-white'}>
-        The top ten participants in Sign score on the leaderboard will share a big prize pool in NOTCoin/TON.
+        The top ten participants in Sign score on the leaderboard will share a big prize pool in NOTCoin/TON. &nbsp;
         <RulesModal />
       </div>
       <div className={'mt-8 flex items-end'}>

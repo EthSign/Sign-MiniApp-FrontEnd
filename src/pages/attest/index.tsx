@@ -37,6 +37,12 @@ export default function AttestPage() {
 
   const navigate = useNavigate();
 
+  const backHome = () => {
+    navigate('/lucky-wheel?back=1', {
+      replace: true
+    });
+  };
+
   const handleSubmit = async () => {
     try {
       setLoading(true);
@@ -55,13 +61,11 @@ export default function AttestPage() {
   };
 
   return (
-    <div className="">
+    <div className="p-6">
       <div className="relative -mx-6 -mt-6 flex items-center justify-center border-b border-[#1D2939] py-[14px]">
         <div
           className="absolute left-0 top-0 flex aspect-square h-full items-center justify-center px-[18px]"
-          onClick={() => {
-            navigate(-1);
-          }}
+          onClick={backHome}
         >
           <ChevronLeft size={24} color="#F9FAFB" />
         </div>
