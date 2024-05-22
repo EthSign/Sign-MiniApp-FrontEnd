@@ -72,8 +72,27 @@ export const Result = React.forwardRef<HTMLDivElement, { className?: string }>((
     return new Date(currentDayRaffleResult.dayEnd);
   }, [currentDayRaffleResult?.dayEnd]);
 
-  const levelInfo = currentDayRaffleResult?.levelInfo;
-  const nextLevel = levelInfo?.nextLevel;
+  const { currentScore, nextLevel, nextScore, progress, remainSteps } = useMemo(() => {
+    if (!currentDayRaffleResult) return {};
+
+    const {
+      currentScore,
+      levelInfo: { nextLevel, currentSteps, currentLevel, currentMultiplier },
+      levels
+    } = currentDayRaffleResult;
+
+    const remainSteps = nextLevel ? nextLevel.steps - currentSteps : 0;
+    const nextScore = nextLevel ? (currentScore / currentMultiplier) * nextLevel.multiplier : null;
+    const hasNextLevel = nextLevel !== undefined && nextLevel !== null;
+
+    const currentLevelInfo = levels.find((item) => item.level === currentLevel);
+    const minStepsInCurrentLevel = currentLevelInfo?.steps ?? 0;
+    const progress = nextLevel
+      ? ((currentSteps - minStepsInCurrentLevel) / (nextLevel.steps - minStepsInCurrentLevel)) * 100
+      : 100;
+
+    return { progress, remainSteps, currentScore, nextScore, hasNextLevel, nextLevel };
+  }, [currentDayRaffleResult]);
 
   const handleInvite = () => {
     const utils = initUtils();
@@ -86,6 +105,8 @@ export const Result = React.forwardRef<HTMLDivElement, { className?: string }>((
     );
   };
 
+  if (!currentDayRaffleResult) return null;
+
   return (
     <div
       ref={ref}
@@ -96,8 +117,7 @@ export const Result = React.forwardRef<HTMLDivElement, { className?: string }>((
       {nextLevel && (
         <div className={'mb-5 mt-2.5 text-sm font-normal text-white'}>
           Ask friends to make attestations to boost your score up to{' '}
-          <span className={'font-bold text-tangerine-500'}>{levelInfo?.nextLevel.multiplier}x points</span>.{' '}
-          <RulesModal />
+          <span className={'font-bold text-tangerine-500'}>{nextLevel.multiplier}x points</span>. <RulesModal />
         </div>
       )}
 
@@ -107,34 +127,28 @@ export const Result = React.forwardRef<HTMLDivElement, { className?: string }>((
         </div>
       )}
 
-      {levelInfo && (
-        <>
-          {nextLevel && (
-            <>
-              <Button className={'mt-5 w-full gap-4'} onClick={handleInvite}>
-                <Send01 color={'#FFF'} /> Ask Friends
-              </Button>
-            </>
-          )}
-
-          {nextLevel && (
-            <div className={'mt-7 text-sm font-normal text-gray-100'}>
-              <span className={'font-semiBold'}>{nextLevel.steps - levelInfo.currentSteps}</span> more steps to level up
-            </div>
-          )}
-
-          <Progress
-            value={nextLevel ? (levelInfo.currentSteps / nextLevel.steps) * 100 : 100}
-            className="mt-4 bg-[#475467] [&>div]:rounded-full [&>div]:bg-[linear-gradient(90deg,#F76200_0%,#F2C045_100%)]"
-          />
-
-          <div className={'mt-3 flex items-center justify-between text-xs font-normal text-gray-100'}>
-            <div>Current: {levelInfo.currentSteps} steps</div>
-
-            {nextLevel && <div>Next Level: {nextLevel.steps} steps</div>}
-          </div>
-        </>
+      {nextLevel && (
+        <Button className={'mt-5 w-full gap-4'} onClick={handleInvite}>
+          <Send01 color={'#FFF'} /> Ask Friends
+        </Button>
       )}
+
+      {remainSteps && (
+        <div className={'mt-7 text-sm font-normal text-gray-100'}>
+          <span className={'font-semiBold'}>{remainSteps}</span> more step{remainSteps > 0 ? 's' : ''} to level up
+        </div>
+      )}
+
+      <Progress
+        value={progress}
+        className="mt-4 bg-[#475467] [&>div]:rounded-full [&>div]:bg-[linear-gradient(90deg,#F76200_0%,#F2C045_100%)]"
+      />
+
+      <div className={'mt-3 flex items-center justify-between text-xs font-normal text-gray-100'}>
+        <div>Current: {currentScore} pts</div>
+
+        <div>{nextScore ? `Next Level: ${nextScore} pts` : 'Max'}</div>
+      </div>
     </div>
   );
 });
