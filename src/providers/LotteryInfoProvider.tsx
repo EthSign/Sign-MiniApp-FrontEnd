@@ -39,9 +39,9 @@ export const LotteryInfoProvider: React.FC<PropsWithChildren> = (props) => {
   const [pageData, setPageData] = useState<LotteryInfoContextData>(DEFAULT_LOTTERY_INFO);
 
   const fetchPageData = useCallback(async () => {
-    const response = await getLotteryInfo();
-
     setPageData((old) => ({ ...old, loading: true }));
+
+    const response = await getLotteryInfo();
 
     setPageData({
       loading: false,

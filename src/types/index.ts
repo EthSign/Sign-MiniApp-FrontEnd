@@ -27,7 +27,7 @@ export interface LotteryInfo {
       currentLevel: number;
       currentSteps: number;
       currentMultiplier: number;
-      nextLevel: {
+      nextLevel?: {
         level: number;
         steps: number;
         multiplier: number;

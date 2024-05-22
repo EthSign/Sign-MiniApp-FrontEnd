@@ -12,18 +12,27 @@ export const Wheel = React.forwardRef<
   HTMLDivElement,
   { className?: string; onResult?: () => void; onStopped?: () => void }
 >((props, ref) => {
-  const { loading, prizes } = useLotteryInfo();
+  const { loading, prizes, refresh } = useLotteryInfo();
 
   const { className, onResult, onStopped } = props;
 
   const [isSpining, setIsSpining] = useState(false);
 
+  const [isRaffling, setIsRaffling] = useState(false);
+
   const [degree, setDegree] = useState(0);
 
   const onSpinButtonClick = async () => {
-    if (loading || isSpining) return;
+    if (loading || isSpining || isRaffling) return;
 
-    const raffleResult = await raffle();
+    setIsRaffling(true);
+
+    const raffleResult = await raffle().catch((error) => {
+      refresh();
+      throw error;
+    });
+
+    setIsRaffling(false);
 
     try {
       WebApp.HapticFeedback.impactOccurred('heavy');
@@ -130,9 +139,7 @@ export const LuckyWheel: React.FC = () => {
                 '!scale-50 opacity-0': state === 'exiting'
               })}
               onStopped={() => {
-                setTimeout(() => {
-                  refresh();
-                }, 500);
+                refresh();
               }}
             />
           )}

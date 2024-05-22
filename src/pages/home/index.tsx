@@ -10,6 +10,7 @@ import { Tabbar, TabItem } from '@/components/Tabbar.tsx';
 import { BarChart01, Diamond01 } from '@ethsign/icons';
 import { Header } from '@/components/Header.tsx';
 import { Loading } from '@/components/Loading.tsx';
+import { useLotteryInfo } from '@/providers/LotteryInfoProvider';
 
 const TABS: TabItem[] = [
   {
@@ -28,9 +29,10 @@ function Home() {
   const wallet = useTonWallet();
   const [tonConnectUI] = useTonConnectUI();
   const { open } = useTonConnectModal();
-  const { user, fetchUser } = useUserInfo();
+  const { user, fetchUser, isLoading: isLoadingUser } = useUserInfo();
+  const { loading: isLoadingLotteryInfo } = useLotteryInfo();
   const navigate = useNavigate();
-  const loadingRef = useRef(false);
+  const isBindingRef = useRef(false);
   const [searchParams] = useSearchParams();
   const isBack = searchParams.get('back');
 
@@ -45,13 +47,13 @@ function Home() {
   const originMsg = JSON.stringify(fullMessage, null, '  ');
 
   const handleBindWallet = async (data: { message: string; signature: string; publicKey: string }) => {
-    if (loadingRef.current) return;
+    if (isBindingRef.current) return;
     try {
-      loadingRef.current = true;
+      isBindingRef.current = true;
       await bindWallet(data);
       fetchUser();
     } finally {
-      loadingRef.current = false;
+      isBindingRef.current = false;
       setBinding(false);
     }
   };
@@ -111,8 +113,10 @@ function Home() {
       <>
         <Header />
         <ScrollArea className={'h-[calc(100vh-167px)] [&>[data-radix-scroll-area-viewport]>div]:!block'}>
-          <div className="p-6">
+          <div className="relative p-6">
             <Outlet />
+
+            {(isLoadingUser || isLoadingLotteryInfo) && <Loading />}
           </div>
         </ScrollArea>
         <Tabbar tabs={TABS} />
@@ -121,7 +125,7 @@ function Home() {
   }
 
   return (
-    <div className={'h-screen flex flex-col justify-center'}>
+    <div className={'flex h-screen flex-col justify-center'}>
       {binding ? (
         <Loading />
       ) : (
