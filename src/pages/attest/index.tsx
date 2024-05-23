@@ -9,6 +9,12 @@ import { ChainType } from '@/core/types.ts';
 import { WalletFactory } from '@/core/WalletFactory.tsx';
 import { useTonConnectUI, useTonWallet } from '@tonconnect/ui-react';
 import { OffChainRpc } from '@ethsign/sp-sdk';
+import { useSignProtocol } from '@/utils/ton-sp/hooks/useSignProtocol';
+import { getTonSpInfo } from '@/constants/config';
+import { AttestationConfig } from '@/utils/ton-sp/wrappers';
+import { Address } from '@ton/core';
+import { useConnection } from '@/utils/ton-sp/hooks/useConnection()';
+import { DataLocation } from '@/utils/ton-sp/utils';
 
 const AboutModal = () => {
   return (
@@ -67,9 +73,9 @@ export default function AttestPage() {
   const [loading, setLoading] = useState(false);
   const { user } = useUserInfo();
   const navigate = useNavigate();
-  const wallet = useTonWallet();
   const [tonConnectUI] = useTonConnectUI();
-
+  const { spContract, getSchemaContract } = useSignProtocol();
+  const { wallet, sender, publicKey } = useConnection();
   const backHome = () => {
     navigate('/lucky-wheel?back=1', {
       replace: true
@@ -131,13 +137,41 @@ export default function AttestPage() {
     console.log(attestRes, 'attestRes');
   };
 
-  const handleSubmit = async () => {
-    if (wallet) {
-      await tonConnectUI.disconnect();
-    }
+  const createAttestationByOnchain = async () => {
+    const schemaAddress = getTonSpInfo().schemaAddress;
+    const schema = getSchemaContract(schemaAddress);
+    const schemaData = await schema!.getSchemaData();
+    const attestation: AttestationConfig = {
+      attestationCounterId: (await spContract?.getAttestationCounter()) ?? 0,
+      attester: Address.parse(wallet?.account.address ?? ''),
+      attesterPubKey: publicKey || '',
+      attestTimestamp: new Date(),
+      data: 'Test',
+      dataLocation: DataLocation.ONCHAIN,
+      linkedAttestationCounterId: 0,
+      recipients: [Address.parse('0QCm4j6oTqRNqS8k0MIQyuqeSoAgApoXzVLX0_dYvAfD_64N')],
+      schemaCounterId: schemaData.schemaCounterId,
+      schemaId: Address.parse(schemaAddress),
+      validUntil: new Date('2024-12-12')
+    };
+    await spContract?.sendAttest(sender, attestation, schemaData);
+    const attestId = await spContract?.getAttestationId(attestation);
+    console.log('attestId', attestId);
+  };
 
+  const handleSubmit = async () => {
     if (type === 'offchain') {
+      if (wallet) {
+        await tonConnectUI.disconnect();
+      }
       await createAttestationByOffchain();
+    } else {
+      if (tonConnectUI.connected) {
+        await createAttestationByOnchain();
+      } else {
+        await tonConnectUI.openModal();
+      }
+      console.log('lala');
     }
 
     return;
