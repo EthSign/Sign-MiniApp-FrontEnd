@@ -10,7 +10,6 @@ import { Tabbar, TabItem } from '@/components/Tabbar.tsx';
 import { BarChart01, Diamond01 } from '@ethsign/icons';
 import { Header } from '@/components/Header.tsx';
 import { Loading } from '@/components/Loading.tsx';
-import { useLotteryInfo } from '@/providers/LotteryInfoProvider';
 
 const TABS: TabItem[] = [
   {
@@ -29,8 +28,7 @@ function Home() {
   const wallet = useTonWallet();
   const [tonConnectUI] = useTonConnectUI();
   const { open } = useTonConnectModal();
-  const { user, fetchUser, isLoading: isLoadingUser } = useUserInfo();
-  const { loading: isLoadingLotteryInfo } = useLotteryInfo();
+  const { user, fetchUser } = useUserInfo();
   const navigate = useNavigate();
   const isBindingRef = useRef(false);
   const [searchParams] = useSearchParams();
@@ -115,8 +113,6 @@ function Home() {
         <ScrollArea className={'h-[calc(100vh-167px)] [&>[data-radix-scroll-area-viewport]>div]:!block'}>
           <div className="relative p-6">
             <Outlet />
-
-            {(isLoadingUser || isLoadingLotteryInfo) && <Loading />}
           </div>
         </ScrollArea>
         <Tabbar tabs={TABS} />
