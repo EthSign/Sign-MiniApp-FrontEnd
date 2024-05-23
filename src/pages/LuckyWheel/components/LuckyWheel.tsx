@@ -44,7 +44,7 @@ export const Wheel = React.forwardRef<
 
     onResult?.();
 
-    setDegree(prizeIndex * 60 + 3600 || 0);
+    setDegree(3600 - prizeIndex * 60 || 0);
 
     setIsSpining(true);
   };
