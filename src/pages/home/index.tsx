@@ -1,11 +1,8 @@
 import { Header } from '@/components/Header.tsx';
 import { TabItem, Tabbar } from '@/components/Tabbar.tsx';
-import { useUserInfo } from '@/providers/UserInfoProvider';
-import { getTMAInitData } from '@/utils/common';
 import { BarChart01, Diamond01 } from '@ethsign/icons';
 import { ScrollArea } from '@ethsign/ui';
-import { useEffect } from 'react';
-import { Outlet, useNavigate, useSearchParams } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 
 const TABS: TabItem[] = [
   {
@@ -21,22 +18,6 @@ const TABS: TabItem[] = [
 ];
 
 function Home() {
-  const { user } = useUserInfo();
-
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const isBack = searchParams.get('back');
-
-  useEffect(() => {
-    const authData = getTMAInitData();
-    console.log(user, authData, 'user');
-    if (user?.code && !isBack) {
-      navigate('/attest', { replace: true });
-      return;
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
-
   return (
     <>
       <Header />

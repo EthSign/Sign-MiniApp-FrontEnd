@@ -76,7 +76,7 @@ export default function AttestPage() {
   const { spContract, getSchemaContract } = useSignProtocol();
   const { wallet, sender, publicKey } = useConnection();
   const backHome = () => {
-    navigate('/lucky-wheel?back=1', {
+    navigate('/lucky-wheel', {
       replace: true
     });
   };

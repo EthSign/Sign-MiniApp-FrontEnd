@@ -5,11 +5,22 @@ import { LuckyWheelPage } from './pages/LuckyWheel';
 import { RankPage } from './pages/Rank';
 import AttestPage from '@/pages/attest';
 import Home from '@/pages/home';
+import { getTMAInitData } from './utils/common';
+
+let redirectedToAttest = false;
 
 const routerConfig: RouteObject[] = [
   {
     path: '/',
     element: <App />,
+    loader: () => {
+      const authData = getTMAInitData();
+      if (authData?.start_param && !redirectedToAttest) {
+        redirectedToAttest = true;
+        return redirect('/attest');
+      }
+      return true;
+    },
     children: [
       {
         path: '',
