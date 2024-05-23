@@ -71,7 +71,7 @@ interface IAttestation {
 }
 
 export const submitAttestationByOffchain = async (data: IAttestation) => {
-  const client = new ApiClient({ baseURL: OffChainRpc.testnet });
+  const client = new ApiClient({ baseURL: 'http://43.198.156.58:3020/api' });
 
   return client.post('/sp/attestations', data);
 };

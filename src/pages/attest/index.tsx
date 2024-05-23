@@ -106,7 +106,7 @@ export default function AttestPage() {
       linkedAttestationId: '',
       validUntil: 0,
       recipients: [],
-      indexingValue: [],
+      indexingValue: [user?.code],
       dataLocation: schema.dataLocation,
       data: JSON.stringify(data)
     };
