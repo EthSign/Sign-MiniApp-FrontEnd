@@ -11,6 +11,9 @@ importers:
       '@ethsign/icons':
         specifier: ^1.0.7
         version: 1.0.13
+      '@ethsign/sp-sdk':
+        specifier: ^0.3.31
+        version: 0.3.31(bufferutil@4.0.8)(utf-8-validate@6.0.4)(viem@2.10.9(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@6.0.4)(zod@3.23.8))
       '@ethsign/ui':
         specifier: ^0.2.2
         version: 0.2.2(@types/react-dom@18.3.0)(@types/react@18.3.2)(date-fns@3.6.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tailwindcss@3.4.3)
@@ -26,6 +29,9 @@ importers:
       '@tma.js/sdk':
         specifier: ^2.2.0
         version: 2.2.0
+      '@tonconnect/ui':
+        specifier: ^2.0.2
+        version: 2.0.2
       '@tonconnect/ui-react':
         specifier: ^2.0.2
         version: 2.0.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -77,6 +83,12 @@ importers:
       tailwind-merge:
         specifier: ^2.2.1
         version: 2.3.0
+      ton-core:
+        specifier: ^0.53.0
+        version: 0.53.0(ton-crypto@3.2.0)
+      valtio:
+        specifier: ^1.13.2
+        version: 1.13.2(@types/react@18.3.2)(react@18.3.1)
       viem:
         specifier: ^2.7.19
         version: 2.10.9(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@6.0.4)(zod@3.23.8)
@@ -84,6 +96,9 @@ importers:
         specifier: ^2.5.7
         version: 2.9.2(@tanstack/query-core@5.36.1)(@tanstack/react-query@5.37.1(react@18.3.1))(@types/react@18.3.2)(bufferutil@4.0.8)(react-dom@18.3.1(react@18.3.1))(react-i18next@13.5.0(i18next@22.5.1)(react-dom@18.3.1(react@18.3.1))(react-native@0.74.1(@babel/core@7.24.5)(@babel/preset-env@7.24.5(@babel/core@7.24.5))(@types/react@18.3.2)(bufferutil@4.0.8)(react@18.3.1)(utf-8-validate@6.0.4))(react@18.3.1))(react-native@0.74.1(@babel/core@7.24.5)(@babel/preset-env@7.24.5(@babel/core@7.24.5))(@types/react@18.3.2)(bufferutil@4.0.8)(react@18.3.1)(utf-8-validate@6.0.4))(react@18.3.1)(rollup@4.17.2)(typescript@5.4.5)(utf-8-validate@6.0.4)(viem@2.10.9(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@6.0.4)(zod@3.23.8))(zod@3.23.8)
     devDependencies:
+      '@esbuild-plugins/node-globals-polyfill':
+        specifier: ^0.2.3
+        version: 0.2.3(esbuild@0.20.2)
       '@tailwindcss/forms':
         specifier: ^0.5.7
         version: 0.5.7(tailwindcss@3.4.3)
@@ -895,6 +910,11 @@ packages:
   '@emotion/hash@0.9.1':
     resolution: {integrity: sha512-gJB6HLm5rYwSLI6PQa+X1t5CFGrv1J1TWG+sOyMCeKz2ojaj6Fnl/rZEspogG+cvqbt4AE/2eIyD2QfLKTBNlQ==}
 
+  '@esbuild-plugins/node-globals-polyfill@0.2.3':
+    resolution: {integrity: sha512-r3MIryXDeXDOZh7ih1l/yE9ZLORCd5e8vWg02azWRGj5SPTuoh69A2AIyn0Z31V/kHBfZ4HgWJ+OK3GTTwLmnw==}
+    peerDependencies:
+      esbuild: '*'
+
   '@esbuild/aix-ppc64@0.20.2':
     resolution: {integrity: sha512-D+EBOJHXdNZcLJRBkhENNG8Wji2kgc9AZ9KiPr1JuZjsNtyHzrsfLRrY0tk2H2aoFu6RANO1y1iPPUCDYWkb5g==}
     engines: {node: '>=12'}
@@ -1069,6 +1089,11 @@ packages:
 
   '@ethsign/icons@1.0.13':
     resolution: {integrity: sha512-0f5idXLaLbBU6GrEJGYOtdqH4yBmc0Z+tRHoMZNj2ZZZXZl8xYBIpXlGHwydPKnTxysgaMUDPZ0141pZYS3bnw==}
+
+  '@ethsign/sp-sdk@0.3.31':
+    resolution: {integrity: sha512-JXUlpYuoKWqvd7GGMwpk6A9NAGDinIHLai1vMNH+hk1uPBU8L6pc8DJ2riYGKeSZYQM+28T4anb0OkSrm2JCoQ==}
+    peerDependencies:
+      viem: '>=2.0.0'
 
   '@ethsign/ui@0.2.2':
     resolution: {integrity: sha512-SzNn3w3VjwIhrRq3+2DzJanPEeMm0I7KGNhVUGIaJVYO7XUneYdmgaTepSXlljB/Im5/WW1Rq0OQkGaIIOkUnw==}
@@ -3303,6 +3328,11 @@ packages:
     resolution: {integrity: sha512-g7nH6P6dyDioJogAAGprGpCtVImJhpPk/roCzdb3fIh61/s/nPsfR6onyMwkCAR/OlC3yBC0lESvUoQEAssIrw==}
     engines: {node: '>= 0.8'}
 
+  derive-valtio@0.1.0:
+    resolution: {integrity: sha512-OCg2UsLbXK7GmmpzMXhYkdO64vhJ1ROUUGaTFyHjVwEdMEcTTRj7W1TxLbSBxdY8QLBPCcp66MTyaSy0RpO17A==}
+    peerDependencies:
+      valtio: '*'
+
   destr@2.0.3:
     resolution: {integrity: sha512-2N3BOUU4gYMpTP24s5rF5iP7BDr7uNTCs4ozw3kf/eKfvWSIu93GEBi5m427YoyJoeOzQ5smuu4nNAPGb8idSQ==}
 
@@ -4119,6 +4149,9 @@ packages:
   jsonfile@4.0.0:
     resolution: {integrity: sha512-m6F1R3z8jjlf2imQHS2Qez5sjKWQzbuuhuJ/FKYFRZvPE3PuHcSMVZzfsLhGVOkfd20obL5SWEBew5ShlquNxg==}
 
+  jssha@3.2.0:
+    resolution: {integrity: sha512-QuruyBENDWdN4tZwJbQq7/eAK85FqrI4oDbXjy5IBhYD+2pTJyBUWZe8ctWaCkrV0gy6AaelgOZZBMeswEa/6Q==}
+
   keccak@3.0.4:
     resolution: {integrity: sha512-3vKuW0jV8J3XNTzvfyicFR5qvxrSAGl7KIhvgOu5cmWwM7tZRj3fMbj/pfIf4be7aznbc+prBWGjywox/g2Y6Q==}
     engines: {node: '>=10.0.0'}
@@ -4799,6 +4832,9 @@ packages:
   proxy-compare@2.5.1:
     resolution: {integrity: sha512-oyfc0Tx87Cpwva5ZXezSp5V9vht1c7dZBhvuV/y3ctkgMVUmiAGDVeeB0dKhGSyT0v1ZTEQYpe/RXlBVBNuCLA==}
 
+  proxy-compare@2.6.0:
+    resolution: {integrity: sha512-8xuCeM3l8yqdmbPoYeLbrAXCBWu19XEYc5/F28f5qOaoAIMyfmBUkl5axiK+x9olUvRlcekvnm98AP9RDngOIw==}
+
   proxy-from-env@1.1.0:
     resolution: {integrity: sha512-D+zkORCbA9f1tdWRK0RaCR3GPv50cMxcrz4X8k5LTSUD1Dkw47mKJEZQNunItRTkWwgtaUSo1RVFRIG9ZXiFYg==}
 
@@ -5377,6 +5413,9 @@ packages:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==}
     engines: {node: '>= 0.4'}
 
+  symbol.inspect@1.0.1:
+    resolution: {integrity: sha512-YQSL4duoHmLhsTD1Pw8RW6TZ5MaTX5rXJnqacJottr2P2LZBF/Yvrc3ku4NUpMOm8aM0KOCqM+UAkMA5HWQCzQ==}
+
   system-architecture@0.1.0:
     resolution: {integrity: sha512-ulAk51I9UVUyJgxlv9M6lFot2WP3e7t8Kz9+IS6D4rVba1tR9kON+Ey69f+1R4Q8cd45Lod6a4IcJIxnzGc/zA==}
     engines: {node: '>=18'}
@@ -5453,6 +5492,17 @@ packages:
   toidentifier@1.0.1:
     resolution: {integrity: sha512-o5sSPKEkg/DIQNmH43V0/uerLrpzVedkUh8tGNvaeXpfpuwjKenlSox/2O/BTlZUtEe+JG7s5YhEz608PlAHRA==}
     engines: {node: '>=0.6'}
+
+  ton-core@0.53.0:
+    resolution: {integrity: sha512-uO/U1oVLdEliWWbwfNQQK+61C+KM0ehcTdHQ6cN0WSEH2UzGfdVFpC4Wb0ph+wUYe/5njl7TA0uL9nif9Q6qwA==}
+    peerDependencies:
+      ton-crypto: '>=3.2.0'
+
+  ton-crypto-primitives@2.0.0:
+    resolution: {integrity: sha512-K+qKjpS0h9sPW6oExcpxnzuQ7nEgHEiDKwIqE/jWD25o8iFGe3FWj1gKxFNbKE9wwYKc5IV8FwrU+raF0KO5nQ==}
+
+  ton-crypto@3.2.0:
+    resolution: {integrity: sha512-fltdBNQ45gARMuGMEOjPZWPJ5eSql8p3CA0Dj7tPv5lhU5ziT8SxXLAzDraR9HJ8YpjBHLVvYyhMLRiEwxgtMQ==}
 
   tr46@0.0.3:
     resolution: {integrity: sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw==}
@@ -5659,6 +5709,18 @@ packages:
 
   valtio@1.11.2:
     resolution: {integrity: sha512-1XfIxnUXzyswPAPXo1P3Pdx2mq/pIqZICkWN60Hby0d9Iqb+MEIpqgYVlbflvHdrp2YR/q3jyKWRPJJ100yxaw==}
+    engines: {node: '>=12.20.0'}
+    peerDependencies:
+      '@types/react': '>=16.8'
+      react: '>=16.8'
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      react:
+        optional: true
+
+  valtio@1.13.2:
+    resolution: {integrity: sha512-Qik0o+DSy741TmkqmRfjq+0xpZBXi/Y6+fXZLn0xNF1z/waFMbE3rkivv5Zcf9RrMUp6zswf2J7sbh2KBlba5A==}
     engines: {node: '>=12.20.0'}
     peerDependencies:
       '@types/react': '>=16.8'
@@ -6809,6 +6871,10 @@ snapshots:
 
   '@emotion/hash@0.9.1': {}
 
+  '@esbuild-plugins/node-globals-polyfill@0.2.3(esbuild@0.20.2)':
+    dependencies:
+      esbuild: 0.20.2
+
   '@esbuild/aix-ppc64@0.20.2':
     optional: true
 
@@ -6926,6 +6992,16 @@ snapshots:
       prop-types: 15.8.1
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
+
+  '@ethsign/sp-sdk@0.3.31(bufferutil@4.0.8)(utf-8-validate@6.0.4)(viem@2.10.9(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@6.0.4)(zod@3.23.8))':
+    dependencies:
+      ethers: 6.12.1(bufferutil@4.0.8)(utf-8-validate@6.0.4)
+      query-string: 9.0.0
+      tslib: 2.6.2
+      viem: 2.10.9(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@6.0.4)(zod@3.23.8)
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
 
   '@ethsign/ui@0.2.2(@types/react-dom@18.3.0)(@types/react@18.3.2)(date-fns@3.6.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tailwindcss@3.4.3)':
     dependencies:
@@ -9925,6 +10001,10 @@ snapshots:
 
   depd@2.0.0: {}
 
+  derive-valtio@0.1.0(valtio@1.13.2(@types/react@18.3.2)(react@18.3.1)):
+    dependencies:
+      valtio: 1.13.2(@types/react@18.3.2)(react@18.3.1)
+
   destr@2.0.3: {}
 
   destroy@1.2.0: {}
@@ -10821,6 +10901,8 @@ snapshots:
     optionalDependencies:
       graceful-fs: 4.2.11
 
+  jssha@3.2.0: {}
+
   keccak@3.0.4:
     dependencies:
       node-addon-api: 2.0.2
@@ -11568,6 +11650,8 @@ snapshots:
 
   proxy-compare@2.5.1: {}
 
+  proxy-compare@2.6.0: {}
+
   proxy-from-env@1.1.0: {}
 
   pump@3.0.0:
@@ -12212,6 +12296,8 @@ snapshots:
 
   supports-preserve-symlinks-flag@1.0.0: {}
 
+  symbol.inspect@1.0.1: {}
+
   system-architecture@0.1.0: {}
 
   tabbable@6.2.0: {}
@@ -12300,6 +12386,21 @@ snapshots:
   toggle-selection@1.0.6: {}
 
   toidentifier@1.0.1: {}
+
+  ton-core@0.53.0(ton-crypto@3.2.0):
+    dependencies:
+      symbol.inspect: 1.0.1
+      ton-crypto: 3.2.0
+
+  ton-crypto-primitives@2.0.0:
+    dependencies:
+      jssha: 3.2.0
+
+  ton-crypto@3.2.0:
+    dependencies:
+      jssha: 3.2.0
+      ton-crypto-primitives: 2.0.0
+      tweetnacl: 1.0.3
 
   tr46@0.0.3: {}
 
@@ -12447,6 +12548,15 @@ snapshots:
   valtio@1.11.2(@types/react@18.3.2)(react@18.3.1):
     dependencies:
       proxy-compare: 2.5.1
+      use-sync-external-store: 1.2.0(react@18.3.1)
+    optionalDependencies:
+      '@types/react': 18.3.2
+      react: 18.3.1
+
+  valtio@1.13.2(@types/react@18.3.2)(react@18.3.1):
+    dependencies:
+      derive-valtio: 0.1.0(valtio@1.13.2(@types/react@18.3.2)(react@18.3.1))
+      proxy-compare: 2.6.0
       use-sync-external-store: 1.2.0(react@18.3.1)
     optionalDependencies:
       '@types/react': 18.3.2

@@ -1,10 +1,14 @@
 import { Button, Label, Modal, Select, toast } from '@ethsign/ui';
 import { useState } from 'react';
 import { ButtonSelect } from '@/components/ButtonSelect.tsx';
-import { checkTx } from '@/services';
+import { checkTx, submitAttestationByOffchain, submitSchema } from '@/services';
 import { useUserInfo } from '@/hooks/useUserInfo.tsx';
 import { ChevronLeft } from '@ethsign/icons';
 import { useNavigate } from 'react-router-dom';
+import { ChainType } from '@/core/types.ts';
+import { WalletFactory } from '@/core/WalletFactory.tsx';
+import { useTonConnectUI, useTonWallet } from '@tonconnect/ui-react';
+import { OffChainRpc } from '@ethsign/sp-sdk';
 
 const AboutModal = () => {
   return (
@@ -29,13 +33,42 @@ const AboutModal = () => {
   );
 };
 
+const schema = {
+  name: 'SIGN score booster for off-chain',
+  description: 'SIGN TG Mini-app score booster schema for off-chain attestation.',
+  revocable: true,
+  maxValidFor: 0,
+  types: [
+    {
+      name: 'userId',
+      type: 'string'
+    },
+    {
+      name: 'boostCode',
+      type: 'string'
+    },
+    {
+      name: 'message',
+      type: 'string'
+    },
+    {
+      name: 'signature',
+      type: 'string'
+    }
+  ],
+  dataLocation: 'arweave'
+};
+
+const schemaId = 'SPS_uRupYWqUadWNjKuPHUOyh';
+
 export default function AttestPage() {
-  const [type, setType] = useState('onchain');
-  const [template, setTemplate] = useState('template1');
+  const [type, setType] = useState('offchain');
+  const [template, setTemplate] = useState(schema.name);
   const [loading, setLoading] = useState(false);
   const { user } = useUserInfo();
-
   const navigate = useNavigate();
+  const wallet = useTonWallet();
+  const [tonConnectUI] = useTonConnectUI();
 
   const backHome = () => {
     navigate('/lucky-wheel?back=1', {
@@ -43,7 +76,71 @@ export default function AttestPage() {
     });
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // const createSchema = async () => {
+  //   const walletIns = WalletFactory.getWallet(ChainType.Ton);
+  //   const str = JSON.stringify(schema, null, '  ');
+  //   const res = await walletIns.sign(str);
+  //   console.log(res, 'res');
+  //   const info = walletIns.getWallet();
+  //   const msgRes = JSON.parse(res.message);
+  //   await submitSchema({
+  //     schema: str,
+  //     signature: res.signature,
+  //     message: msgRes.fullMessage,
+  //     publicKey: info.publicKey!,
+  //     signType: 'ton-connect'
+  //   });
+  // };
+
+  const createAttestationByOffchain = async () => {
+    const data = {
+      userId: user?.userId,
+      boostCode: user?.code,
+      message: '',
+      signature: ''
+    };
+
+    const attestationObj = {
+      schemaId,
+      linkedAttestationId: '',
+      validUntil: 0,
+      recipients: [],
+      indexingValue: [],
+      dataLocation: schema.dataLocation,
+      data: JSON.stringify(data)
+    };
+
+    const attestationString = JSON.stringify(attestationObj, null, '  ');
+
+    const walletIns = WalletFactory.getWallet(ChainType.Ton);
+    const res = await walletIns.sign(attestationString);
+    console.log(res, 'res');
+    const info = walletIns.getWallet();
+    const msgRes = JSON.parse(res.message);
+    console.log(info, msgRes);
+
+    const attestRes = await submitAttestationByOffchain({
+      signType: 'ton-connect',
+      publicKey: info.publicKey!,
+      signature: res.signature,
+      message: msgRes.fullMessage,
+      attestation: attestationString
+    });
+
+    console.log(attestRes, 'attestRes');
+  };
+
   const handleSubmit = async () => {
+    if (wallet) {
+      await tonConnectUI.disconnect();
+    }
+
+    if (type === 'offchain') {
+      await createAttestationByOffchain();
+    }
+
+    return;
     try {
       setLoading(true);
       await checkTx({
@@ -101,14 +198,7 @@ export default function AttestPage() {
           <div className="space-y-6 py-6">
             <div className={'space-y-1'}>
               <Label>Choose a template</Label>
-              <Select
-                options={[
-                  { label: 'Template 1', value: 'template1' },
-                  { label: 'Template 2', value: 'template2' }
-                ]}
-                value={template}
-                onChange={setTemplate}
-              />
+              <Select options={[{ label: schema.name, value: schema.name }]} value={template} onChange={setTemplate} />
             </div>
 
             <div>

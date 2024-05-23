@@ -75,7 +75,7 @@ export const RankPage: React.FC = () => {
                 <span
                   className={'flex size-6 items-center justify-center rounded-full bg-gray-600 font-medium text-xs'}
                 >
-                  {index + 3}
+                  {index + 4}
                 </span>
                 <span>{item.username}</span>
               </div>
