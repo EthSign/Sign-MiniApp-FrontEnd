@@ -5,9 +5,9 @@ import {
   useTonConnectUI,
   useTonWallet,
   useTonConnectModal,
-  WalletInfoRemote
+  WalletInfoRemote,
+  TonConnectUIProviderProps
 } from '@tonconnect/ui-react';
-import { TonConnectUIProviderProps } from '@tonconnect/ui-react/lib/components/TonConnectUIProvider';
 import { WalletBase } from '../../WalletBase.ts';
 import { ISignResult } from '../../types.ts';
 import { getCustomNaNoId } from '../../utils';

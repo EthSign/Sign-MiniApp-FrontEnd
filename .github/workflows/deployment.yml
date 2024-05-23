@@ -20,8 +20,7 @@ jobs:
     environment: production
     env:
       CI: false
-      VITE_WALLET_CONNECT_PROJECT_ID: ${{ vars.VITE_WALLET_CONNECT_PROJECT_ID }}
-      VITE_RENZO_PROJECT_ID: ${{ vars.VITE_RENZO_PROJECT_ID }}
+      VITE_ENV: ${{ vars.VITE_ENV }}
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it

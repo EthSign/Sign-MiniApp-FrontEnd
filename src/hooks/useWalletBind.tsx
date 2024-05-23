@@ -1,15 +1,15 @@
 import { bindWallet } from '@/services';
 import { getCustomNaNoId } from '@/utils/common.ts';
-import { hashSha256 } from '@ethsign/utils-web';
-import { useTonConnectModal, useTonConnectUI, useTonWallet } from '@tonconnect/ui-react';
-import { useEffect, useRef, useState } from 'react';
+import { useTonConnectUI, useTonWallet } from '@tonconnect/ui-react';
+import { useRef, useState } from 'react';
+import { WalletFactory } from '@/core/WalletFactory.tsx';
+import { ChainType } from '@/core/types.ts';
 
 export const useWalletBind = (props: { onBindSuccess?: () => void }) => {
   const { onBindSuccess } = props;
 
   const wallet = useTonWallet();
   const [tonConnectUI] = useTonConnectUI();
-  const { open } = useTonConnectModal();
 
   const [binding, setBinding] = useState(false);
 
@@ -28,14 +28,16 @@ export const useWalletBind = (props: { onBindSuccess?: () => void }) => {
       await tonConnectUI.disconnect();
     }
 
-    const message = await hashSha256(originMsg);
+    const walletIns = WalletFactory.getWallet(ChainType.Ton);
+    const res = await walletIns.sign(originMsg);
 
-    tonConnectUI.setConnectRequestParameters({
-      state: 'ready',
-      value: { tonProof: message }
+    const info = walletIns.getWallet();
+
+    handleBindWallet({
+      message: res.message,
+      signature: res.signature,
+      publicKey: info.publicKey!
     });
-
-    open();
   };
 
   const handleBindWallet = async (data: { message: string; signature: string; publicKey: string }) => {
@@ -44,41 +46,12 @@ export const useWalletBind = (props: { onBindSuccess?: () => void }) => {
     try {
       isBindingRef.current = true;
       await bindWallet(data);
-      // fetchUser();
       onBindSuccess?.();
     } finally {
       isBindingRef.current = false;
       setBinding(false);
     }
   };
-
-  useEffect(() => {
-    tonConnectUI.onStatusChange((wallet) => {
-      console.log(wallet, 'ww');
-      if (wallet?.connectItems?.tonProof && 'proof' in wallet!.connectItems!.tonProof) {
-        setBinding(true);
-        const connectItems = wallet.connectItems;
-        const proof = (connectItems?.tonProof as any)!.proof;
-        const publicKey = wallet.account.publicKey!; //使用walletStateInit，publicKey由后端计算
-        const fullMessage = JSON.stringify({
-          timestamp: proof.timestamp,
-          payload: proof.payload,
-          domain: proof.domain
-        });
-        const signature = proof.signature;
-
-        handleBindWallet({
-          message: JSON.stringify({
-            fullMessage,
-            message: originMsg
-          }),
-          signature,
-          publicKey
-        });
-      }
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return {
     isBindingWallet: binding,

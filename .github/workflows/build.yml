@@ -26,6 +26,7 @@ jobs:
     environment: development
     env:
       CI: false
+      VITE_ENV: ${{ vars.VITE_ENV }}
     strategy:
       matrix:
         node-version: [18.x]

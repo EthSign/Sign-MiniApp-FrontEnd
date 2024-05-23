@@ -1,19 +1,18 @@
 import { Button, Label, Modal, Select, toast } from '@ethsign/ui';
 import { useState } from 'react';
 import { ButtonSelect } from '@/components/ButtonSelect.tsx';
-import { checkTx, submitAttestationByOffchain, submitSchema } from '@/services';
+import { checkTx, submitAttestationByOffchain } from '@/services';
 import { useUserInfo } from '@/providers/UserInfoProvider';
 import { ChevronLeft } from '@ethsign/icons';
 import { useNavigate } from 'react-router-dom';
 import { ChainType } from '@/core/types.ts';
 import { WalletFactory } from '@/core/WalletFactory.tsx';
-import { useTonConnectUI, useTonWallet } from '@tonconnect/ui-react';
-import { OffChainRpc } from '@ethsign/sp-sdk';
+import { useTonConnectUI } from '@tonconnect/ui-react';
 import { useSignProtocol } from '@/utils/ton-sp/hooks/useSignProtocol';
 import { getTonSpInfo } from '@/constants/config';
 import { AttestationConfig } from '@/utils/ton-sp/wrappers';
 import { Address } from '@ton/core';
-import { useConnection } from '@/utils/ton-sp/hooks/useConnection()';
+import { useConnection } from '@/utils/ton-sp/hooks/useConnection.ts';
 import { DataLocation } from '@/utils/ton-sp/utils';
 
 const AboutModal = () => {
@@ -71,7 +70,7 @@ export default function AttestPage() {
   const [type, setType] = useState('offchain');
   const [template, setTemplate] = useState(schema.name);
   const [loading, setLoading] = useState(false);
-  const { user } = useUserInfo();
+  const { user, isBindingWallet, bindWallet } = useUserInfo();
   const navigate = useNavigate();
   const [tonConnectUI] = useTonConnectUI();
   const { spContract, getSchemaContract } = useSignProtocol();
@@ -112,7 +111,7 @@ export default function AttestPage() {
       linkedAttestationId: '',
       validUntil: 0,
       recipients: [],
-      indexingValue: [user?.code],
+      indexingValue: user?.code ? user?.code : user?.userId,
       dataLocation: schema.dataLocation,
       data: JSON.stringify(data)
     };
@@ -236,9 +235,15 @@ export default function AttestPage() {
             </div>
 
             <div>
-              <Button loading={loading} className={'w-full'} onClick={handleSubmit}>
-                Make Attestation
-              </Button>
+              {user?.walletAddress ? (
+                <Button loading={loading} className={'w-full'} onClick={handleSubmit}>
+                  Make Attestation
+                </Button>
+              ) : (
+                <Button loading={isBindingWallet} className={'w-full'} onClick={bindWallet}>
+                  Bind Wallet
+                </Button>
+              )}
             </div>
           </div>
         </div>

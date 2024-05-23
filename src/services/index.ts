@@ -2,6 +2,7 @@
 import { ApiClient, apiClient } from '@/utils/api-client.ts';
 import { IRankData, IUser, LotteryInfo, RaffleResult } from '@/types';
 import { OffChainRpc } from '@ethsign/sp-sdk';
+import { ENVS } from '@/constants/config.ts';
 
 export const auth = async (data: { webappData: Record<string, any>; referenceCode: string }) => {
   return await apiClient.post('/mini/auth', data);
@@ -54,14 +55,6 @@ export const submitSchema = async (data: ISchema) => {
   return await spClient.post('/sp/schemas', data);
 };
 
-// {
-//   signType: 'ton-connect',
-//     publicKey: info.publicKey,
-//   signature: res.signature,
-//   message: msgRes.fullMessage,
-//   attestation: attestationString
-// }
-
 interface IAttestation {
   signType: string;
   publicKey: string;
@@ -70,8 +63,13 @@ interface IAttestation {
   attestation: string;
 }
 
+const rpcMap = {
+  dev: 'http://43.198.156.58:3020/api',
+  prod: OffChainRpc.testnet
+};
+
 export const submitAttestationByOffchain = async (data: IAttestation) => {
-  const client = new ApiClient({ baseURL: 'http://43.198.156.58:3020/api' });
+  const client = new ApiClient({ baseURL: rpcMap[ENVS.ENV as 'dev' | 'prod'] });
 
   return client.post('/sp/attestations', data);
 };
