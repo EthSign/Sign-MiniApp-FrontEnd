@@ -1,3 +1,4 @@
+import { Loading } from '@/components/Loading';
 import { getLotteryInfo } from '@/services';
 import { LotteryInfo } from '@/types';
 import React, { PropsWithChildren, createContext, useCallback, useContext, useState } from 'react';
@@ -22,7 +23,7 @@ export const DEFAULT_LOTTERY_INFO: LotteryInfoContextData = {
 
 export const LotteryInfoContext = createContext<
   LotteryInfoContextData & {
-    refresh: () => Promise<void>;
+    refresh: (props?: { showLoading?: boolean }) => Promise<void>;
   }
 >({
   loading: true,
@@ -36,14 +37,16 @@ export const LotteryInfoContext = createContext<
 export const LotteryInfoProvider: React.FC<PropsWithChildren> = (props) => {
   const { children } = props;
 
-  const [pageData, setPageData] = useState<LotteryInfoContextData>(DEFAULT_LOTTERY_INFO);
+  const [lotteryInfo, setLotteryInfo] = useState<LotteryInfoContextData>(DEFAULT_LOTTERY_INFO);
+
+  const [loadingVisible, setLoadingVisible] = useState(false);
 
   const fetchPageData = useCallback(async () => {
-    setPageData((old) => ({ ...old, loading: true }));
+    setLotteryInfo((old) => ({ ...old, loading: true }));
 
     const response = await getLotteryInfo();
 
-    setPageData({
+    setLotteryInfo({
       loading: false,
       totalPoint: response.totalPoint,
       currentScore: response.currentDayRaffleResult?.currentScore ?? 0,
@@ -53,9 +56,35 @@ export const LotteryInfoProvider: React.FC<PropsWithChildren> = (props) => {
     });
   }, []);
 
+  const refresh = useCallback(
+    async (props: { showLoading?: boolean } = { showLoading: false }) => {
+      const { showLoading } = props;
+
+      if (showLoading) setLoadingVisible(true);
+
+      const data = await fetchPageData();
+
+      if (showLoading) setLoadingVisible(false);
+
+      return data;
+    },
+    [fetchPageData]
+  );
+
   return (
-    <LotteryInfoContext.Provider value={{ ...pageData, refresh: fetchPageData }}>
+    <LotteryInfoContext.Provider
+      value={{
+        ...lotteryInfo,
+        refresh
+      }}
+    >
       {children}
+
+      {loadingVisible && (
+        <div className="fixed inset-0">
+          <Loading />
+        </div>
+      )}
     </LotteryInfoContext.Provider>
   );
 };

@@ -133,7 +133,7 @@ export const Result = React.forwardRef<HTMLDivElement, { className?: string }>((
         </Button>
       )}
 
-      {remainSteps && (
+      {remainSteps !== undefined && remainSteps > 0 && (
         <div className={'mt-7 text-sm font-normal text-gray-100'}>
           <span className={'font-semiBold'}>{remainSteps}</span> more step{remainSteps > 0 ? 's' : ''} to level up
         </div>
