@@ -4,7 +4,7 @@ import { CoinsStacked01 } from '@ethsign/icons';
 import React, { useEffect, useRef } from 'react';
 import { useLotteryInfo } from '../../providers/LotteryInfoProvider';
 import { Link } from 'react-router-dom';
-import { useUserInfo } from '@/hooks/useUserInfo';
+import { useUserInfo } from '@/providers/UserInfoProvider';
 
 export const LuckyWheelPage: React.FC = () => {
   const { user } = useUserInfo();

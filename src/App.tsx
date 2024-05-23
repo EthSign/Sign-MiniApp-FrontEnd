@@ -1,7 +1,7 @@
 import { Outlet } from 'react-router-dom';
 import { initTelegramApp, isTelegramApp } from '@/utils/common.ts';
 import { useDebug } from '@/hooks/useDebug.tsx';
-import { UserInfoProvider } from '@/hooks/useUserInfo.tsx';
+import { UserInfoProvider } from '@/providers/UserInfoProvider';
 import { useEffect } from 'react';
 
 const TGAPP = () => {

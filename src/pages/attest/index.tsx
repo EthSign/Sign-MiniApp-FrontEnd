@@ -2,7 +2,7 @@ import { Button, Label, Modal, Select, toast } from '@ethsign/ui';
 import { useState } from 'react';
 import { ButtonSelect } from '@/components/ButtonSelect.tsx';
 import { checkTx, submitAttestationByOffchain, submitSchema } from '@/services';
-import { useUserInfo } from '@/hooks/useUserInfo.tsx';
+import { useUserInfo } from '@/providers/UserInfoProvider';
 import { ChevronLeft } from '@ethsign/icons';
 import { useNavigate } from 'react-router-dom';
 import { ChainType } from '@/core/types.ts';
