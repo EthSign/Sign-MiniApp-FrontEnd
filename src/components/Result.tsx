@@ -2,65 +2,11 @@ import { CountDown } from '@/components/Countdown.tsx';
 import { ENVS } from '@/constants/config.ts';
 import { useLotteryInfo } from '@/providers/LotteryInfoProvider';
 import { Send01 } from '@ethsign/icons';
-import { Button, Modal, Progress, Table, TableBody, TableCell, TableRow } from '@ethsign/ui';
+import { Button, Progress } from '@ethsign/ui';
 import { initUtils } from '@tma.js/sdk';
 import classNames from 'classnames';
 import React, { useMemo } from 'react';
-
-export const RulesModal: React.FC = () => {
-  const { currentDayRaffleResult } = useLotteryInfo();
-
-  const tableData = useMemo(() => {
-    const levels = currentDayRaffleResult?.levels ?? [];
-
-    const data = [
-      {
-        label: 'Levels',
-        values: levels.map((item) => 'Level' + item.level)
-      },
-      {
-        label: 'Bonus',
-        values: levels.map((item) => item.multiplier + 'x')
-      },
-      {
-        label: 'Level up',
-        values: levels.map((item) => item.steps)
-      }
-    ];
-
-    return data;
-  }, [currentDayRaffleResult?.levels]);
-
-  return (
-    <Modal
-      className={'w-[95vw] rounded-[12px] border border-white/20 bg-[#1B253D] p-4 pt-6 sm:w-[410px]'}
-      footer={false}
-      trigger={<span className={'text-tangerine-500 underline'}>Rules</span>}
-    >
-      <div className={'text-center text-white'}>
-        <h2 className={'font-bold text-[25px]'}>Activity Rules</h2>
-        <div className={'mt-3 text-lg font-normal'}>
-          5 steps forward for a on-chain attestation. 1 step forward for a off-chain attestation.
-        </div>
-      </div>
-      <Table className={'overflow-hidden rounded-[6px] text-xs'}>
-        <TableBody>
-          {tableData.map((row, index) => (
-            <TableRow key={index} className="border-[#475467]">
-              <TableCell className="w-[76px] bg-[#2E2F49] px-2 font-medium text-white">{row.label}</TableCell>
-
-              {row.values.map((value, index) => (
-                <TableCell key={index} className="w-[75px] bg-[#252740] px-2">
-                  {value}
-                </TableCell>
-              ))}
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </Modal>
-  );
-};
+import { LotteryRulesModal } from './RulesModal';
 
 export const Result = React.forwardRef<HTMLDivElement, { className?: string }>((props, ref) => {
   const { currentDayRaffleResult, refresh } = useLotteryInfo();
@@ -117,7 +63,7 @@ export const Result = React.forwardRef<HTMLDivElement, { className?: string }>((
       {nextLevel && (
         <div className={'mb-5 mt-2.5 text-sm font-normal text-white'}>
           Ask friends to make attestations to boost your score up to{' '}
-          <span className={'font-bold text-tangerine-500'}>{nextLevel.multiplier}x points</span>. <RulesModal />
+          <span className={'font-bold text-tangerine-500'}>{nextLevel.multiplier}x points</span>. <LotteryRulesModal />
         </div>
       )}
 

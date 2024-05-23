@@ -1,5 +1,5 @@
 import React from 'react';
-import { RulesModal } from '@/components/Result.tsx';
+import { LotteryRulesModal } from '@/components/RulesModal';
 import { useQuery } from '@tanstack/react-query';
 import { getRank } from '@/services';
 import { Loading } from '@/components/Loading.tsx';
@@ -21,7 +21,7 @@ export const RankPage: React.FC = () => {
       <h1 className={'text-center font-bold text-xl'}>Sign Open Competition</h1>
       <div className={'mt-5 px-2 text-white'}>
         The top ten participants in Sign score on the leaderboard will share a big prize pool in NOTCoin/TON. &nbsp;
-        <RulesModal />
+        <LotteryRulesModal />
       </div>
       <div className={'mt-8 flex items-end'}>
         <div className="flex h-[124px] flex-1 flex-col items-center rounded-l-[12px] bg-grey-750 py-6">
