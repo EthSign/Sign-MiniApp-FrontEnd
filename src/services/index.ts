@@ -40,6 +40,15 @@ export const getRank = async () => {
   return await apiClient.get<IRankData>('/mini/rank');
 };
 
+// POST /mini/campaigns/lottery/attest-prepare
+export const attestPrepare = async (data: { raffleId: string }) => {
+  return await apiClient.post<{
+    raffleId: string;
+    signature: string;
+    userId: string;
+  }>('/mini/campaigns/lottery/attest-prepare', data);
+};
+
 const spClient = new ApiClient({ baseURL: '/sp-api' });
 
 // POST /sp/schemas
@@ -71,5 +80,5 @@ const rpcMap = {
 export const submitAttestationByOffchain = async (data: IAttestation) => {
   const client = new ApiClient({ baseURL: rpcMap[ENVS.ENV as 'dev' | 'prod'] });
 
-  return client.post('/sp/attestations', data);
+  return client.post<{ attestationId: string }>('/sp/attestations', data);
 };

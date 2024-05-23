@@ -1,7 +1,7 @@
 import { Button, Label, Modal, Select, toast } from '@ethsign/ui';
 import { useState } from 'react';
-import { ButtonSelect } from '@/components/ButtonSelect.tsx';
-import { checkTx, submitAttestationByOffchain } from '@/services';
+// import { ButtonSelect } from '@/components/ButtonSelect.tsx';
+import { attestPrepare, checkTx, submitAttestationByOffchain } from '@/services';
 import { useUserInfo } from '@/providers/UserInfoProvider';
 import { ChevronLeft } from '@ethsign/icons';
 import { useNavigate } from 'react-router-dom';
@@ -67,7 +67,7 @@ const schema = {
 const schemaId = 'SPS_uRupYWqUadWNjKuPHUOyh';
 
 export default function AttestPage() {
-  const [type, setType] = useState('offchain');
+  const [type] = useState('offchain');
   const [template, setTemplate] = useState(schema.name);
   const [loading, setLoading] = useState(false);
   const { user, isBindingWallet, bindWallet } = useUserInfo();
@@ -81,7 +81,6 @@ export default function AttestPage() {
     });
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   // const createSchema = async () => {
   //   const walletIns = WalletFactory.getWallet(ChainType.Ton);
   //   const str = JSON.stringify(schema, null, '  ');
@@ -99,19 +98,30 @@ export default function AttestPage() {
   // };
 
   const createAttestationByOffchain = async () => {
+    const reffleId = user?.code || '9--SO1AotswFM9D4r0Aqp';
+    if (!reffleId) {
+      toast({
+        title: 'Error',
+        description: 'User code is not found',
+        variant: 'error'
+      });
+      return;
+    }
+    const prepareData = await attestPrepare({ raffleId: reffleId });
+    console.log(prepareData, 'prepareData');
     const data = {
-      userId: user?.userId,
-      boostCode: user?.code,
-      message: '',
-      signature: ''
+      userId: prepareData.userId,
+      boostCode: reffleId,
+      message: schema.description, // TODO
+      signature: prepareData.signature
     };
 
     const attestationObj = {
       schemaId,
       linkedAttestationId: '',
       validUntil: 0,
-      recipients: [],
-      indexingValue: user?.code ? user?.code : user?.userId,
+      recipients: [user?.walletAddress],
+      indexingValue: reffleId,
       dataLocation: schema.dataLocation,
       data: JSON.stringify(data)
     };
@@ -122,6 +132,15 @@ export default function AttestPage() {
     const res = await walletIns.sign(attestationString);
     console.log(res, 'res');
     const info = walletIns.getWallet();
+
+    // if (info.address?.toLowerCase() !== user?.walletAddress.toLowerCase()) {
+    //   toast({
+    //     title: 'Error',
+    //     description: 'Wallet address is not matched',
+    //     variant: 'error'
+    //   });
+    //   return;
+    // }
     const msgRes = JSON.parse(res.message);
     console.log(info, msgRes);
 
@@ -134,6 +153,21 @@ export default function AttestPage() {
     });
 
     console.log(attestRes, 'attestRes');
+
+    try {
+      setLoading(true);
+      await checkTx({
+        txHash: attestRes.attestationId,
+        raffleId: reffleId
+      });
+      toast({
+        title: 'Success',
+        description: 'Attestation has been made successfully',
+        variant: 'success'
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const createAttestationByOnchain = async () => {
@@ -172,22 +206,6 @@ export default function AttestPage() {
       }
       console.log('lala');
     }
-
-    return;
-    try {
-      setLoading(true);
-      await checkTx({
-        txHash: '0x123',
-        raffleId: user?.code
-      });
-      toast({
-        title: 'Success',
-        description: 'Attestation has been made successfully',
-        variant: 'success'
-      });
-    } finally {
-      setLoading(false);
-    }
   };
 
   return (
@@ -214,20 +232,20 @@ export default function AttestPage() {
         </div>
 
         <div className="rounded-[6px] border border-grey-650 bg-gray-900 p-6">
-          <ButtonSelect
-            options={[
-              {
-                label: 'On-Chain',
-                value: 'onchain'
-              },
-              {
-                label: 'Off-Chain',
-                value: 'offchain'
-              }
-            ]}
-            value={type}
-            onChange={(v) => setType(v as string)}
-          />
+          {/*<ButtonSelect*/}
+          {/*  options={[*/}
+          {/*    {*/}
+          {/*      label: 'On-Chain',*/}
+          {/*      value: 'onchain'*/}
+          {/*    },*/}
+          {/*    {*/}
+          {/*      label: 'Off-Chain',*/}
+          {/*      value: 'offchain'*/}
+          {/*    }*/}
+          {/*  ]}*/}
+          {/*  value={type}*/}
+          {/*  onChange={(v) => setType(v as string)}*/}
+          {/*/>*/}
           <div className="space-y-6 py-6">
             <div className={'space-y-1'}>
               <Label>Choose a template</Label>
