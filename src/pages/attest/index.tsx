@@ -1,5 +1,5 @@
 import { Button, Label, Modal, Select, toast } from '@ethsign/ui';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 // import { ButtonSelect } from '@/components/ButtonSelect.tsx';
 import { attestPrepare, checkTx, submitAttestationByOffchain } from '@/services';
 import { useUserInfo } from '@/providers/UserInfoProvider';
@@ -14,6 +14,7 @@ import { AttestationConfig } from '@/utils/ton-sp/wrappers';
 import { Address } from '@ton/core';
 import { useConnection } from '@/utils/ton-sp/hooks/useConnection.ts';
 import { DataLocation } from '@/utils/ton-sp/utils';
+//import { ButtonSelect } from '@/components/ButtonSelect';
 
 const AboutModal = () => {
   return (
@@ -67,20 +68,26 @@ const schema = {
 const schemaId = 'SPS_uRupYWqUadWNjKuPHUOyh';
 
 export default function AttestPage() {
-  const [type] = useState('offchain');
+  const [type /* setType */] = useState('offchain');
   const [template, setTemplate] = useState(schema.name);
   const [loading, setLoading] = useState(false);
   const { user, isBindingWallet, bindWallet } = useUserInfo();
   const navigate = useNavigate();
   const [tonConnectUI] = useTonConnectUI();
-  const { spContract, getSchemaContract } = useSignProtocol();
+  const { spContract, getSchemaContract, getAttestationContract } = useSignProtocol();
   const { wallet, sender, publicKey } = useConnection();
   const backHome = () => {
     navigate('/lucky-wheel', {
       replace: true
     });
   };
-
+  useEffect(() => {
+    if (tonConnectUI) {
+      tonConnectUI.onModalStateChange((state) => {
+        console.log(state, '222');
+      });
+    }
+  }, [tonConnectUI]);
   // const createSchema = async () => {
   //   const walletIns = WalletFactory.getWallet(ChainType.Ton);
   //   const str = JSON.stringify(schema, null, '  ');
@@ -189,7 +196,28 @@ export default function AttestPage() {
     };
     await spContract?.sendAttest(sender, attestation, schemaData);
     const attestId = await spContract?.getAttestationId(attestation);
-    console.log('attestId', attestId?.toString());
+    // 校验是否成功，2分钟后直接超时失败
+    await new Promise((resolve, reject) => {
+      const intervaler = setInterval(async () => {
+        try {
+          const attestationContract = await getAttestationContract(attestId?.toString() ?? '');
+          const data = await attestationContract?.getAttestationData();
+          if (data) {
+            clearInterval(intervaler);
+            resolve(attestId?.toString());
+            console.log('Attestation Data', data);
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      }, 2000);
+      setTimeout(() => {
+        clearInterval(intervaler);
+        reject('Timeout');
+      }, 120000);
+    });
+
+    console.log('attestId', attestId);
   };
 
   const handleSubmit = async () => {
@@ -232,20 +260,20 @@ export default function AttestPage() {
         </div>
 
         <div className="rounded-[6px] border border-grey-650 bg-gray-900 p-6">
-          {/*<ButtonSelect*/}
-          {/*  options={[*/}
-          {/*    {*/}
-          {/*      label: 'On-Chain',*/}
-          {/*      value: 'onchain'*/}
-          {/*    },*/}
-          {/*    {*/}
-          {/*      label: 'Off-Chain',*/}
-          {/*      value: 'offchain'*/}
-          {/*    }*/}
-          {/*  ]}*/}
-          {/*  value={type}*/}
-          {/*  onChange={(v) => setType(v as string)}*/}
-          {/*/>*/}
+          {/* <ButtonSelect
+            options={[
+              {
+                label: 'On-Chain',
+                value: 'onchain'
+              },
+              {
+                label: 'Off-Chain',
+                value: 'offchain'
+              }
+            ]}
+            value={type}
+            onChange={(v) => setType(v as string)}
+          /> */}
           <div className="space-y-6 py-6">
             <div className={'space-y-1'}>
               <Label>Choose a template</Label>
