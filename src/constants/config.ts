@@ -3,8 +3,7 @@ export const ENVS = {
   CHAIN_ENV: import.meta.env.VITE_CHAIN_ENV,
   TG_APP_LINK: import.meta.env.VITE_TMA_LINK, //t.me/ethsignddev_bot/minidev t.me/ChainDevBot/chainapp
   ENV: import.meta.env.VITE_ENV,
-  SHARE_DESC:
-    "💰Catizen: Unleash, Play, Earn - Where Every Game Leads to an Airdrop Adventure!\n🎁Let's play-to-earn airdrop right now!"
+  SHARE_DESC: 'Spin to win $NOT and more！'
 };
 
 export const tonSp = {
