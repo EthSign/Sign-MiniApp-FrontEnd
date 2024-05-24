@@ -50,7 +50,7 @@ export const attestPrepare = async (data: { raffleId: string }) => {
 };
 
 const rpcMap = {
-  dev: OffChainRpc.testnet, //'http://43.198.156.58:3020/api'
+  dev: 'http://43.198.156.58:3020/api', //'http://43.198.156.58:3020/api'
   prod: OffChainRpc.mainnet
 };
 

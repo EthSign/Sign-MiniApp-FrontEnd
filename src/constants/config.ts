@@ -11,7 +11,7 @@ export const tonSp = {
   dev: {
     spAddress: 'kQBbxPGNadGSWnVLDyDy0VqGVGHoI9fzXBED5sh3Vd3oadW5',
     schemaAddress: 'kQCcQmtTwkOktZCbrv8r8gTDCcebzdCNKiOBMxprpo9wRiWq',
-    offchainSchemaId: 'SPS_dh0JMcaQCZ2DPKzD0JFF0'
+    offchainSchemaId: 'SPS_uRupYWqUadWNjKuPHUOyh' // testnet:SPS_dh0JMcaQCZ2DPKzD0JFF0
   },
   prod: {
     spAddress: '',
