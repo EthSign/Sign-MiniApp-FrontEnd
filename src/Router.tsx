@@ -3,9 +3,10 @@ import NotFound from '@/pages/404';
 import { createBrowserRouter, redirect, RouteObject, RouterProvider } from 'react-router-dom';
 import { LuckyWheelPage } from './pages/LuckyWheel';
 import { RankPage } from './pages/Rank';
-import AttestPage from '@/pages/attest';
-import Home from '@/pages/home';
+import AttestPage from '@/pages/Attest';
+import Home from '@/pages/Home';
 import { getTMAInitData } from './utils/common';
+import CreateSchema from './pages/CreateSchema';
 
 let redirectedToAttest = false;
 
@@ -48,6 +49,10 @@ const routerConfig: RouteObject[] = [
       {
         path: '/attest',
         element: <AttestPage />
+      },
+      {
+        path: '/schema',
+        element: <CreateSchema />
       }
     ]
   },

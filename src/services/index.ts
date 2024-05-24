@@ -49,7 +49,12 @@ export const attestPrepare = async (data: { raffleId: string }) => {
   }>('/mini/campaigns/lottery/attest-prepare', data);
 };
 
-const spClient = new ApiClient({ baseURL: '/sp-api' });
+const rpcMap = {
+  dev: OffChainRpc.testnet, //'http://43.198.156.58:3020/api'
+  prod: OffChainRpc.mainnet
+};
+
+const spClient = new ApiClient({ baseURL: rpcMap[ENVS.ENV as 'dev' | 'prod'] });
 
 // POST /sp/schemas
 
@@ -72,13 +77,6 @@ interface IAttestation {
   attestation: string;
 }
 
-const rpcMap = {
-  dev: 'http://43.198.156.58:3020/api',
-  prod: OffChainRpc.testnet
-};
-
 export const submitAttestationByOffchain = async (data: IAttestation) => {
-  const client = new ApiClient({ baseURL: rpcMap[ENVS.ENV as 'dev' | 'prod'] });
-
-  return client.post<{ attestationId: string }>('/sp/attestations', data);
+  return spClient.post<{ attestationId: string }>('/sp/attestations', data);
 };
