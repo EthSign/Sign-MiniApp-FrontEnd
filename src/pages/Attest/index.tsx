@@ -16,7 +16,6 @@ import { useConnection } from '@/utils/ton-sp/hooks/useConnection.ts';
 import { DataLocation } from '@/utils/ton-sp/utils';
 import { offChainSchema } from '@/constants/config';
 
-
 const AboutModal = () => {
   return (
     <Modal
@@ -40,7 +39,6 @@ const AboutModal = () => {
   );
 };
 
-
 // const schemaId = 'SPS_uRupYWqUadWNjKuPHUOyh';
 
 export default function AttestPage() {
@@ -52,7 +50,7 @@ export default function AttestPage() {
   const [tonConnectUI] = useTonConnectUI();
   const { spContract, getSchemaContract, getAttestationContract } = useSignProtocol();
   const { wallet, sender, publicKey } = useConnection();
-  const { offchainSchemaId: schemaId } = getTonSpInfo()
+  const { offchainSchemaId: schemaId } = getTonSpInfo();
   const backHome = () => {
     navigate('/lucky-wheel', {
       replace: true
@@ -95,14 +93,14 @@ export default function AttestPage() {
     console.log(res, 'res');
     const info = walletIns.getWallet();
 
-    // if (info.address?.toLowerCase() !== user?.walletAddress.toLowerCase()) {
-    //   toast({
-    //     title: 'Error',
-    //     description: 'Wallet address is not matched',
-    //     variant: 'error'
-    //   });
-    //   return;
-    // }
+    if (info.address?.toLowerCase() !== user?.walletAddress.toLowerCase()) {
+      toast({
+        title: 'Error',
+        description: 'Wallet address is not matched',
+        variant: 'error'
+      });
+      return;
+    }
     const msgRes = JSON.parse(res.message);
     console.log(info, msgRes);
 
@@ -232,7 +230,11 @@ export default function AttestPage() {
           <div className="space-y-6 py-6">
             <div className={'space-y-1'}>
               <Label>Choose a template</Label>
-              <Select options={[{ label: offChainSchema.name, value: offChainSchema.name }]} value={template} onChange={setTemplate} />
+              <Select
+                options={[{ label: offChainSchema.name, value: offChainSchema.name }]}
+                value={template}
+                onChange={setTemplate}
+              />
             </div>
 
             <div>

@@ -3,7 +3,6 @@ import { LuckyWheel } from '@/pages/LuckyWheel/components/LuckyWheel';
 import { CoinsStacked01 } from '@ethsign/icons';
 import React, { useEffect, useRef } from 'react';
 import { useLotteryInfo } from '../../providers/LotteryInfoProvider';
-import { Link } from 'react-router-dom';
 import { useUserInfo } from '@/providers/UserInfoProvider';
 
 export const LuckyWheelPage: React.FC = () => {
@@ -50,12 +49,12 @@ export const LuckyWheelPage: React.FC = () => {
 
       <LuckyWheel />
 
-      <Link
-        to="/attest"
-        className="fixed bottom-[105px] right-4 flex size-[66px] items-center justify-center rounded-full border border-[#CF5C10] bg-[#EF6820] font-bold text-sm"
-      >
-        <span>Attest</span>
-      </Link>
+      {/*<Link*/}
+      {/*  to="/attest"*/}
+      {/*  className="fixed bottom-[105px] right-4 flex size-[66px] items-center justify-center rounded-full border border-[#CF5C10] bg-[#EF6820] font-bold text-sm"*/}
+      {/*>*/}
+      {/*  <span>Attest</span>*/}
+      {/*</Link>*/}
     </div>
   );
 };
