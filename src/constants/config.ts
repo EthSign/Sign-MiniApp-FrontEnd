@@ -1,9 +1,10 @@
 export const ENVS = {
   WALLET_CONNECT_PROJECT_ID: import.meta.env.VITE_WALLET_CONNECT_PROJECT_ID,
   CHAIN_ENV: import.meta.env.VITE_CHAIN_ENV,
-  TG_APP_LINK: 'https://t.me/ethsignddev_bot/minidev', //t.me/ethsignddev_bot/minidev t.me/ChainDevBot/chainapp
-  WelcomeMessage: 'Welcometosignbot',
+  TG_APP_LINK: import.meta.env.VITE_TMA_LINK, //t.me/ethsignddev_bot/minidev t.me/ChainDevBot/chainapp
   ENV: import.meta.env.VITE_ENV,
+  SHARE_DESC:
+    "💰Catizen: Unleash, Play, Earn - Where Every Game Leads to an Airdrop Adventure!\n🎁Let's play-to-earn airdrop right now!"
 };
 
 export const tonSp = {
@@ -15,7 +16,7 @@ export const tonSp = {
   prod: {
     spAddress: '',
     schemaAddress: '',
-    offchainSchemaId: ''
+    offchainSchemaId: 'SPS_9TfGxNsEIY2qNRhsP081L'
   }
 };
 export function getTonSpInfo() {

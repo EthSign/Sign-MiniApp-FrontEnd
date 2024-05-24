@@ -1,5 +1,5 @@
 import { Button, Label, Modal, Select, toast } from '@ethsign/ui';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 // import { ButtonSelect } from '@/components/ButtonSelect.tsx';
 import { attestPrepare, checkTx, submitAttestationByOffchain } from '@/services';
 import { useUserInfo } from '@/providers/UserInfoProvider';
@@ -60,7 +60,7 @@ export default function AttestPage() {
   };
 
   const createAttestationByOffchain = async () => {
-    const reffleId = user?.code || 'WJV9dSaAR7C3xvWruLQBl';
+    const reffleId = user?.code;
     if (!reffleId) {
       toast({
         title: 'Error',
