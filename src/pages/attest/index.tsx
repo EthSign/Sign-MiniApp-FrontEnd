@@ -81,13 +81,7 @@ export default function AttestPage() {
       replace: true
     });
   };
-  useEffect(() => {
-    if (tonConnectUI) {
-      tonConnectUI.onModalStateChange((state) => {
-        console.log(state, '222');
-      });
-    }
-  }, [tonConnectUI]);
+
   // const createSchema = async () => {
   //   const walletIns = WalletFactory.getWallet(ChainType.Ton);
   //   const str = JSON.stringify(schema, null, '  ');
