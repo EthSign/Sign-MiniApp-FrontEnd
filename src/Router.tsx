@@ -6,6 +6,8 @@ import { RankPage } from './pages/Rank';
 import AttestPage from '@/pages/attest';
 import Home from '@/pages/home';
 
+// let redirectedToAttest = false;
+
 const routerConfig: RouteObject[] = [
   {
     path: '/',

@@ -2,6 +2,7 @@
 import { ApiClient, apiClient } from '@/utils/api-client.ts';
 import { IRankData, IUser, LotteryInfo, RaffleResult } from '@/types';
 import { OffChainRpc } from '@ethsign/sp-sdk';
+import { ENVS } from '@/constants/config.ts';
 
 export const auth = async (data: { webappData: Record<string, any>; referenceCode: string }) => {
   return await apiClient.post('/mini/auth', data);
@@ -39,6 +40,15 @@ export const getRank = async () => {
   return await apiClient.get<IRankData>('/mini/rank');
 };
 
+// POST /mini/campaigns/lottery/attest-prepare
+export const attestPrepare = async (data: { raffleId: string }) => {
+  return await apiClient.post<{
+    raffleId: string;
+    signature: string;
+    userId: string;
+  }>('/mini/campaigns/lottery/attest-prepare', data);
+};
+
 const spClient = new ApiClient({ baseURL: '/sp-api' });
 
 // POST /sp/schemas
@@ -54,14 +64,6 @@ export const submitSchema = async (data: ISchema) => {
   return await spClient.post('/sp/schemas', data);
 };
 
-// {
-//   signType: 'ton-connect',
-//     publicKey: info.publicKey,
-//   signature: res.signature,
-//   message: msgRes.fullMessage,
-//   attestation: attestationString
-// }
-
 interface IAttestation {
   signType: string;
   publicKey: string;
@@ -70,8 +72,13 @@ interface IAttestation {
   attestation: string;
 }
 
-export const submitAttestationByOffchain = async (data: IAttestation) => {
-  const client = new ApiClient({ baseURL: OffChainRpc.testnet });
+const rpcMap = {
+  dev: 'http://43.198.156.58:3020/api',
+  prod: OffChainRpc.testnet
+};
 
-  return client.post('/sp/attestations', data);
+export const submitAttestationByOffchain = async (data: IAttestation) => {
+  const client = new ApiClient({ baseURL: rpcMap[ENVS.ENV as 'dev' | 'prod'] });
+
+  return client.post<{ attestationId: string }>('/sp/attestations', data);
 };
