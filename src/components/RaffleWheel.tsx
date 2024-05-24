@@ -55,39 +55,61 @@ export const RaffleWheel = React.forwardRef<HTMLDivElement, RaffleWheelProps>((p
     <div
       ref={ref}
       className={classNames(
-        'relative flex aspect-square w-[420px] shrink-0 items-center justify-center overflow-hidden select-none',
+        'relative flex aspect-square size-[100vw] max-w-[420px] max-h-[420px] shrink-0 items-center justify-center overflow-hidden select-none',
         className
       )}
     >
-      <div className="absolute inset-0">
-        <img src="/wheel-bg.svg" className="object-cover" alt="" />
-      </div>
+      <div className="absolute inset-0 rounded-full bg-[linear-gradient(-135deg,#FDC347_9%,#FC8682_27%,#FA2CD7_52%,#987CDB_76%,#33D0E0_100%)]" />
 
-      <div className="absolute inset-[40px]">
-        <img
-          src="/wheel.svg"
+      <div className="absolute flex size-[86%] items-center justify-center overflow-hidden rounded-full">
+        <div className="absolute size-full rounded-full bg-[linear-gradient(135deg,#FDC347_9%,#FC8682_27%,#FA2CD7_52%,#987CDB_76%,#33D0E0_100%)]"></div>
+
+        <div className="absolute z-10 size-[calc(100%-10px)] rounded-full shadow-[inset_0_2px_12px_0_#000000]"></div>
+
+        <div
           style={{
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-expect-error
             '--tw-rotate': degree + 'deg',
             '--wheel-duration': SPIN_DURATION + 'ms'
           }}
-          className={classNames('rotate-0 object-contain [transition-timing-function:cubic-bezier(0.5,0,0,1)]', {
-            '[transition-duration:var(--wheel-duration)] transition-all': isSpining
-          })}
+          className={classNames(
+            'absolute inset-0 size-full rotate-0 [transition-timing-function:cubic-bezier(0.5,0,0,1)] flex justify-center items-center',
+            {
+              '[transition-duration:var(--wheel-duration)] transition-all': isSpining
+            }
+          )}
           onTransitionEnd={() => {
             onStopped?.();
             setIsSpining(false);
             setDegree(degree - BASE_DEGREE);
           }}
-        />
+        >
+          <img src="/wheel.svg" className="object-contain " />
+
+          <div className="absolute inset-[8%] flex items-center justify-center rounded-full">
+            {prizes.map((prize, index) => (
+              <div
+                style={{
+                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                  // @ts-expect-error
+                  '--tw-rotate': index * (360 / prizes.length) - 90 + 'deg'
+                }}
+                key={prize.id}
+                className="absolute right-0 flex w-1/2 origin-left translate-x-0 items-center justify-end pr-[8%] text-[25px] font-extrabold"
+              >
+                <span className="[text-shadow:2px_2px_0px_black]">{prize.value}</span>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
 
-      <img src="/wheel-pointer.svg" className="absolute left-1/2 top-0 w-[18px] -translate-x-1/2" alt="" />
+      <img src="/wheel-pointer.svg" className="absolute left-1/2 top-0 z-10 w-[20px] -translate-x-1/2" alt="" />
 
-      <div className="z-10 flex size-[49px] items-center justify-center overflow-hidden rounded-full bg-[linear-gradient(225deg,#FEDC31_4.15%,#FDC347_13.8%,#FC8682_33.1%,#FA2CD7_59.91%,#987CDB_85.64%,#33D0E0_111.37%)]">
+      <div className="relative z-10 flex size-[16%] items-center justify-center overflow-hidden rounded-full bg-[linear-gradient(225deg,#FEDC31_4.15%,#FDC347_13.8%,#FC8682_33.1%,#FA2CD7_59.91%,#987CDB_85.64%,#33D0E0_111.37%)]">
         <div
-          className="relative z-10 flex size-[44px] items-center justify-center rounded-full bg-black font-bold text-[16px]"
+          className="absolute inset-[4px] z-10 flex items-center justify-center rounded-full bg-black font-bold text-[16px]"
           onClick={onSpinButtonClick}
         >
           Spin
