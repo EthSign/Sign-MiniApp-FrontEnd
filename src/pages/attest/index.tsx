@@ -1,5 +1,5 @@
 import { Button, Label, Modal, Select, toast } from '@ethsign/ui';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 // import { ButtonSelect } from '@/components/ButtonSelect.tsx';
 import { attestPrepare, checkTx, submitAttestationByOffchain } from '@/services';
 import { useUserInfo } from '@/providers/UserInfoProvider';
@@ -50,7 +50,7 @@ export default function AttestPage() {
   const { user, isBindingWallet, bindWallet } = useUserInfo();
   const navigate = useNavigate();
   const [tonConnectUI] = useTonConnectUI();
-  const { spContract, getSchemaContract } = useSignProtocol();
+  const { spContract, getSchemaContract, getAttestationContract } = useSignProtocol();
   const { wallet, sender, publicKey } = useConnection();
   const { offchainSchemaId: schemaId } = getTonSpInfo()
   const backHome = () => {
@@ -151,6 +151,27 @@ export default function AttestPage() {
     };
     await spContract?.sendAttest(sender, attestation, schemaData);
     const attestId = await spContract?.getAttestationId(attestation);
+    // 校验是否成功，2分钟后直接超时失败
+    await new Promise((resolve, reject) => {
+      const intervaler = setInterval(async () => {
+        try {
+          const attestationContract = await getAttestationContract(attestId?.toString() ?? '');
+          const data = await attestationContract?.getAttestationData();
+          if (data) {
+            clearInterval(intervaler);
+            resolve(attestId?.toString());
+            console.log('Attestation Data', data);
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      }, 2000);
+      setTimeout(() => {
+        clearInterval(intervaler);
+        reject('Timeout');
+      }, 120000);
+    });
+
     console.log('attestId', attestId);
   };
 
@@ -194,20 +215,20 @@ export default function AttestPage() {
         </div>
 
         <div className="rounded-[6px] border border-grey-650 bg-gray-900 p-6">
-          {/*<ButtonSelect*/}
-          {/*  options={[*/}
-          {/*    {*/}
-          {/*      label: 'On-Chain',*/}
-          {/*      value: 'onchain'*/}
-          {/*    },*/}
-          {/*    {*/}
-          {/*      label: 'Off-Chain',*/}
-          {/*      value: 'offchain'*/}
-          {/*    }*/}
-          {/*  ]}*/}
-          {/*  value={type}*/}
-          {/*  onChange={(v) => setType(v as string)}*/}
-          {/*/>*/}
+          {/* <ButtonSelect
+            options={[
+              {
+                label: 'On-Chain',
+                value: 'onchain'
+              },
+              {
+                label: 'Off-Chain',
+                value: 'offchain'
+              }
+            ]}
+            value={type}
+            onChange={(v) => setType(v as string)}
+          /> */}
           <div className="space-y-6 py-6">
             <div className={'space-y-1'}>
               <Label>Choose a template</Label>
