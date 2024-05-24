@@ -156,7 +156,7 @@ export default function AttestPage() {
     };
     await spContract?.sendAttest(sender, attestation, schemaData);
     const attestId = await spContract?.getAttestationId(attestation);
-    console.log('attestId', attestId);
+    console.log('attestId', attestId?.toString());
   };
 
   const handleSubmit = async () => {
