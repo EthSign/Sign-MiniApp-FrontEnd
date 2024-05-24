@@ -15,6 +15,10 @@ export const RankPage: React.FC = () => {
 
   if (!userData) return <Loading />;
 
+  if (!userData.length) {
+    return <div className={'text-center text-white'}>No Data</div>;
+  }
+
   const restUsers = userData.slice(3);
   return (
     <div className={'pt-5'}>
@@ -32,8 +36,8 @@ export const RankPage: React.FC = () => {
           >
             <span className={'-rotate-45'}>2</span>
           </div>
-          <div className={'mt-2 font-medium text-xs'}>{userData[1].username}</div>
-          <div className={'mt-1.5 font-bold text-sm text-[#009BD6]'}>{userData[1].score}</div>
+          <div className={'mt-2 font-medium text-xs'}>{userData[1]?.username}</div>
+          <div className={'mt-1.5 font-bold text-sm text-[#009BD6]'}>{userData[1]?.score}</div>
         </div>
         <div className="flex h-[175px] flex-1 flex-col items-center rounded-t-[32px] bg-grey-650 py-6">
           <div
@@ -43,8 +47,8 @@ export const RankPage: React.FC = () => {
           >
             <span className={'-rotate-45'}>1</span>
           </div>
-          <div className={'mt-5 font-medium text-xs'}>{userData[0].username}</div>
-          <div className={'mt-3 font-bold text-sm text-[#FFAA00]'}>{userData[0].score}</div>
+          <div className={'mt-5 font-medium text-xs'}>{userData[0]?.username}</div>
+          <div className={'mt-3 font-bold text-sm text-[#FFAA00]'}>{userData[0]?.score}</div>
           {/*<div className={'mt-2 text-xs'}>@username</div>*/}
         </div>
         <div className="flex h-[124px] flex-1 flex-col items-center rounded-r-[12px] bg-grey-750 py-6">
@@ -55,8 +59,8 @@ export const RankPage: React.FC = () => {
           >
             <span className={'-rotate-45'}>3</span>
           </div>
-          <div className={'mt-2 font-medium text-xs'}>{userData[2].username}</div>
-          <div className={'mt-1.5 font-bold text-sm text-[#00D95F]'}>{userData[2].score}</div>
+          <div className={'mt-2 font-medium text-xs'}>{userData[2]?.username}</div>
+          <div className={'mt-1.5 font-bold text-sm text-[#00D95F]'}>{userData[2]?.score}</div>
           {/*<div className={'text-xs'}>@username</div>*/}
         </div>
       </div>
