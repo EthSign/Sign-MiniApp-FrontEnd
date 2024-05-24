@@ -26,6 +26,8 @@ jobs:
     environment: development
     env:
       CI: false
+      VITE_ENV: ${{ vars.VITE_ENV }}
+      VITE_TMA_LINK: ${{ vars.VITE_TMA_LINK }}
     strategy:
       matrix:
         node-version: [18.x]

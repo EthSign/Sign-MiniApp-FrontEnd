@@ -1,17 +1,41 @@
 import { Card } from '@/components/Card';
 import { LuckyWheel } from '@/pages/LuckyWheel/components/LuckyWheel';
 import { CoinsStacked01 } from '@ethsign/icons';
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useLotteryInfo } from '../../providers/LotteryInfoProvider';
 import { Link } from 'react-router-dom';
+import { useUserInfo } from '@/providers/UserInfoProvider';
 
 export const LuckyWheelPage: React.FC = () => {
-  const { totalPoint, refresh } = useLotteryInfo();
+  const { user } = useUserInfo();
+  const { totalPoint, hasSpinedToday, refresh } = useLotteryInfo();
+
+  const firstLoadingRef = useRef(false);
 
   useEffect(() => {
-    refresh();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    let timer: NodeJS.Timeout;
+
+    const init = async () => {
+      if (!user) return;
+
+      if (!firstLoadingRef.current) {
+        firstLoadingRef.current = true;
+        await refresh({ showLoading: true });
+      }
+
+      if (hasSpinedToday) {
+        timer = setInterval(() => {
+          refresh({ showLoading: false });
+        }, 10 * 1000);
+      }
+    };
+
+    init();
+
+    return () => {
+      if (timer) clearInterval(timer);
+    };
+  }, [hasSpinedToday, refresh, user]);
 
   return (
     <div className="relative space-y-5">

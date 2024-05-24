@@ -27,7 +27,7 @@ export interface LotteryInfo {
       currentLevel: number;
       currentSteps: number;
       currentMultiplier: number;
-      nextLevel: {
+      nextLevel?: {
         level: number;
         steps: number;
         multiplier: number;
@@ -39,4 +39,16 @@ export interface LotteryInfo {
 export interface RaffleResult {
   raffleId: string;
   prizeId: string;
+}
+
+export interface IRankData {
+  total: number;
+  rows: IRank[];
+  size: number;
+}
+
+export interface IRank {
+  score: string;
+  username: string;
+  walletAddress: string;
 }
