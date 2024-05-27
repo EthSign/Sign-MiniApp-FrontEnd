@@ -92,14 +92,14 @@ export const CountDown: React.FC<CountDownProps> = (props) => {
                 return (
                   <TransitionGroup
                     key={digitIndex}
-                    className="relative h-[46px] min-w-[35px] overflow-hidden rounded-md bg-[#344054] px-[10px] py-[6px]"
+                    className="relative h-[46px] min-w-[35px] overflow-hidden rounded-md border px-[10px] py-[6px]"
                   >
                     <Transition unmountOnExit key={digit} timeout={1000} nodeRef={ref}>
                       {(state) => (
                         <div
                           ref={ref}
                           className={classNames(
-                            'absolute duration-1000 transition-[top] h-[46px] min-w-[35px] overflow-hidden rounded-md bg-[#344054] px-[10px] py-[6px] flex justify-center items-center top-0 left-0',
+                            'absolute left-0 top-0 flex h-[46px] min-w-[35px] items-center justify-center overflow-hidden rounded-md bg-white px-[10px] py-[6px] text-[#1D2939] transition-[top] duration-1000',
                             {
                               'top-full': state === 'exiting'
                             }
@@ -113,7 +113,7 @@ export const CountDown: React.FC<CountDownProps> = (props) => {
                 );
               })}
             </div>
-            <div className="text-xs font-semibold text-[#6B7280]">{groupItem.label}</div>
+            <div className="text-xs font-normal text-[#6B7280]">{groupItem.label}</div>
           </div>
         ))}
       </div>

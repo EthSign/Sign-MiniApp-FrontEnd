@@ -23,7 +23,7 @@ export const Tabbar: React.FC<TabbarProps> = (props) => {
         <Link className={classNames('py-4 flex items-center justify-center')} key={tab.to} to={tab.to}>
           <div
             className={classNames(
-              'flex py-4 px-2 text-xs justify-center gap-1 flex-col items-center w-[100px] h-[62px] rounded-[6px] transition-all duration-200 text-[#98A2B3]',
+              'flex px-2 text-xs justify-center gap-1 flex-col items-center w-[100px] rounded-[6px] transition-all duration-200 text-[#98A2B3]',
               {
                 '!text-[#0052FF]': tab.to === location.pathname
               }

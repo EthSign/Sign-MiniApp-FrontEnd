@@ -21,8 +21,8 @@ function Home() {
   return (
     <>
       <Header />
-      <ScrollArea className={'h-[calc(100vh-167px)] [&>[data-radix-scroll-area-viewport]>div]:!block'}>
-        <div className="relative p-6">
+      <ScrollArea className={'h-[calc(100vh-151px)] [&>[data-radix-scroll-area-viewport]>div]:!block'}>
+        <div className="relative p-4">
           <Outlet />
         </div>
       </ScrollArea>

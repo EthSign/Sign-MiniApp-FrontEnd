@@ -82,8 +82,8 @@ export const LotteryRulesModal: React.FC<PropsWithChildren> = (props) => {
         </div>
       </Modal>
 
-      <div className="" onClick={() => setModalVisible(true)}>
-        {children ?? <span className={'text-white text-sm font-medium underline'}>Rules</span>}
+      <div className="inline-block" onClick={() => setModalVisible(true)}>
+        {children ?? <span className={'font-medium text-white underline'}>Rules</span>}
       </div>
     </>
   );
