@@ -3,6 +3,7 @@ import { initTelegramApp, isTelegramApp } from '@/utils/common.ts';
 import { useDebug } from '@/hooks/useDebug.tsx';
 import { UserInfoProvider, useUserInfo } from '@/providers/UserInfoProvider';
 import { useEffect, useRef } from 'react';
+import { TourActionSheet } from '@/components/TourActionSheet.tsx';
 
 const TGAPP = () => {
   const isTg = isTelegramApp();
@@ -47,6 +48,7 @@ function App() {
       <div className="flex-1">
         <Outlet />
       </div>
+      <TourActionSheet />
     </div>
   );
 }
