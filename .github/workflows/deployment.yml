@@ -21,6 +21,7 @@ jobs:
     env:
       CI: false
       VITE_ENV: ${{ vars.VITE_ENV }}
+      VITE_TMA_LINK: ${{ vars.VITE_TMA_LINK }}
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -59,7 +60,7 @@ jobs:
           aws-region: us-east-1
 
       - name: Deploy static site to S3 bucket
-        run: aws s3 sync ./dist/ s3://claims.tokentable.xyz --delete
+        run: aws s3 sync ./dist/ s3://tma.sign.global --delete
 
       - name: Create invalidation in CloudFront
-        run: aws cloudfront create-invalidation --distribution-id E1RFXKT74CU9NQ --paths '/*'
+        run: aws cloudfront create-invalidation --distribution-id ETZZKBYMLKCKD --paths '/*'

@@ -91,7 +91,7 @@ export class TonWallet extends WalletBase {
     const message = await hashSha256(originMsg);
     const tonConnectUI = tonStore.walletClient as TonConnectUI;
     // const walletInfo = tonConnectUI?.wallet;
-    let authType = '';
+    const authType = '';
     // if (walletInfo?.jsBridgeKey && walletInfo?.openMethod !== 'qrcode') {
     //     authType = walletInfo.jsBridgeKey; //记录当前连接的方式，下次进来直接连接，只支持 浏览器插件 tonkeeper
     // }
