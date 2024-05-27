@@ -31,7 +31,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       }
     >
       <QueryClientProvider client={queryClient}>
-        <ThemeProvider defaultTheme={'dark'} storageKey={'theme'}>
+        <ThemeProvider defaultTheme={'light'} storageKey={'theme'}>
           <LotteryInfoProvider>
             <Router />
             <Toaster />
