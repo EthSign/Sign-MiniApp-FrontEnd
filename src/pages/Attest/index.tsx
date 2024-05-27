@@ -143,10 +143,9 @@ export default function AttestPage() {
       data: 'Test',
       dataLocation: DataLocation.ONCHAIN,
       linkedAttestationCounterId: 0,
-      recipients: [Address.parse('0QCm4j6oTqRNqS8k0MIQyuqeSoAgApoXzVLX0_dYvAfD_64N')],
+      recipients: [Address.parse(wallet?.account.address ?? '')],
       schemaCounterId: schemaData.schemaCounterId,
-      schemaId: Address.parse(schemaAddress),
-      validUntil: new Date('2024-12-12')
+      schemaId: Address.parse(schemaAddress)
     };
     await spContract?.sendAttest(sender, attestation, schemaData);
     const attestId = await spContract?.getAttestationId(attestation);
@@ -171,7 +170,7 @@ export default function AttestPage() {
       }, 120000);
     });
 
-    console.log('attestId', attestId);
+    console.log('attestId', attestId?.toString());
   };
 
   const handleSubmit = async () => {
@@ -181,6 +180,7 @@ export default function AttestPage() {
       }
       await createAttestationByOffchain();
     } else {
+      debugger;
       if (tonConnectUI.connected) {
         await createAttestationByOnchain();
       } else {
