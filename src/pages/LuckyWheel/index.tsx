@@ -3,7 +3,6 @@ import { LuckyWheel } from '@/pages/LuckyWheel/components/LuckyWheel';
 import { useUserInfo } from '@/providers/UserInfoProvider';
 import { ChevronRight, PlusCircle, Ticket01 } from '@ethsign/icons';
 import React, { useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
 import { useLotteryInfo } from '../../providers/LotteryInfoProvider';
 
 export const LuckyWheelPage: React.FC = () => {
