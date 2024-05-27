@@ -39,10 +39,10 @@ export const LotteryRulesModal: React.FC<PropsWithChildren> = (props) => {
       <Modal
         open={modalVisible}
         onOpenChange={(visible) => setModalVisible(visible)}
-        className={'w-[95vw] rounded-[12px] border border-white/20 bg-[#1B253D] p-4 pt-6 sm:w-[410px]'}
+        className={'w-[95vw] rounded-[24px] border border-white/20 bg-white p-4 pt-6 sm:w-[410px]'}
         footer={false}
       >
-        <div className={'text-white'}>
+        <div className={'text-gray-900'}>
           <h2 className={'text-center font-bold text-[25px]'}>Activity Rules</h2>
           <div className={'mt-3 text-[14px] font-normal [&_ul]:list-disc [&_ul]:pl-4'}>
             <p>Earn extra [mini-app score] by asking friends to make attestations through your referral link.</p>
@@ -63,25 +63,27 @@ export const LotteryRulesModal: React.FC<PropsWithChildren> = (props) => {
             <div className="">Detailed boosting rules are presented in the table below.</div>
           </div>
         </div>
-        <Table className={'overflow-hidden rounded-[6px] text-xs'}>
-          <TableBody>
-            {tableData.map((row, index) => (
-              <TableRow key={index} className="border-[#475467]">
-                <TableCell className="w-[76px] bg-[#2E2F49] px-2 font-medium text-white">{row.label}</TableCell>
+        <div className={'overflow-hidden rounded-[8px] border border-gray-200'}>
+          <Table className={'text-xs'}>
+            <TableBody>
+              {tableData.map((row, index) => (
+                <TableRow key={index} className="border-gray-200">
+                  <TableCell className="w-[76px] px-2 font-medium">{row.label}</TableCell>
 
-                {row.values.map((value, index) => (
-                  <TableCell key={index} className="w-[75px] bg-[#252740] px-2">
-                    {value}
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+                  {row.values.map((value, index) => (
+                    <TableCell key={index} className="w-[75px] px-2">
+                      {value}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
       </Modal>
 
       <div className="" onClick={() => setModalVisible(true)}>
-        {children ?? <span className={'text-tangerine-500 underline'}>Rules</span>}
+        {children ?? <span className={'text-white text-sm font-medium underline'}>Rules</span>}
       </div>
     </>
   );
