@@ -64,13 +64,6 @@ export const LuckyWheelPage: React.FC = () => {
       </div>
 
       <LuckyWheel />
-
-      <Link
-        to="/attest"
-        className="fixed bottom-[105px] right-4 flex size-[66px] items-center justify-center rounded-full border border-[#CF5C10] bg-[#EF6820] font-bold text-sm"
-      >
-        <span>Attest</span>
-      </Link>
     </div>
   );
 };
