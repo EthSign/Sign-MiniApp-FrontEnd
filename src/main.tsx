@@ -11,8 +11,8 @@ import { TonProvider } from '@/core/providers/ton';
 
 WebApp.ready();
 
-WebApp.setBackgroundColor('#05051E');
-WebApp.setHeaderColor('#05051E');
+WebApp.setBackgroundColor('#fff');
+WebApp.setHeaderColor('#fff');
 
 const manifestUrl = 'https://app.ethsign.xyz/manifest.json';
 

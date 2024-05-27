@@ -14,20 +14,18 @@ export const LuckyWheel: React.FC = () => {
   const wheelRef = useRef<HTMLDivElement>(null);
 
   return (
-    <Card className="relative px-0 py-6">
-      <div className="">
-        <div className="text-center font-bold text-2xl text-white">
-          <span>Lucky Wheel</span>
-        </div>
-
-        <div className="mt-2 flex items-center justify-center gap-2 text-sm">
-          <span>You won</span>
-          <div className="">
-            <Score value={currentScore} />
+    <Card className="relative -mx-6 bg-transparent !p-0">
+      {hasSpinedToday && (
+        <div className="">
+          <div className="mt-2 flex items-center justify-center gap-2 text-sm">
+            <span>You won</span>
+            <div className="">
+              <Score value={currentScore} />
+            </div>
+            <span>points</span>
           </div>
-          <span>points</span>
         </div>
-      </div>
+      )}
 
       <div className="relative mt-6 flex min-h-[416px] w-full justify-center overflow-hidden">
         <Transition nodeRef={resultRef} in={hasSpinedToday} unmountOnExit timeout={200}>

@@ -55,7 +55,7 @@ export const RaffleWheel = React.forwardRef<HTMLDivElement, RaffleWheelProps>((p
     <div
       ref={ref}
       className={classNames(
-        'relative flex aspect-square size-[100vw] max-w-[420px] max-h-[420px] shrink-0 items-center justify-center overflow-hidden select-none',
+        'relative flex aspect-square size-[110vw] max-w-[460px] max-h-[460px] shrink-0 items-center justify-center overflow-hidden select-none',
         className
       )}
     >
@@ -85,7 +85,7 @@ export const RaffleWheel = React.forwardRef<HTMLDivElement, RaffleWheelProps>((p
             setDegree(degree - BASE_DEGREE);
           }}
         >
-          <img src="/wheel.svg" className="object-contain " />
+          <img src="/wheel.svg" className="size-full object-contain" />
 
           <div className="absolute inset-[8%] flex items-center justify-center rounded-full">
             {prizes.map((prize, index) => (

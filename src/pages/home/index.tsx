@@ -8,12 +8,12 @@ const TABS: TabItem[] = [
   {
     label: 'Rank',
     to: '/rank',
-    icon: <BarChart01 size={24} color="#FFF" />
+    icon: ({ active }) => <BarChart01 size={24} color={active ? '#0052FF' : '#98A2B3'} />
   },
   {
     label: 'Lucky Wheel',
     to: '/lucky-wheel',
-    icon: <Diamond01 size={24} color="#FFF" />
+    icon: ({ active }) => <Diamond01 size={24} color={active ? '#0052FF' : '#98A2B3'} />
   }
 ];
 
