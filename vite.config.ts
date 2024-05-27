@@ -37,11 +37,6 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '')
       },
-      '/sp-api': {
-        target: 'http://43.198.156.58:3020/api',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/sp-api/, '')
-      }
     }
   }
 });

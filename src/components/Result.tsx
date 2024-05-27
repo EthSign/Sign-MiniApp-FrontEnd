@@ -42,8 +42,7 @@ export const Result = React.forwardRef<HTMLDivElement, { className?: string }>((
 
   const handleInvite = () => {
     const utils = initUtils();
-    const desc =
-      "💰Catizen: Unleash, Play, Earn - Where Every Game Leads to an Airdrop Adventure!\n🎁Let's play-to-earn airdrop right now!";
+    const desc = ENVS.SHARE_DESC;
     utils.openTelegramLink(
       `https://t.me/share/url?url=${ENVS.TG_APP_LINK}?startapp=${
         currentDayRaffleResult?.raffleId

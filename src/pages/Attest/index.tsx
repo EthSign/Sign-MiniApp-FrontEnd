@@ -1,5 +1,5 @@
 import { Button, Label, Modal, Select, toast } from '@ethsign/ui';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 // import { ButtonSelect } from '@/components/ButtonSelect.tsx';
 import { attestPrepare, checkTx, submitAttestationByOffchain } from '@/services';
 import { useUserInfo } from '@/providers/UserInfoProvider';
@@ -14,7 +14,7 @@ import { AttestationConfig } from '@/utils/ton-sp/wrappers';
 import { Address } from '@ton/core';
 import { useConnection } from '@/utils/ton-sp/hooks/useConnection.ts';
 import { DataLocation } from '@/utils/ton-sp/utils';
-//import { ButtonSelect } from '@/components/ButtonSelect';
+import { offChainSchema } from '@/constants/config';
 
 const AboutModal = () => {
   return (
@@ -39,67 +39,26 @@ const AboutModal = () => {
   );
 };
 
-const schema = {
-  name: 'SIGN score booster for off-chain',
-  description: 'SIGN TG Mini-app score booster schema for off-chain attestation.',
-  revocable: true,
-  maxValidFor: 0,
-  types: [
-    {
-      name: 'userId',
-      type: 'string'
-    },
-    {
-      name: 'boostCode',
-      type: 'string'
-    },
-    {
-      name: 'message',
-      type: 'string'
-    },
-    {
-      name: 'signature',
-      type: 'string'
-    }
-  ],
-  dataLocation: 'arweave'
-};
-
-const schemaId = 'SPS_uRupYWqUadWNjKuPHUOyh';
+// const schemaId = 'SPS_uRupYWqUadWNjKuPHUOyh';
 
 export default function AttestPage() {
-  const [type /* setType */] = useState('offchain');
-  const [template, setTemplate] = useState(schema.name);
+  const [type] = useState('offchain');
+  const [template, setTemplate] = useState(offChainSchema.name);
   const [loading, setLoading] = useState(false);
   const { user, isBindingWallet, bindWallet } = useUserInfo();
   const navigate = useNavigate();
   const [tonConnectUI] = useTonConnectUI();
   const { spContract, getSchemaContract, getAttestationContract } = useSignProtocol();
   const { wallet, sender, publicKey } = useConnection();
+  const { offchainSchemaId: schemaId } = getTonSpInfo();
   const backHome = () => {
     navigate('/lucky-wheel', {
       replace: true
     });
   };
 
-  // const createSchema = async () => {
-  //   const walletIns = WalletFactory.getWallet(ChainType.Ton);
-  //   const str = JSON.stringify(schema, null, '  ');
-  //   const res = await walletIns.sign(str);
-  //   console.log(res, 'res');
-  //   const info = walletIns.getWallet();
-  //   const msgRes = JSON.parse(res.message);
-  //   await submitSchema({
-  //     schema: str,
-  //     signature: res.signature,
-  //     message: msgRes.fullMessage,
-  //     publicKey: info.publicKey!,
-  //     signType: 'ton-connect'
-  //   });
-  // };
-
   const createAttestationByOffchain = async () => {
-    const reffleId = user?.code || '9--SO1AotswFM9D4r0Aqp';
+    const reffleId = user?.code;
     if (!reffleId) {
       toast({
         title: 'Error',
@@ -113,7 +72,7 @@ export default function AttestPage() {
     const data = {
       userId: prepareData.userId,
       boostCode: reffleId,
-      message: schema.description, // TODO
+      message: offChainSchema.description, // TODO
       signature: prepareData.signature
     };
 
@@ -123,7 +82,7 @@ export default function AttestPage() {
       validUntil: 0,
       recipients: [user?.walletAddress],
       indexingValue: reffleId,
-      dataLocation: schema.dataLocation,
+      dataLocation: offChainSchema.dataLocation,
       data: JSON.stringify(data)
     };
 
@@ -134,14 +93,14 @@ export default function AttestPage() {
     console.log(res, 'res');
     const info = walletIns.getWallet();
 
-    // if (info.address?.toLowerCase() !== user?.walletAddress.toLowerCase()) {
-    //   toast({
-    //     title: 'Error',
-    //     description: 'Wallet address is not matched',
-    //     variant: 'error'
-    //   });
-    //   return;
-    // }
+    if (info.address?.toLowerCase() !== user?.walletAddress.toLowerCase()) {
+      toast({
+        title: 'Error',
+        description: 'Wallet address is not matched',
+        variant: 'error'
+      });
+      return;
+    }
     const msgRes = JSON.parse(res.message);
     console.log(info, msgRes);
 
@@ -271,7 +230,11 @@ export default function AttestPage() {
           <div className="space-y-6 py-6">
             <div className={'space-y-1'}>
               <Label>Choose a template</Label>
-              <Select options={[{ label: schema.name, value: schema.name }]} value={template} onChange={setTemplate} />
+              <Select
+                options={[{ label: offChainSchema.name, value: offChainSchema.name }]}
+                value={template}
+                onChange={setTemplate}
+              />
             </div>
 
             <div>
