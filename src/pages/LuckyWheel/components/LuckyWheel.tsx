@@ -14,7 +14,7 @@ export const LuckyWheel: React.FC = () => {
 
   return (
     <Card className="relative bg-transparent !p-0">
-      <div className="relative flex min-h-[416px] justify-center overflow-hidden">
+      <div className="relative flex min-h-[416px] justify-center">
         <Transition nodeRef={resultRef} in={hasSpinedToday} unmountOnExit timeout={200}>
           {(state) => (
             <Result
@@ -30,7 +30,7 @@ export const LuckyWheel: React.FC = () => {
           {(state) => (
             <RaffleWheel
               ref={wheelRef}
-              className={classNames('scale-100 transition-all duration-200 origin-center', {
+              className={classNames('scale-100 transition-all duration-200 origin-center mt-3 -mx-4', {
                 '!scale-50 opacity-0': state === 'exiting'
               })}
               onStopped={() => {
