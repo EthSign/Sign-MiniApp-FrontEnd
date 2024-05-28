@@ -7,16 +7,17 @@ import { getRaffles } from '@/services';
 import { formatDate } from '@/utils/common.ts';
 import { Drawer, DrawerContent, DrawerTrigger } from '@/components/Drawer.tsx';
 import { ResultCard } from '@/components/Result.tsx';
+import { useLotteryInfo } from '@/providers/LotteryInfoProvider.tsx';
 
 const InviteModal = ({ trigger, data }: { trigger: ReactNode; data: any }) => {
   const [open, setOpen] = useState(false);
+  const { prizes } = useLotteryInfo();
   return (
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>{trigger}</DrawerTrigger>
       <DrawerContent>
         <div>
-          <div>121</div>
-          <ResultCard data={data} />
+          <ResultCard data={{ ...data, levels: prizes }} />
         </div>
       </DrawerContent>
     </Drawer>
@@ -24,7 +25,7 @@ const InviteModal = ({ trigger, data }: { trigger: ReactNode; data: any }) => {
 };
 
 export default function RecordsPage() {
-  const [date, setDate] = useState(Date.now());
+  const [date] = useState(Date.now());
   const { data } = useQuery({
     queryKey: ['records', date],
     queryFn: () => getRaffles(date)

@@ -25,7 +25,7 @@ export const Result = () => {
 
 export const ResultCard = React.forwardRef<
   HTMLDivElement,
-  { className?: string; data: LotteryInfo['currentRaffleResult']; refresh: () => void }
+  { className?: string; data: LotteryInfo['currentRaffleResult']; refresh?: () => void }
 >((props, ref) => {
   const { className, data, refresh } = props;
 
@@ -103,7 +103,7 @@ export const ResultCard = React.forwardRef<
 
         {dueDate && (
           <div className="flex justify-center">
-            <CountDown targetDate={dueDate} onFinish={() => refresh()} />
+            <CountDown targetDate={dueDate} onFinish={() => refresh?.()} />
           </div>
         )}
 
