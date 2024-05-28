@@ -12,7 +12,8 @@ export interface LotteryInfo {
     value: number;
   }[];
   totalPoint: number;
-  currentDayRaffleResult?: {
+  remainingTimes: number;
+  currentRaffleResult?: {
     raffleId: string;
     prizeId: string;
     raffleAt: string;
