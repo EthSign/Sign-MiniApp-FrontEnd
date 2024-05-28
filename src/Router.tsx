@@ -7,6 +7,7 @@ import AttestPage from '@/pages/Attest';
 import Home from '@/pages/Home';
 import { getTMAInitData } from './utils/common';
 import CreateSchema from './pages/CreateSchema';
+import RecordsPage from '@/pages/Records';
 
 let redirectedToAttest = false;
 
@@ -49,6 +50,10 @@ const routerConfig: RouteObject[] = [
       {
         path: '/attest',
         element: <AttestPage />
+      },
+      {
+        path: '/records',
+        element: <RecordsPage />
       },
       {
         path: '/schema',

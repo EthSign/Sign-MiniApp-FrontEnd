@@ -6,7 +6,7 @@ import {
   DrawerTitle,
   DrawerTrigger
 } from '@/components/Drawer.tsx';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Carousel, CarouselApi, CarouselContent, CarouselItem, useCarousel } from '@/components/Carousel.tsx';
 import { Button } from '@ethsign/ui';
 import { StepIcon } from '@/components/Icons.tsx';
@@ -61,29 +61,29 @@ const PageOne = () => {
   const { scrollNext } = useCarousel();
   const rewards = [
     {
-      img: 'https://ethsign-public.s3.ap-east-1.amazonaws.com/telegram-miniapp/ð±_240528022628.webp',
+      img: 'https://ethsign-public.s3.ap-east-1.amazonaws.com/telegram-miniapp/Frame 2085654242_240528062557.webp',
       title: 'Phone'
     },
     {
-      img: 'https://ethsign-public.s3.ap-east-1.amazonaws.com/telegram-miniapp/image 114_240528022628.webp',
+      img: 'https://ethsign-public.s3.ap-east-1.amazonaws.com/telegram-miniapp/Frame 2085654243_240528062557.webp',
       title: 'Ballet Wallet'
     },
     {
-      img: 'https://ethsign-public.s3.ap-east-1.amazonaws.com/telegram-miniapp/SignPass_240528022628.webp',
+      img: 'https://ethsign-public.s3.ap-east-1.amazonaws.com/telegram-miniapp/Frame 2085654244_240528062557.webp',
       title: 'SignPass'
     },
     {
-      img: 'https://ethsign-public.s3.ap-east-1.amazonaws.com/telegram-miniapp/image 110_240528022628.webp',
+      img: 'https://ethsign-public.s3.ap-east-1.amazonaws.com/telegram-miniapp/Frame 2085654245_240528062557.webp',
       title: '$TON Token'
     },
     {
-      img: 'https://ethsign-public.s3.ap-east-1.amazonaws.com/telegram-miniapp/image 112_240528022628.webp',
+      img: 'https://ethsign-public.s3.ap-east-1.amazonaws.com/telegram-miniapp/Frame 2085654246_240528062557.webp',
       title: '$NOT Token'
     }
   ];
   return (
     <div className={'flex flex-col justify-center items-center h-full'}>
-      <DrawerHeader>
+      <DrawerHeader className={'p-0'}>
         <DrawerTitle className={'text-[25px] font-bold'}>What to win?</DrawerTitle>
         <DrawerDescription className={'text-left space-y-2'}>
           <div>Welcome to SIGN Game, a simple but highly rewarding online arcade.</div>
@@ -112,7 +112,7 @@ const PageTwo = () => {
 
   return (
     <div>
-      <DrawerHeader>
+      <DrawerHeader className={'p-0'}>
         <DrawerTitle className={'text-[25px] font-bold'}>How to play?</DrawerTitle>
         <DrawerDescription className={'text-left space-y-2'}>
           <div>Welcome to SIGN Game, a simple but highly rewarding online arcade.</div>
@@ -135,7 +135,7 @@ const PageThree = ({ onStart }: { onStart: () => void }) => {
       <div className={'text-center mb-2 flex justify-center'}>
         <img src={dropImg} alt="drop" className={'w-[150px]'} />
       </div>
-      <DrawerHeader>
+      <DrawerHeader className={'p-0'}>
         <DrawerTitle className={'text-[25px] font-bold'}>Mystery Drop</DrawerTitle>
         <DrawerDescription className={'text-left space-y-2'}>
           <div>
@@ -205,7 +205,7 @@ export const TourActionSheet = () => {
                 </CarouselContent>
               </Carousel>
 
-              <div className={'flex gap-2 justify-center'}>
+              <div className={'flex gap-2 justify-center mt-4'}>
                 {new Array(count).fill(0).map((_, index) => (
                   <div
                     key={index}

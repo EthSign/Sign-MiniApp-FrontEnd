@@ -61,3 +61,25 @@ export interface RaffleInfo {
   raffleAt: number;
   userIdHash: string;
 }
+
+export interface IRaffleRecord {
+  raffleAt: number;
+  prizeId: string;
+  currentScore: number;
+  levelInfo: LevelInfo;
+  userIdHash: string;
+  expandExpirationAt: number;
+}
+
+export interface LevelInfo {
+  currentLevel: number;
+  currentSteps: number;
+  currentMultiplier: number;
+  nextLevel: NextLevel;
+}
+
+export interface NextLevel {
+  level: number;
+  steps: number;
+  multiplier: number;
+}

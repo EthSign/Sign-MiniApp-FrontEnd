@@ -2,7 +2,7 @@ import { LotteryRulesModal } from '@/components/RulesModal';
 import { LuckyWheel } from '@/pages/LuckyWheel/components/LuckyWheel';
 import { ConfettiProvider } from '@/providers/ConfettiProvider';
 import { useUserInfo } from '@/providers/UserInfoProvider';
-import { ChevronRight, Ticket01 } from '@ethsign/icons';
+import { Ticket01 } from '@ethsign/icons';
 import React, { useEffect, useRef } from 'react';
 import { useLotteryInfo } from '../../providers/LotteryInfoProvider';
 import { TourActionSheet } from '@/components/TourActionSheet.tsx';

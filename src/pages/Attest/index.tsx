@@ -139,6 +139,7 @@ export default function AttestPage() {
 
   const createAttestationByOnchain = async () => {
     const schemaAddress = getTonSpInfo().schemaAddress;
+    console.log(schemaAddress, getTonSpInfo(), 'schemaAddress');
     const schema = getSchemaContract(schemaAddress);
     const schemaData = await schema!.getSchemaData();
     const attestation: AttestationConfig = {

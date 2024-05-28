@@ -8,28 +8,35 @@ import classNames from 'classnames';
 import React, { useMemo } from 'react';
 import { LotteryRulesModal } from './RulesModal';
 import { useUserInfo } from '@/providers/UserInfoProvider.tsx';
+import { LotteryInfo } from '@/types';
 // import { useConfetti } from '@/providers/ConfettiProvider';
 
-export const Result = React.forwardRef<HTMLDivElement, { className?: string }>((props, ref) => {
+export const Result = () => {
   const { currentDayRaffleResult, refresh } = useLotteryInfo();
+  return <ResultCard data={currentDayRaffleResult} refresh={refresh} />;
+};
 
-  const { className } = props;
+export const ResultCard = React.forwardRef<
+  HTMLDivElement,
+  { className?: string; data: LotteryInfo['currentRaffleResult']; refresh: () => void }
+>((props, ref) => {
+  const { className, data, refresh } = props;
 
   const { user } = useUserInfo();
 
   const dueDate = useMemo(() => {
-    if (!currentDayRaffleResult?.dayEnd) return null;
-    return new Date(currentDayRaffleResult.dayEnd);
-  }, [currentDayRaffleResult?.dayEnd]);
+    if (!data?.dayEnd) return null;
+    return new Date(data.dayEnd);
+  }, [data?.dayEnd]);
 
   const { currentScore, nextLevel, nextScore, progress, remainSteps } = useMemo(() => {
-    if (!currentDayRaffleResult) return {};
+    if (!data) return {};
 
     const {
       currentScore,
       levelInfo: { nextLevel, currentSteps, currentLevel, currentMultiplier },
       levels
-    } = currentDayRaffleResult;
+    } = data;
 
     const remainSteps = nextLevel ? nextLevel.steps - currentSteps : 0;
     const nextScore = nextLevel ? (currentScore / currentMultiplier) * nextLevel.multiplier : null;
@@ -42,13 +49,13 @@ export const Result = React.forwardRef<HTMLDivElement, { className?: string }>((
       : 100;
 
     return { progress, remainSteps, currentScore, nextScore, hasNextLevel, nextLevel };
-  }, [currentDayRaffleResult]);
+  }, [data]);
 
   const handleInvite = () => {
     const utils = initUtils();
     const desc = ENVS.SHARE_DESC;
     const inviteData = {
-      raffleId: currentDayRaffleResult?.raffleId,
+      raffleId: data?.raffleId,
       inviteUser: user?.username || 'SIGN user'
     };
     utils.openTelegramLink(
@@ -60,7 +67,7 @@ export const Result = React.forwardRef<HTMLDivElement, { className?: string }>((
 
   // const { confetti } = useConfetti();
 
-  if (!currentDayRaffleResult) return null;
+  if (!data) return null;
 
   return (
     <div

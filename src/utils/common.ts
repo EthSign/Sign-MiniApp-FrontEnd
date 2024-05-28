@@ -1,5 +1,6 @@
 import queryString from 'query-string';
 import { customAlphabet } from 'nanoid';
+import dayjs from 'dayjs';
 
 export const stringifyQueryString = (obj: Record<string, any>): string => {
   return queryString.stringify(obj, { skipNull: true, skipEmptyString: true });
@@ -58,4 +59,8 @@ export const initTelegramApp = (): void => {
       window.Telegram.WebApp.expand();
     });
   }
+};
+
+export const formatDate = (time: number) => {
+  return dayjs(time).format('MMMM DD, YYYY');
 };
