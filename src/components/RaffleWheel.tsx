@@ -55,7 +55,7 @@ export const RaffleWheel = React.forwardRef<HTMLDivElement, RaffleWheelProps>((p
     <div
       ref={ref}
       className={classNames(
-        'relative flex aspect-square size-[110vw] max-w-[460px] max-h-[460px] shrink-0 items-center justify-center overflow-hidden select-none',
+        'relative flex aspect-square size-[110vw] max-w-[460px] max-h-[460px] shrink-0 items-center justify-center overflow-hidden select-none text-white',
         className
       )}
     >
