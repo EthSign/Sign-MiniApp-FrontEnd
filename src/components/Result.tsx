@@ -7,6 +7,7 @@ import { initUtils } from '@tma.js/sdk';
 import classNames from 'classnames';
 import React, { useMemo } from 'react';
 import { LotteryRulesModal } from './RulesModal';
+// import { useConfetti } from '@/providers/ConfettiProvider';
 
 export const Result = React.forwardRef<HTMLDivElement, { className?: string }>((props, ref) => {
   const { currentDayRaffleResult, refresh } = useLotteryInfo();
@@ -49,6 +50,8 @@ export const Result = React.forwardRef<HTMLDivElement, { className?: string }>((
       }&text=${encodeURIComponent(desc)}`
     );
   };
+
+  // const { confetti } = useConfetti();
 
   if (!currentDayRaffleResult) return null;
 
