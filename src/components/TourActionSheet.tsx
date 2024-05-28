@@ -6,7 +6,7 @@ import {
   DrawerTitle,
   DrawerTrigger
 } from '@/components/Drawer.tsx';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Carousel, CarouselApi, CarouselContent, CarouselItem, useCarousel } from '@/components/Carousel.tsx';
 import { Button } from '@ethsign/ui';
 import { StepIcon } from '@/components/Icons.tsx';

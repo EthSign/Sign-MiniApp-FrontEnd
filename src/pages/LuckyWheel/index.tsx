@@ -52,22 +52,21 @@ export const LuckyWheelPage: React.FC = () => {
             <span> {totalPoint}</span>
           </div>
 
-          {!hasSpinedToday ||
-            (hasSpinedToday && backToWheelButtonClicked && (
-              <>
-                <div className="flex gap-3">
-                  <TourActionSheet />
-                  <div className="flex-1 rounded-[6px] bg-white px-4 py-2 text-center font-bold text-[#101828]">
-                    <div className="flex items-center justify-center gap-2 text-[#0052FF]">
-                      <Ticket01 size={16} color="#0052FF" />
-                      <span>{remainingTimes}</span>
-                      <span>Ticket</span>
-                      {/* <PlusCircle size={16} color="#0052FF" /> */}
-                    </div>
+          {(!hasSpinedToday || (hasSpinedToday && backToWheelButtonClicked)) && (
+            <>
+              <div className="flex gap-3">
+                <TourActionSheet />
+                <div className="flex-1 rounded-[6px] bg-white px-4 py-2 text-center font-bold text-[#101828]">
+                  <div className="flex items-center justify-center gap-2 text-[#0052FF]">
+                    <Ticket01 size={16} color="#0052FF" />
+                    <span>{remainingTimes}</span>
+                    <span>Ticket</span>
+                    {/* <PlusCircle size={16} color="#0052FF" /> */}
                   </div>
                 </div>
-              </>
-            ))}
+              </div>
+            </>
+          )}
         </div>
 
         <LuckyWheel />
