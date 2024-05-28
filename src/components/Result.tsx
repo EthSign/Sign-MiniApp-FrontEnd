@@ -42,9 +42,9 @@ export const ResultCard = React.forwardRef<
   const [backModalVisible, setBackModalVisible] = useState(false);
 
   const dueDate = useMemo(() => {
-    if (!data?.dayEnd) return null;
-    return new Date(data.dayEnd);
-  }, [data?.dayEnd]);
+    if (!data?.expandExpirationAt) return null;
+    return new Date(data.expandExpirationAt);
+  }, [data?.expandExpirationAt]);
 
   const { currentScore, nextLevel, nextScore, progress, remainSteps } = useMemo(() => {
     if (!data) return {};
