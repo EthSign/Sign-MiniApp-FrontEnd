@@ -61,14 +61,20 @@ export const UserInfoProvider = ({ children }: { children: ReactNode }) => {
   });
 
   const inviteData = useMemo(() => {
-    if (authData?.start_param) {
-      const inviteData = JSON.parse(window.atob(authData.start_param));
-      return {
-        raffleId: inviteData.raffleId,
-        inviteUser: inviteData?.inviteUser
-      };
+    try {
+      if (authData?.start_param) {
+        const inviteData = JSON.parse(window.atob(authData.start_param));
+        console.log(inviteData, 'iv');
+        return {
+          raffleId: inviteData.raffleId,
+          inviteUser: inviteData?.inviteUser
+        };
+      }
+      return null;
+    } catch (e) {
+      console.error(e);
+      return null;
     }
-    return null;
   }, [authData]);
 
   const handleAuth = async () => {
