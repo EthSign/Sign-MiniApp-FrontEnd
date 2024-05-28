@@ -1,21 +1,31 @@
 import { useLotteryInfo } from '@/providers/LotteryInfoProvider';
 import classNames from 'classnames';
-import React, { useRef } from 'react';
+import React, { useMemo, useRef } from 'react';
 import { Transition } from 'react-transition-group';
 import { Card } from '../../../components/Card';
 import { RaffleWheel } from '../../../components/RaffleWheel';
 import { Result } from '../../../components/Result';
 
 export const LuckyWheel: React.FC = () => {
-  const { hasSpinedToday, refresh } = useLotteryInfo();
+  const {
+    hasSpinedToday,
+    flags: { backToWheelButtonClicked },
+    refresh,
+    setBackToWheelButtonClicked
+  } = useLotteryInfo();
 
   const resultRef = useRef<HTMLDivElement>(null);
   const wheelRef = useRef<HTMLDivElement>(null);
 
+  const showWheel = useMemo(() => {
+    if (backToWheelButtonClicked) return true;
+    return !hasSpinedToday;
+  }, [backToWheelButtonClicked, hasSpinedToday]);
+
   return (
     <Card className="relative bg-transparent !p-0">
       <div className="relative flex min-h-[416px] justify-center">
-        <Transition nodeRef={resultRef} in={hasSpinedToday} unmountOnExit timeout={200}>
+        <Transition nodeRef={resultRef} in={!showWheel} unmountOnExit timeout={200}>
           {(state) => (
             <Result
               ref={resultRef}
@@ -26,7 +36,7 @@ export const LuckyWheel: React.FC = () => {
           )}
         </Transition>
 
-        <Transition nodeRef={wheelRef} in={!hasSpinedToday} unmountOnExit timeout={200}>
+        <Transition nodeRef={wheelRef} in={showWheel} unmountOnExit timeout={200}>
           {(state) => (
             <RaffleWheel
               ref={wheelRef}
@@ -35,6 +45,7 @@ export const LuckyWheel: React.FC = () => {
               })}
               onStopped={() => {
                 refresh();
+                setBackToWheelButtonClicked(false);
               }}
             />
           )}

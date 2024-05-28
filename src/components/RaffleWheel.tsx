@@ -14,7 +14,7 @@ const BASE_DEGREE = 3600;
 const SPIN_DURATION = 5000;
 
 export const RaffleWheel = React.forwardRef<HTMLDivElement, RaffleWheelProps>((props, ref) => {
-  const { loading, prizes, refresh } = useLotteryInfo();
+  const { loading, prizes, remainingTimes, refresh } = useLotteryInfo();
 
   const { className, onResult, onStopped } = props;
 
@@ -26,6 +26,10 @@ export const RaffleWheel = React.forwardRef<HTMLDivElement, RaffleWheelProps>((p
 
   const onSpinButtonClick = async () => {
     if (loading || isSpining || isRaffling) return;
+
+    if (remainingTimes < 1) {
+      return;
+    }
 
     setIsRaffling(true);
 
@@ -55,7 +59,7 @@ export const RaffleWheel = React.forwardRef<HTMLDivElement, RaffleWheelProps>((p
     <div
       ref={ref}
       className={classNames(
-        'relative flex aspect-square size-[110vw] max-w-[460px] max-h-[460px] shrink-0 items-center justify-center overflow-hidden select-none',
+        'relative flex aspect-square size-[110vw] max-w-[460px] max-h-[460px] shrink-0 items-center justify-center overflow-hidden select-none text-white',
         className
       )}
     >
@@ -98,7 +102,13 @@ export const RaffleWheel = React.forwardRef<HTMLDivElement, RaffleWheelProps>((p
                 key={prize.id}
                 className="absolute right-0 flex w-1/2 origin-left translate-x-0 items-center justify-end pr-[8%] text-[25px] font-extrabold"
               >
-                <span className="[text-shadow:2px_2px_0px_black]">{prize.value}</span>
+                {prize.type === 'point' ? (
+                  <span className="[text-shadow:2px_2px_0px_black]">{prize.value}</span>
+                ) : (
+                  <div>
+                    <img className="size-[52px] object-contain" src={prize.image} alt="" />
+                  </div>
+                )}
               </div>
             ))}
           </div>

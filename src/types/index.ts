@@ -11,6 +11,7 @@ export interface LotteryInfo {
     id: string;
     type: string;
     value: number;
+    image: string;
   }[];
   totalPoint: number;
   remainingTimes: number;

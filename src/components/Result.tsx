@@ -1,18 +1,25 @@
 import { CountDown } from '@/components/Countdown.tsx';
 import { ENVS } from '@/constants/config.ts';
 import { useLotteryInfo } from '@/providers/LotteryInfoProvider';
-import { Send01 } from '@ethsign/icons';
+import { ChevronLeft, Send01 } from '@ethsign/icons';
 import { Button, Progress } from '@ethsign/ui';
 import { initUtils } from '@tma.js/sdk';
 import classNames from 'classnames';
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { LotteryRulesModal } from './RulesModal';
 import { useUserInfo } from '@/providers/UserInfoProvider.tsx';
+import { BackToWheelModal } from '@/pages/LuckyWheel/components/BackWheelModal';
 import { LotteryInfo } from '@/types';
 // import { useConfetti } from '@/providers/ConfettiProvider';
 
 export const Result = () => {
-  const { currentDayRaffleResult, refresh } = useLotteryInfo();
+  const {
+    currentDayRaffleResult,
+    refresh,
+    flags: { doNotShowBackToWheelTipModal },
+    setBackToWheelButtonClicked
+  } = useLotteryInfo();
+
   return <ResultCard data={currentDayRaffleResult} refresh={refresh} />;
 };
 
@@ -23,6 +30,8 @@ export const ResultCard = React.forwardRef<
   const { className, data, refresh } = props;
 
   const { user } = useUserInfo();
+
+  const [backModalVisible, setBackModalVisible] = useState(false);
 
   const dueDate = useMemo(() => {
     if (!data?.dayEnd) return null;
@@ -125,11 +134,30 @@ export const ResultCard = React.forwardRef<
         </div>
       </div>
 
-      {nextLevel && (
-        <Button className={'mt-5 w-full gap-4'} onClick={handleInvite}>
-          <Send01 color={'#FFF'} /> Ask Friends
+      <div className="mt-5 flex items-center gap-x-2">
+        <Button
+          variant="outline"
+          className="flex-1 gap-2 whitespace-nowrap border-[#D0D5DD]"
+          onClick={() => {
+            // if (doNotShowBackToWheelTipModal) {
+            //   setBackToWheelButtonClicked(true);
+            //   return;
+            // }
+            setBackModalVisible(true);
+          }}
+        >
+          <ChevronLeft color="" size={16} />
+          {nextLevel ? 'Back' : 'Back to Lucky Wheel'}
         </Button>
-      )}
+        {nextLevel !== undefined && (
+          <Button className={'flex-1 gap-2'} onClick={handleInvite}>
+            <Send01 color={'#FFF'} size={16} />
+            <span className="whitespace-nowrap">Ask Friends</span>
+          </Button>
+        )}
+      </div>
+
+      <BackToWheelModal open={backModalVisible} onOpenChange={(visible) => setBackModalVisible(visible)} />
     </div>
   );
 });

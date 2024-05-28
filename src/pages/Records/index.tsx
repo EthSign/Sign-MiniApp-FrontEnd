@@ -6,7 +6,7 @@ import { ReactNode, useState } from 'react';
 import { getRaffles } from '@/services';
 import { formatDate } from '@/utils/common.ts';
 import { Drawer, DrawerContent, DrawerTrigger } from '@/components/Drawer.tsx';
-import { Result, ResultCard } from '@/components/Result.tsx';
+import { ResultCard } from '@/components/Result.tsx';
 
 const InviteModal = ({ trigger, data }: { trigger: ReactNode; data: any }) => {
   const [open, setOpen] = useState(false);

@@ -1,15 +1,20 @@
-import { LotteryRulesModal } from '@/components/RulesModal';
+import { TourActionSheet } from '@/components/TourActionSheet.tsx';
 import { LuckyWheel } from '@/pages/LuckyWheel/components/LuckyWheel';
 import { ConfettiProvider } from '@/providers/ConfettiProvider';
 import { useUserInfo } from '@/providers/UserInfoProvider';
 import { Ticket01 } from '@ethsign/icons';
 import React, { useEffect, useRef } from 'react';
 import { useLotteryInfo } from '../../providers/LotteryInfoProvider';
-import { TourActionSheet } from '@/components/TourActionSheet.tsx';
 
 export const LuckyWheelPage: React.FC = () => {
   const { user } = useUserInfo();
-  const { totalPoint, hasSpinedToday, remainingTimes, refresh } = useLotteryInfo();
+  const {
+    totalPoint,
+    hasSpinedToday,
+    flags: { backToWheelButtonClicked },
+    remainingTimes,
+    refresh
+  } = useLotteryInfo();
 
   const firstLoadingRef = useRef(false);
 
@@ -24,7 +29,7 @@ export const LuckyWheelPage: React.FC = () => {
         await refresh({ showLoading: true });
       }
 
-      if (hasSpinedToday) {
+      if (hasSpinedToday && !backToWheelButtonClicked) {
         timer = setInterval(() => {
           refresh({ showLoading: false });
         }, 10 * 1000);
@@ -36,7 +41,7 @@ export const LuckyWheelPage: React.FC = () => {
     return () => {
       if (timer) clearInterval(timer);
     };
-  }, [hasSpinedToday, refresh, user]);
+  }, [backToWheelButtonClicked, hasSpinedToday, refresh, user]);
 
   return (
     <ConfettiProvider>
@@ -47,7 +52,7 @@ export const LuckyWheelPage: React.FC = () => {
             <span> {totalPoint}</span>
           </div>
 
-          {!hasSpinedToday && (
+          {(!hasSpinedToday || (hasSpinedToday && backToWheelButtonClicked)) && (
             <>
               <div className="flex gap-3">
                 <TourActionSheet />
