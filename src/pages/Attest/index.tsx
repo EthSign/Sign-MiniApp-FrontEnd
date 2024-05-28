@@ -1,10 +1,8 @@
-import { Button, Label, Modal, Select, toast } from '@ethsign/ui';
+import { Button, Input, Label, Modal, Select, toast } from '@ethsign/ui';
 import { useState } from 'react';
 import { ButtonSelect } from '@/components/ButtonSelect.tsx';
-import { attestPrepare, checkTx, submitAttestationByOffchain } from '@/services';
+import { attestPrepare, checkTx, getRaffleInfo, submitAttestationByOffchain } from '@/services';
 import { useUserInfo } from '@/providers/UserInfoProvider';
-import { ChevronLeft } from '@ethsign/icons';
-import { useNavigate } from 'react-router-dom';
 import { ChainType } from '@/core/types.ts';
 import { WalletFactory } from '@/core/WalletFactory.tsx';
 import { useTonConnectUI } from '@tonconnect/ui-react';
@@ -15,6 +13,8 @@ import { Address } from '@ton/core';
 import { useConnection } from '@/utils/ton-sp/hooks/useConnection.ts';
 import { DataLocation } from '@/utils/ton-sp/utils';
 import { offChainSchema } from '@/constants/config';
+import { Header } from '@/components/Header.tsx';
+import { useQuery } from '@tanstack/react-query';
 
 const AboutModal = () => {
   return (
@@ -46,20 +46,27 @@ export default function AttestPage() {
   const [template, setTemplate] = useState(offChainSchema.name);
   const [loading, setLoading] = useState(false);
   const { user, isBindingWallet, bindWallet } = useUserInfo();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [tonConnectUI] = useTonConnectUI();
   const { spContract, getSchemaContract, getAttestationContract } = useSignProtocol();
   const { wallet, sender, publicKey } = useConnection();
   const { offchainSchemaId: schemaId } = getTonSpInfo();
-  const backHome = () => {
-    navigate('/lucky-wheel', {
-      replace: true
-    });
-  };
+  const raffleId = user?.code || '6TQzCG4gfECcnb6VPVEdW';
+  const { data } = useQuery({
+    queryKey: ['raffle', raffleId],
+    queryFn: () => getRaffleInfo(raffleId!)
+  });
+  console.log(data, 'data');
+  // const backHome = () => {
+  //   navigate('/lucky-wheel', {
+  //     replace: true
+  //   });
+  // };
+
+  const isExpired = data?.expandExpirationAt && data.expandExpirationAt < Date.now();
 
   const createAttestationByOffchain = async () => {
-    const reffleId = user?.code;
-    if (!reffleId) {
+    if (!raffleId) {
       toast({
         title: 'Error',
         description: 'User code is not found',
@@ -67,12 +74,12 @@ export default function AttestPage() {
       });
       return;
     }
-    const prepareData = await attestPrepare({ raffleId: reffleId });
+    const prepareData = await attestPrepare({ raffleId: raffleId });
     console.log(prepareData, 'prepareData');
     const data = {
       userId: prepareData.userId,
-      boostCode: reffleId,
-      message: offChainSchema.description, // TODO
+      boostCode: raffleId,
+      message: `Hey, ${user?.inviteUser}! I've boosted Signie points for you. --${user?.username || 'Sign User'}`, // TODO
       signature: prepareData.signature
     };
 
@@ -81,7 +88,7 @@ export default function AttestPage() {
       linkedAttestationId: '',
       validUntil: 0,
       recipients: [user?.walletAddress],
-      indexingValue: reffleId,
+      indexingValue: raffleId,
       dataLocation: offChainSchema.dataLocation,
       data: JSON.stringify(data)
     };
@@ -118,7 +125,7 @@ export default function AttestPage() {
       setLoading(true);
       await checkTx({
         txHash: attestRes.attestationId,
-        raffleId: reffleId
+        raffleId: raffleId
       });
       toast({
         title: 'Success',
@@ -190,19 +197,20 @@ export default function AttestPage() {
   };
 
   return (
-    <div className="p-6">
-      <div className="relative -mx-6 -mt-6 flex items-center justify-center border-b border-[#1D2939] py-[14px]">
-        <div
-          className="absolute left-0 top-0 flex aspect-square h-full items-center justify-center px-[18px]"
-          onClick={backHome}
-        >
-          <ChevronLeft size={24} color="#F9FAFB" />
-        </div>
+    <div>
+      <Header />
+      {/*<div className="relative -mx-6 -mt-6 flex items-center justify-center py-[14px]">*/}
+      {/*  <div*/}
+      {/*    className="absolute left-0 top-0 flex aspect-square h-full items-center justify-center px-[18px]"*/}
+      {/*    onClick={backHome}*/}
+      {/*  >*/}
+      {/*    <ChevronLeft size={24} color="#F9FAFB" />*/}
+      {/*  </div>*/}
 
-        <span className="font-bold text-md">attest</span>
-      </div>
+      {/*  <span className="font-bold text-md">attest</span>*/}
+      {/*</div>*/}
 
-      <div className={'pt-10 space-y-4'}>
+      <div className={'p-6 space-y-4'}>
         <div className="rounded-[6px] border border-gray-200 bg-white p-3">
           <h1 className={'text-center text-md font-bold text-gray-900'}>
             Sign any event on Sign Protocol to earn Sign points
@@ -238,10 +246,15 @@ export default function AttestPage() {
               />
             </div>
 
+            <div className={'space-y-1'}>
+              <Label>Invite User</Label>
+              <Input value={user?.inviteUser} readOnly />
+            </div>
+
             <div>
               {user?.walletAddress ? (
-                <Button loading={loading} className={'w-full'} onClick={handleSubmit}>
-                  Make Attestation
+                <Button loading={loading} disabled={!!isExpired} className={'w-full'} onClick={handleSubmit}>
+                  {isExpired ? 'Expired' : 'Make Attestation'}
                 </Button>
               ) : (
                 <Button loading={isBindingWallet} className={'w-full'} onClick={bindWallet}>

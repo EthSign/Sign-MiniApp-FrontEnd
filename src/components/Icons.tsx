@@ -37,3 +37,19 @@ export const SignIcon = () => {
     </svg>
   );
 };
+
+export const StepIcon = () => {
+  return (
+    <svg width="33" height="33" viewBox="0 0 33 33" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <g clipPath="url(#clip0_461_545)">
+        <rect x="0.262695" y="0.767578" width="32" height="32" rx="16" fill="#F9FAFB" />
+        <circle cx="16.2627" cy="16.7676" r="5" fill="#EAECF0" />
+      </g>
+      <defs>
+        <clipPath id="clip0_461_545">
+          <rect x="0.262695" y="0.767578" width="32" height="32" rx="16" fill="white" />
+        </clipPath>
+      </defs>
+    </svg>
+  );
+};

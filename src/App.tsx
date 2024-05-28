@@ -3,7 +3,6 @@ import { initTelegramApp, isTelegramApp } from '@/utils/common.ts';
 import { useDebug } from '@/hooks/useDebug.tsx';
 import { UserInfoProvider, useUserInfo } from '@/providers/UserInfoProvider';
 import { useEffect, useRef } from 'react';
-import { TourActionSheet } from '@/components/TourActionSheet.tsx';
 
 const TGAPP = () => {
   const isTg = isTelegramApp();
@@ -44,11 +43,10 @@ function App() {
   }, []);
 
   return (
-    <div className="flex h-screen w-screen flex-col overflow-hidden bg-[linear-gradient(114deg,rgba(0,178,255,0.52)-0.81%,#9997FF_65.22%),linear-gradient(114deg,#00B2FF_-0.81%,#9997FF_65.22%)] text-white">
+    <div className="flex h-screen w-screen flex-col overflow-hidden bg-[linear-gradient(114deg,rgba(0,178,255,0.52)-0.81%,#9997FF_65.22%),linear-gradient(114deg,#00B2FF_-0.81%,#9997FF_65.22%)]">
       <div className="flex-1">
         <Outlet />
       </div>
-      <TourActionSheet />
     </div>
   );
 }

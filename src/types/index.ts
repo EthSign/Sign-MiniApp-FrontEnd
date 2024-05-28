@@ -3,6 +3,7 @@ export interface IUser {
   username: string;
   walletAddress: string;
   code?: string;
+  inviteUser?: string;
 }
 
 export interface LotteryInfo {
@@ -52,4 +53,11 @@ export interface IRank {
   score: string;
   username: string;
   walletAddress: string;
+}
+
+export interface RaffleInfo {
+  expandExpirationAt: number;
+  prizeId: string;
+  raffleAt: number;
+  userIdHash: string;
 }

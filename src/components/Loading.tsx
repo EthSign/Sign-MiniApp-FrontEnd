@@ -4,7 +4,7 @@ import { ReactNode } from 'react';
 export function Loading() {
   return (
     <div className="absolute z-[99] bg-background/80 backdrop-blur-sm left-0 right-0 top-0 bottom-0 flex flex-col justify-center items-center">
-      <Loader2 className="animate-spin" color="#CF5C10" size={32} />
+      <Loader2 className="animate-spin text-primary" size={32} />
     </div>
   );
 }

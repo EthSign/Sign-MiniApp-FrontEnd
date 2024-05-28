@@ -5,6 +5,7 @@ import { useUserInfo } from '@/providers/UserInfoProvider';
 import { ChevronRight, Ticket01 } from '@ethsign/icons';
 import React, { useEffect, useRef } from 'react';
 import { useLotteryInfo } from '../../providers/LotteryInfoProvider';
+import { TourActionSheet } from '@/components/TourActionSheet.tsx';
 
 export const LuckyWheelPage: React.FC = () => {
   const { user } = useUserInfo();
@@ -49,14 +50,7 @@ export const LuckyWheelPage: React.FC = () => {
           {!hasSpinedToday && (
             <>
               <div className="flex gap-3">
-                <div className="flex-1 rounded-[6px] bg-white px-4 py-2 text-center font-bold text-[#101828]">
-                  <LotteryRulesModal>
-                    <div className="flex items-center justify-center">
-                      <span>Rules</span>
-                      <ChevronRight />
-                    </div>
-                  </LotteryRulesModal>
-                </div>
+                <TourActionSheet />
                 <div className="flex-1 rounded-[6px] bg-white px-4 py-2 text-center font-bold text-[#101828]">
                   <div className="flex items-center justify-center gap-2 text-[#0052FF]">
                     <Ticket01 size={16} color="#0052FF" />

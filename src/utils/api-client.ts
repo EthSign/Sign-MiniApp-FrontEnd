@@ -64,7 +64,7 @@ export class ApiClient {
           title: 'Something went wrong',
           description: resData.message || 'Unknow error',
           variant: 'error',
-          className: 'z-[999] bg-black'
+          className: 'z-[999]'
         });
       }
       // 继续往外抛错误

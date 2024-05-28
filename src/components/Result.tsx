@@ -7,12 +7,15 @@ import { initUtils } from '@tma.js/sdk';
 import classNames from 'classnames';
 import React, { useMemo } from 'react';
 import { LotteryRulesModal } from './RulesModal';
+import { useUserInfo } from '@/providers/UserInfoProvider.tsx';
 // import { useConfetti } from '@/providers/ConfettiProvider';
 
 export const Result = React.forwardRef<HTMLDivElement, { className?: string }>((props, ref) => {
   const { currentDayRaffleResult, refresh } = useLotteryInfo();
 
   const { className } = props;
+
+  const { user } = useUserInfo();
 
   const dueDate = useMemo(() => {
     if (!currentDayRaffleResult?.dayEnd) return null;
@@ -44,10 +47,14 @@ export const Result = React.forwardRef<HTMLDivElement, { className?: string }>((
   const handleInvite = () => {
     const utils = initUtils();
     const desc = ENVS.SHARE_DESC;
+    const inviteData = {
+      raffleId: currentDayRaffleResult?.raffleId,
+      inviteUser: user?.username || 'SIGN user'
+    };
     utils.openTelegramLink(
-      `https://t.me/share/url?url=${ENVS.TG_APP_LINK}?startapp=${
-        currentDayRaffleResult?.raffleId
-      }&text=${encodeURIComponent(desc)}`
+      `https://t.me/share/url?url=${ENVS.TG_APP_LINK}?startapp=${window.btoa(
+        JSON.stringify(inviteData)
+      )}&text=${encodeURIComponent(desc)}`
     );
   };
 
