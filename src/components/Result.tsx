@@ -16,7 +16,7 @@ export const Result = React.forwardRef<HTMLDivElement, { className?: string }>((
     currentDayRaffleResult,
     flags: { doNotShowBackToWheelTipModal },
     refresh,
-    goBackToWheel
+    setBackToWheelButtonClicked
   } = useLotteryInfo();
 
   const { className } = props;
@@ -132,7 +132,7 @@ export const Result = React.forwardRef<HTMLDivElement, { className?: string }>((
           className="flex-1 gap-2 whitespace-nowrap border-[#D0D5DD]"
           onClick={() => {
             if (doNotShowBackToWheelTipModal) {
-              goBackToWheel();
+              setBackToWheelButtonClicked(true);
               return;
             }
             setBackModalVisible(true);
