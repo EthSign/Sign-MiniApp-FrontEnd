@@ -20,6 +20,7 @@ export interface LotteryInfo {
     prizeId: string;
     raffleAt: string;
     dayEnd: number;
+    expandExpirationAt: number;
     currentScore: number;
     levels: {
       level: number;
