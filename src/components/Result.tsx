@@ -5,31 +5,39 @@ import { ChevronLeft, Send01 } from '@ethsign/icons';
 import { Button, Progress } from '@ethsign/ui';
 import { initUtils } from '@tma.js/sdk';
 import classNames from 'classnames';
-import React, { useMemo, useState } from 'react';
+import React, { forwardRef, useMemo, useState } from 'react';
 import { LotteryRulesModal } from './RulesModal';
 import { useUserInfo } from '@/providers/UserInfoProvider.tsx';
 import { BackToWheelModal } from '@/pages/LuckyWheel/components/BackWheelModal';
 import { LotteryInfo } from '@/types';
 // import { useConfetti } from '@/providers/ConfettiProvider';
 
-export const Result = () => {
-  const {
-    currentDayRaffleResult,
-    refresh,
-    flags: { doNotShowBackToWheelTipModal },
-    setBackToWheelButtonClicked
-  } = useLotteryInfo();
+export const Result = forwardRef<HTMLDivElement, { className: string }>((props, ref) => {
+  const { className } = props;
+  const { currentDayRaffleResult, refresh } = useLotteryInfo();
 
-  return <ResultCard data={currentDayRaffleResult} refresh={refresh} />;
-};
+  return (
+    <ResultCard className={className} ref={ref} data={currentDayRaffleResult} showBackToWheelButton refresh={refresh} />
+  );
+});
 
 export const ResultCard = React.forwardRef<
   HTMLDivElement,
-  { className?: string; data: LotteryInfo['currentRaffleResult']; refresh?: () => void }
+  {
+    className?: string;
+    showBackToWheelButton?: boolean;
+    data: LotteryInfo['currentRaffleResult'];
+    refresh?: () => void;
+  }
 >((props, ref) => {
-  const { className, data, refresh } = props;
+  const { className, data, showBackToWheelButton = false, refresh } = props;
 
   const { user } = useUserInfo();
+
+  const {
+    flags: { doNotShowBackToWheelTipModal },
+    setBackToWheelButtonClicked
+  } = useLotteryInfo();
 
   const [backModalVisible, setBackModalVisible] = useState(false);
 
@@ -115,11 +123,17 @@ export const ResultCard = React.forwardRef<
         )}
 
         <div className="">
-          {remainSteps !== undefined && remainSteps > 0 && (
-            <div className={'mt-7 text-sm font-normal text-[#101828]'}>
-              <span className={'font-semiBold'}>{remainSteps}</span> more step{remainSteps > 0 ? 's' : ''} to level up
-            </div>
-          )}
+          <div className={'mt-7 text-center font-semiBold text-sm text-[#101828]'}>
+            {remainSteps !== undefined && remainSteps > 0 ? (
+              <div>
+                <span>{remainSteps}</span> more step{remainSteps > 0 ? 's' : ''} to level up
+              </div>
+            ) : (
+              <div className="">
+                <span>🎊 You've reached maximum level!</span>
+              </div>
+            )}
+          </div>
 
           <Progress
             value={progress}
@@ -135,20 +149,23 @@ export const ResultCard = React.forwardRef<
       </div>
 
       <div className="mt-5 flex items-center gap-x-2">
-        <Button
-          variant="outline"
-          className="flex-1 gap-2 whitespace-nowrap border-[#D0D5DD]"
-          onClick={() => {
-            // if (doNotShowBackToWheelTipModal) {
-            //   setBackToWheelButtonClicked(true);
-            //   return;
-            // }
-            setBackModalVisible(true);
-          }}
-        >
-          <ChevronLeft color="" size={16} />
-          {nextLevel ? 'Back' : 'Back to Lucky Wheel'}
-        </Button>
+        {showBackToWheelButton && (
+          <Button
+            variant="outline"
+            className="flex-1 gap-2 whitespace-nowrap border-[#D0D5DD]"
+            onClick={() => {
+              if (doNotShowBackToWheelTipModal) {
+                setBackToWheelButtonClicked(true);
+                return;
+              }
+              setBackModalVisible(true);
+            }}
+          >
+            <ChevronLeft color="" size={16} />
+            {nextLevel ? 'Back' : 'Back to Lucky Wheel'}
+          </Button>
+        )}
+
         {nextLevel !== undefined && (
           <Button className={'flex-1 gap-2'} onClick={handleInvite}>
             <Send01 color={'#FFF'} size={16} />
