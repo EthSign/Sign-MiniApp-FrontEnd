@@ -15,7 +15,7 @@ const TGAPP = () => {
 
   if (!isTg && !debug) {
     return (
-      <div className="flex h-screen w-screen items-center justify-center text-white">
+      <div className="flex h-screen w-screen items-center justify-center bg-[linear-gradient(114deg,rgba(0,178,255,0.52)_0.81%,#9997FF_65.22%),linear-gradient(114deg,#00B2FF_0.81%,#9997FF_65.22%)] text-white">
         <h1>Please open in Telegram</h1>
       </div>
     );
@@ -43,7 +43,7 @@ function App() {
   }, []);
 
   return (
-    <div className="flex h-screen w-screen flex-col overflow-hidden bg-[linear-gradient(114deg,rgba(0,178,255,0.52)-0.81%,#9997FF_65.22%),linear-gradient(114deg,#00B2FF_-0.81%,#9997FF_65.22%)]">
+    <div className="flex h-screen w-screen flex-col overflow-hidden bg-[linear-gradient(114deg,rgba(0,178,255,0.52)_0.81%,#9997FF_65.22%),linear-gradient(114deg,#00B2FF_0.81%,#9997FF_65.22%)]">
       <div className="flex-1">
         <Outlet />
       </div>
