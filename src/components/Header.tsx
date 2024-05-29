@@ -1,9 +1,8 @@
-import React from 'react';
-import { SignIcon } from '@/components/Icons.tsx';
+import { useUserInfo } from '@/providers/UserInfoProvider';
 import { Button } from '@ethsign/ui';
 import { shortenWalletAddress } from '@ethsign/utils-web';
-import { useUserInfo } from '@/providers/UserInfoProvider';
 import { ArrowLeft } from 'lucide-react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export const TabBar = ({ title }: { title: string }) => {
@@ -32,7 +31,11 @@ export const Header: React.FC = () => {
 
   return (
     <div className="flex h-[72px] shrink-0 items-center justify-between border-b border-[rgba(235,236,239,0.20)] px-4 text-[#344054]">
-      <SignIcon />
+      <img
+        className="w-[78px] object-contain"
+        src="https://ethsign-public.s3.ap-east-1.amazonaws.com/telegram-miniapp/logo_240529091048.svg"
+        alt=""
+      />
 
       <Button
         className={'gap-2 rounded-[12px] border-[#EBECEF] bg-[rgba(255,255,255,0.60)]'}

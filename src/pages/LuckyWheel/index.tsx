@@ -5,6 +5,7 @@ import { useUserInfo } from '@/providers/UserInfoProvider';
 import { Rocket01, Ticket01 } from '@ethsign/icons';
 import React, { useEffect, useRef } from 'react';
 import { useLotteryInfo } from '../../providers/LotteryInfoProvider';
+import { Events, eventBus } from '@/eventbus';
 import { useNavigate } from 'react-router-dom';
 
 export const LuckyWheelPage: React.FC = () => {
@@ -21,6 +22,8 @@ export const LuckyWheelPage: React.FC = () => {
   const navigate = useNavigate();
 
   const firstLoadingRef = useRef(false);
+
+  const ticketButtonRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
@@ -47,12 +50,38 @@ export const LuckyWheelPage: React.FC = () => {
     };
   }, [backToWheelButtonClicked, hasSpinedToday, refresh, user]);
 
+  useEffect(() => {
+    const handler = () => {
+      const ticketButtonEl = ticketButtonRef.current;
+
+      if (!ticketButtonEl) return;
+
+      const animationClassName = 'animate-shake';
+
+      if (!animationClassName) return;
+
+      ticketButtonEl.classList.remove(animationClassName);
+
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          ticketButtonEl.classList.add(animationClassName);
+        });
+      });
+    };
+
+    eventBus.on(Events.noTicketSpin, handler);
+
+    return () => {
+      eventBus.off(Events.noTicketSpin, handler);
+    };
+  }, []);
+
   return (
     <ConfettiProvider>
       <div className="relative space-y-2">
         <div className="space-y-6">
           <div className="relative rounded-[6px] bg-white px-4 py-2 text-center font-bold text-[#101828]">
-            <span>Sign Score: </span>
+            <span>Signie Score: </span>
             <span> {totalPoint}</span>
 
             <div className="absolute right-4 top-1/2 -translate-y-1/2">
@@ -64,7 +93,7 @@ export const LuckyWheelPage: React.FC = () => {
             <>
               <div className="flex gap-3">
                 <div
-                  className="flex-1 rounded-[6px] bg-white px-4 py-2 text-center font-bold text-[#101828]"
+                  className="flex-1 rounded-[6px] bg-white px-4 py-2 text-center font-bold text-[#101828] transition-all duration-75 active:shadow-lg"
                   onClick={() => {
                     navigate('/records');
                   }}
@@ -75,7 +104,7 @@ export const LuckyWheelPage: React.FC = () => {
                   </div>
                 </div>
                 <div className="flex-1 rounded-[6px] bg-white px-4 py-2 text-center font-bold text-[#101828]">
-                  <div className="flex items-center justify-center gap-2 text-[#0052FF]">
+                  <div ref={ticketButtonRef} className="flex items-center justify-center gap-2 text-[#0052FF]">
                     <Ticket01 size={16} color="#0052FF" />
                     <span>{remainingTimes}</span>
                     <span>Ticket</span>
