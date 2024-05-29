@@ -3,6 +3,29 @@ import { SignIcon } from '@/components/Icons.tsx';
 import { Button } from '@ethsign/ui';
 import { shortenWalletAddress } from '@ethsign/utils-web';
 import { useUserInfo } from '@/providers/UserInfoProvider';
+import { ArrowLeft } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+
+export const TabBar = ({ title }: { title: string }) => {
+  const navigate = useNavigate();
+  const backHome = () => {
+    navigate('/lucky-wheel', {
+      replace: true
+    });
+  };
+  return (
+    <div className="relative flex items-center justify-center px-4 py-3">
+      <div
+        className="absolute left-0 top-0 flex aspect-square h-full items-center justify-center px-[18px]"
+        onClick={backHome}
+      >
+        <ArrowLeft size={24} color="#FFF" />
+      </div>
+
+      <span className="font-bold text-md text-white">{title}</span>
+    </div>
+  );
+};
 
 export const Header: React.FC = () => {
   const { user, bindWallet } = useUserInfo();

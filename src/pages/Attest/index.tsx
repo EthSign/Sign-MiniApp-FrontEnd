@@ -13,10 +13,10 @@ import { Address } from '@ton/core';
 import { useConnection } from '@/utils/ton-sp/hooks/useConnection.ts';
 import { DataLocation } from '@/utils/ton-sp/utils';
 import { offChainSchema } from '@/constants/config';
-import { Header } from '@/components/Header.tsx';
 import { useQuery } from '@tanstack/react-query';
+import { TabBar } from '@/components/Header';
 
-const AboutModal = () => {
+export const AboutModal = () => {
   return (
     <Modal
       footer={false}
@@ -46,7 +46,6 @@ export default function AttestPage() {
   const [template, setTemplate] = useState(offChainSchema.name);
   const [loading, setLoading] = useState(false);
   const { user, isBindingWallet, bindWallet } = useUserInfo();
-  // const navigate = useNavigate();
   const [tonConnectUI] = useTonConnectUI();
   const { spContract, getSchemaContract, getAttestationContract } = useSignProtocol();
   const { wallet, sender, publicKey } = useConnection();
@@ -57,11 +56,6 @@ export default function AttestPage() {
     queryFn: () => getRaffleInfo(raffleId!)
   });
   console.log(data, 'data');
-  // const backHome = () => {
-  //   navigate('/lucky-wheel', {
-  //     replace: true
-  //   });
-  // };
 
   const isExpired = data?.expandExpirationAt && data.expandExpirationAt < Date.now();
 
@@ -199,30 +193,20 @@ export default function AttestPage() {
 
   return (
     <div>
-      <Header />
-      {/*<div className="relative -mx-6 -mt-6 flex items-center justify-center py-[14px]">*/}
-      {/*  <div*/}
-      {/*    className="absolute left-0 top-0 flex aspect-square h-full items-center justify-center px-[18px]"*/}
-      {/*    onClick={backHome}*/}
-      {/*  >*/}
-      {/*    <ChevronLeft size={24} color="#F9FAFB" />*/}
-      {/*  </div>*/}
+      <TabBar title={'Sign Event'} />
 
-      {/*  <span className="font-bold text-md">attest</span>*/}
-      {/*</div>*/}
+      <div className={'p-6 space-y-4 h-[calc(100vh-48px)] bg-white'}>
+        {/*<div className="rounded-[6px] border border-gray-200 bg-white p-3">*/}
+        {/*  <h1 className={'text-center text-md font-bold text-gray-900'}>*/}
+        {/*    Sign any event on Sign Protocol to earn Sign points*/}
+        {/*  </h1>*/}
 
-      <div className={'p-6 space-y-4'}>
-        <div className="rounded-[6px] border border-gray-200 bg-white p-3">
-          <h1 className={'text-center text-md font-bold text-gray-900'}>
-            Sign any event on Sign Protocol to earn Sign points
-          </h1>
+        {/*  <div className={'mt-4 flex justify-center'}>*/}
+        {/*    <AboutModal />*/}
+        {/*  </div>*/}
+        {/*</div>*/}
 
-          <div className={'mt-4 flex justify-center'}>
-            <AboutModal />
-          </div>
-        </div>
-
-        <div className="rounded-[6px] border border-gray-200 bg-white p-6">
+        <div className="rounded-[6px] bg-white">
           <ButtonSelect
             options={[
               {
@@ -241,7 +225,7 @@ export default function AttestPage() {
             <div className={'space-y-1'}>
               <Label>Choose a template</Label>
               <Select
-                options={[{ label: offChainSchema.name, value: offChainSchema.name }]}
+                options={[{ label: 'Boost EthSign Score for a friend', value: offChainSchema.name }]}
                 value={template}
                 onChange={setTemplate}
               />
@@ -255,7 +239,7 @@ export default function AttestPage() {
             <div>
               {user?.walletAddress ? (
                 <Button loading={loading} disabled={!!isExpired} className={'w-full'} onClick={handleSubmit}>
-                  {isExpired ? 'Expired' : 'Make Attestation'}
+                  {isExpired ? 'Expired' : 'Sign Event'}
                 </Button>
               ) : (
                 <Button loading={isBindingWallet} className={'w-full'} onClick={bindWallet}>

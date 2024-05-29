@@ -11,6 +11,7 @@ import { initUtils } from '@tma.js/sdk';
 import classNames from 'classnames';
 import React, { forwardRef, useEffect, useMemo, useState } from 'react';
 import { LotteryRulesModal } from './RulesModal';
+import { getLevelInfo, isExpired } from '@/utils/lottery.ts';
 
 export const Result = forwardRef<HTMLDivElement, { className: string }>((props, ref) => {
   const { className } = props;
@@ -47,36 +48,11 @@ export const ResultCard = React.forwardRef<
   }, [data?.expandExpirationAt]);
 
   const [timesUp, setTimesUp] = useState(() => {
-    if (!data?.expandExpirationAt) return false;
-
-    const now = new Date().getTime();
-    const expire = new Date(data?.expandExpirationAt).getTime();
-
-    return expire - now <= 0;
+    return isExpired(data?.expandExpirationAt);
   });
 
   const { currentLevel, reachedMax, currentScore, nextLevel, nextScore, progress, remainSteps } = useMemo(() => {
-    if (!data) return {};
-
-    const {
-      currentScore,
-      levelInfo: { nextLevel, currentSteps, currentLevel, currentMultiplier },
-      levels
-    } = data;
-
-    const remainSteps = nextLevel ? nextLevel.steps - currentSteps : 0;
-    const nextScore = nextLevel ? (currentScore / currentMultiplier) * nextLevel.multiplier : null;
-    const hasNextLevel = nextLevel !== undefined && nextLevel !== null;
-
-    const currentLevelInfo = levels.find((item) => item.level === currentLevel);
-    const minStepsInCurrentLevel = currentLevelInfo?.steps ?? 0;
-    const progress = nextLevel
-      ? ((currentSteps - minStepsInCurrentLevel) / (nextLevel.steps - minStepsInCurrentLevel)) * 100
-      : 100;
-
-    const reachedMax = currentLevel !== undefined && currentLevel > 0 && !hasNextLevel;
-
-    return { progress, remainSteps, currentScore, nextScore, hasNextLevel, nextLevel, currentLevel, reachedMax };
+    return getLevelInfo(data);
   }, [data]);
 
   const levelTips = useMemo(() => {
@@ -126,9 +102,11 @@ export const ResultCard = React.forwardRef<
         }}
       >
         <span className="text-lg font-extrabold text-[#1C1C1C]">🎉 Congratulations!</span>
-        <LotteryRulesModal>
-          <span className="font-medium text-xs text-[#0052FF] underline">Rules</span>
-        </LotteryRulesModal>
+        {showBackToWheelButton && (
+          <LotteryRulesModal>
+            <span className="font-medium text-xs text-[#0052FF] underline">Rules</span>
+          </LotteryRulesModal>
+        )}
       </div>
 
       <div className="flex justify-between rounded-[12px] bg-[#ECF2FF] px-5 py-[10px]">

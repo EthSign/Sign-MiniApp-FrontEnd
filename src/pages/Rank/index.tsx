@@ -11,7 +11,10 @@ export const RankPage: React.FC = () => {
   });
   console.log(data, 'data');
 
-  const userData = data?.rows;
+  const userData = data?.rows?.map((it) => ({
+    ...it,
+    username: it.username || 'Sign User'
+  }));
 
   if (!userData) return <Loading />;
 
@@ -66,7 +69,7 @@ export const RankPage: React.FC = () => {
         <div className={'flex items-center justify-around text-xs font-normal text-white'}>
           <div className={'flex-1'}>Rank</div>
           <div className={'flex-[0_0_100px] text-center'}>Score</div>
-          <div className={'flex-[0_0_100px] text-right'}>Rewards</div>
+          <div className={'flex-[0_0_80px] text-right'}>Rewards</div>
         </div>
       </div>
       <div className={'mt-3 space-y-2'}>
@@ -87,7 +90,7 @@ export const RankPage: React.FC = () => {
                 <span>{item.username}</span>
               </div>
               <div className={'flex-[0_0_100px] px-2 text-center'}>{item.score}</div>
-              <div className={'flex-[0_0_100px] px-2 text-right'}>-</div>
+              <div className={'flex-[0_0_80px] px-2 text-right'}>-</div>
             </div>
           );
         })}
