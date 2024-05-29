@@ -17,6 +17,7 @@ const InviteModal = ({ data }: { data: any }) => {
   const { prizes } = useLotteryInfo();
   const levelInfo = getLevelInfo({ ...data, levels: prizes } as any);
   const isCompleted = levelInfo?.reachedMax || isExpired(data.expandExpirationAt);
+
   return (
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
@@ -40,7 +41,7 @@ const InviteModal = ({ data }: { data: any }) => {
             </div>
             <div className={'text-xs font-normal'}>{formatDate(data.raffleAt)}</div>
             <Progress
-              value={50}
+              value={levelInfo.progress}
               className={
                 'mt-2.5 bg-[#EAECF0] [&>div]:rounded-full [&>div]:bg-[linear-gradient(90deg,#C7D9FF_0%,#0052FF_100%)]'
               }
