@@ -29,8 +29,8 @@ export const LuckyWheel: React.FC = () => {
           {(state) => (
             <Result
               ref={resultRef}
-              className={classNames('absolute inset-0 origin-center scale-50 opacity-0 transition-all duration-200', {
-                '!scale-100 relative opacity-100': state === 'entered'
+              className={classNames('!absolute inset-0 origin-center scale-50 opacity-0 transition-all duration-200', {
+                '!scale-100 !relative opacity-100': state === 'entered'
               })}
             />
           )}
