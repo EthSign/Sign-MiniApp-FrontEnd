@@ -16,7 +16,12 @@ export const RankPage: React.FC = () => {
     username: it.username || 'Sign User'
   }));
 
-  if (!userData) return <Loading />;
+  if (!userData)
+    return (
+      <div className="flex min-h-[200px] items-center justify-center">
+        <Loading className="!bg-transparent" />
+      </div>
+    );
 
   if (!userData.length) {
     return <div className={'text-center text-white'}>No Data</div>;
@@ -25,7 +30,7 @@ export const RankPage: React.FC = () => {
   const restUsers = userData.slice(3);
   return (
     <div className={'pt-0'}>
-      <div className={'px-2 text-white text-right'}>
+      <div className={'px-2 text-right text-white'}>
         <LotteryRulesModal />
       </div>
       <div className={'mt-[-20px] flex items-end'}>
@@ -82,7 +87,7 @@ export const RankPage: React.FC = () => {
               <div className={'flex flex-1 gap-4'}>
                 <span
                   className={
-                    'flex size-6 items-center justify-center rounded-full bg-[#ECF2FF] text-primary font-medium text-xs'
+                    'flex size-6 items-center justify-center rounded-full bg-[#ECF2FF] font-medium text-xs text-primary'
                   }
                 >
                   {index + 4}
