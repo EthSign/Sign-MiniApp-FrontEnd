@@ -95,13 +95,15 @@ export const ResultCard = React.forwardRef<
         className
       )}
     >
-      <div
-        className="mb-2 flex justify-between"
-        onClick={() => {
-          confetti();
-        }}
-      >
-        <span className="text-lg font-extrabold text-[#1C1C1C]">🎉 Congratulations!</span>
+      <div className="mb-2 flex justify-between">
+        <span
+          className="text-lg font-extrabold text-[#1C1C1C]"
+          onClick={() => {
+            confetti();
+          }}
+        >
+          🎉 Congratulations!
+        </span>
         {showBackToWheelButton && (
           <LotteryRulesModal>
             <span className="font-medium text-xs text-[#0052FF] underline">Rules</span>
@@ -111,7 +113,7 @@ export const ResultCard = React.forwardRef<
 
       <div className="flex justify-between rounded-[12px] bg-[#ECF2FF] px-5 py-[10px]">
         <span className="font-extrabold text-[#1C1C1C]">You won</span>
-        <span className="font-extrabold text-[#0052FF]">{currentScore} points</span>
+        <span className="block font-extrabold text-[#0052FF]">{currentScore} points</span>
       </div>
 
       <div className="mt-4 rounded-[12px] bg-[#ECF2FF] px-5 py-[16px]">
@@ -157,11 +159,11 @@ export const ResultCard = React.forwardRef<
         )}
 
         <div className="">
-          <div className={'mt-7 text-center font-semiBold text-sm text-[#101828]'}>{levelTips}</div>
+          <div className={'mt-4 text-center text-sm font-normal text-[#101828]'}>{levelTips}</div>
 
           <Progress
             value={progress}
-            className="mt-4 bg-[#EAECF0] [&>div]:rounded-full [&>div]:bg-[linear-gradient(90deg,#C7D9FF_0%,#0052FF_100%)]"
+            className="mt-[6px] bg-[#EAECF0] [&>div]:rounded-full [&>div]:bg-[linear-gradient(90deg,#C7D9FF_0%,#0052FF_100%)]"
           />
 
           {!reachedMax && (

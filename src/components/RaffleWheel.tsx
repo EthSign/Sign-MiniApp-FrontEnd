@@ -66,7 +66,7 @@ export const RaffleWheel = React.forwardRef<HTMLDivElement, RaffleWheelProps>((p
       <div className="absolute inset-0 rounded-full bg-[linear-gradient(-135deg,#FDC347_9%,#FC8682_27%,#FA2CD7_52%,#987CDB_76%,#33D0E0_100%)]" />
 
       <div className="absolute flex size-[86%] items-center justify-center overflow-hidden rounded-full">
-        <div className="absolute size-full rounded-full bg-[linear-gradient(135deg,#FDC347_9%,#FC8682_27%,#FA2CD7_52%,#987CDB_76%,#33D0E0_100%)]"></div>
+        <div className="absolute size-full translate-y-[-2%] rounded-full bg-[linear-gradient(135deg,#FDC347_9%,#FC8682_27%,#FA2CD7_52%,#987CDB_76%,#33D0E0_100%)]"></div>
 
         <div className="absolute z-10 size-[calc(100%-10px)] rounded-full shadow-[inset_0_2px_12px_0_#000000]"></div>
 
@@ -117,9 +117,9 @@ export const RaffleWheel = React.forwardRef<HTMLDivElement, RaffleWheelProps>((p
 
       <img src="/wheel-pointer.svg" className="absolute left-1/2 top-0 z-10 w-[20px] -translate-x-1/2" alt="" />
 
-      <div className="relative z-10 flex size-[16%] items-center justify-center overflow-hidden rounded-full bg-[linear-gradient(225deg,#FEDC31_4.15%,#FDC347_13.8%,#FC8682_33.1%,#FA2CD7_59.91%,#987CDB_85.64%,#33D0E0_111.37%)]">
+      <div className="relative z-10 flex size-[24%] items-center justify-center overflow-hidden rounded-full bg-[linear-gradient(226deg,#FEDC31_4.15%,#FDC347_13.8%,#FC8682_33.1%,#FA2CD7_59.91%,#987CDB_85.64%,#33D0E0_111.37%)]">
         <div
-          className="absolute inset-[4px] z-10 flex items-center justify-center rounded-full bg-black font-bold text-[16px]"
+          className="absolute inset-[6%] z-10 flex items-center justify-center rounded-full bg-black font-bold text-[28px]"
           onClick={onSpinButtonClick}
         >
           Spin
