@@ -2,12 +2,14 @@ import { TourActionSheet } from '@/components/TourActionSheet.tsx';
 import { LuckyWheel } from '@/pages/LuckyWheel/components/LuckyWheel';
 import { ConfettiProvider } from '@/providers/ConfettiProvider';
 import { useUserInfo } from '@/providers/UserInfoProvider';
-import { Ticket01 } from '@ethsign/icons';
+import { Rocket01, Ticket01 } from '@ethsign/icons';
 import React, { useEffect, useRef } from 'react';
 import { useLotteryInfo } from '../../providers/LotteryInfoProvider';
+import { useNavigate } from 'react-router-dom';
 
 export const LuckyWheelPage: React.FC = () => {
   const { user } = useUserInfo();
+
   const {
     totalPoint,
     hasSpinedToday,
@@ -15,6 +17,8 @@ export const LuckyWheelPage: React.FC = () => {
     remainingTimes,
     refresh
   } = useLotteryInfo();
+
+  const navigate = useNavigate();
 
   const firstLoadingRef = useRef(false);
 
@@ -47,15 +51,29 @@ export const LuckyWheelPage: React.FC = () => {
     <ConfettiProvider>
       <div className="relative space-y-1">
         <div className="space-y-6">
-          <div className="rounded-[6px] bg-white px-4 py-2 text-center font-bold text-[#101828]">
+          <div className="relative rounded-[6px] bg-white px-4 py-2 text-center font-bold text-[#101828]">
             <span>Sign Score: </span>
             <span> {totalPoint}</span>
+
+            <div className="absolute right-4 top-1/2 -translate-y-1/2">
+              <TourActionSheet />
+            </div>
           </div>
 
           {(!hasSpinedToday || (hasSpinedToday && backToWheelButtonClicked)) && (
             <>
               <div className="flex gap-3">
-                <TourActionSheet />
+                <div
+                  className="flex-1 rounded-[6px] bg-white px-4 py-2 text-center font-bold text-[#101828]"
+                  onClick={() => {
+                    navigate('/records');
+                  }}
+                >
+                  <div className="flex items-center gap-2">
+                    <Rocket01 size={16} />
+                    <span className="whitespace-nowrap">Boost Record</span>
+                  </div>
+                </div>
                 <div className="flex-1 rounded-[6px] bg-white px-4 py-2 text-center font-bold text-[#101828]">
                   <div className="flex items-center justify-center gap-2 text-[#0052FF]">
                     <Ticket01 size={16} color="#0052FF" />

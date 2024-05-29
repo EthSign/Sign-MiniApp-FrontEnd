@@ -6,13 +6,12 @@ import {
   DrawerTitle,
   DrawerTrigger
 } from '@/components/Drawer.tsx';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Carousel, CarouselApi, CarouselContent, CarouselItem, useCarousel } from '@/components/Carousel.tsx';
 import { Button } from '@ethsign/ui';
 import { StepIcon } from '@/components/Icons.tsx';
 import classNames from 'classnames';
 import dropImg from '@/assets/drop.png';
-import { ChevronRight } from '@ethsign/icons';
 import { useLocalStorage } from 'react-use';
 
 const StepTab = ({ items, current }: { items: any; current: number }) => {
@@ -21,7 +20,7 @@ const StepTab = ({ items, current }: { items: any; current: number }) => {
       {items.map((item: any, index: number) => {
         return (
           <div key={index} className={classNames('gap-4 flex relative')}>
-            <div className={'w-8 relative'}>
+            <div className={'relative w-8'}>
               <StepIcon />
               <div
                 className={classNames('absolute top-[36px] left-[16px] w-[2px] bg-gray-200 h-[54px]', {
@@ -32,8 +31,8 @@ const StepTab = ({ items, current }: { items: any; current: number }) => {
             </div>
 
             <div className={'text-left'}>
-              <div className={'text-md font-medium text-primary'}>{item.title}</div>
-              <div className={'text-sm font-normal text-gray-500 mt-1'}>{item.description}</div>
+              <div className={'font-medium text-md text-primary'}>{item.title}</div>
+              <div className={'mt-1 text-sm font-normal text-gray-500'}>{item.description}</div>
             </div>
           </div>
         );
@@ -82,20 +81,20 @@ const PageOne = () => {
     }
   ];
   return (
-    <div className={'flex flex-col justify-center items-center h-full'}>
+    <div className={'flex h-full flex-col items-center justify-center'}>
       <DrawerHeader className={'p-0'}>
-        <DrawerTitle className={'text-[25px] font-bold'}>What to win?</DrawerTitle>
-        <DrawerDescription className={'text-left space-y-2'}>
+        <DrawerTitle className={'font-bold text-[25px]'}>What to win?</DrawerTitle>
+        <DrawerDescription className={'space-y-2 text-left'}>
           <div>Welcome to SIGN Game, a simple but highly rewarding online arcade.</div>
           <div>Here you can spin to win a wide pool of prizes.</div>
         </DrawerDescription>
-        <div className={'flex gap-3 mt-8'}>
+        <div className={'mt-8 flex gap-3'}>
           {rewards.map((reward, index) => (
             <div key={index} className={''}>
-              <div className={'flex items-center justify-center bg-[#ECF2FF] rounded-full w-[50px] h-[50px]'}>
+              <div className={'flex size-[50px] items-center justify-center rounded-full bg-[#ECF2FF]'}>
                 <img src={reward.img} alt="reward" className={'w-auto'} />
               </div>
-              <div className={'mt-2 text-primary text-[12px] font-normal'}>{reward.title}</div>
+              <div className={'mt-2 text-[12px] font-normal text-primary'}>{reward.title}</div>
             </div>
           ))}
         </div>
@@ -113,8 +112,8 @@ const PageTwo = () => {
   return (
     <div>
       <DrawerHeader className={'p-0'}>
-        <DrawerTitle className={'text-[25px] font-bold'}>How to play?</DrawerTitle>
-        <DrawerDescription className={'text-left space-y-2'}>
+        <DrawerTitle className={'font-bold text-[25px]'}>How to play?</DrawerTitle>
+        <DrawerDescription className={'space-y-2 text-left'}>
           <div>Welcome to SIGN Game, a simple but highly rewarding online arcade.</div>
           <div>Here you can spin to win a wide pool of prizes.</div>
         </DrawerDescription>
@@ -131,13 +130,13 @@ const PageTwo = () => {
 
 const PageThree = ({ onStart }: { onStart: () => void }) => {
   return (
-    <div className={'flex flex-col justify-center h-full'}>
-      <div className={'text-center mb-2 flex justify-center'}>
+    <div className={'flex h-full flex-col justify-center'}>
+      <div className={'mb-2 flex justify-center text-center'}>
         <img src={dropImg} alt="drop" className={'w-[150px]'} />
       </div>
       <DrawerHeader className={'p-0'}>
-        <DrawerTitle className={'text-[25px] font-bold'}>Mystery Drop</DrawerTitle>
-        <DrawerDescription className={'text-left space-y-2'}>
+        <DrawerTitle className={'font-bold text-[25px]'}>Mystery Drop</DrawerTitle>
+        <DrawerDescription className={'space-y-2 text-left'}>
           <div>
             Red pocket rain, like token-filled gift boxes, will be distributed to every online player at random time of
             the day,
@@ -152,7 +151,7 @@ const PageThree = ({ onStart }: { onStart: () => void }) => {
   );
 };
 
-export const TourActionSheet = () => {
+export const TourActionSheet: React.FC = () => {
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
   const [count, setCount] = useState(0);
@@ -175,12 +174,7 @@ export const TourActionSheet = () => {
     <>
       <Drawer open={open} onOpenChange={setOpen}>
         <DrawerTrigger asChild>
-          <div className="flex-1 rounded-[6px] bg-white px-4 py-2 text-center font-bold text-[#101828]">
-            <div className="flex items-center justify-center">
-              <span>Rules</span>
-              <ChevronRight />
-            </div>
-          </div>
+          <span className="text-xs text-[#0052FF] underline">Guide</span>
         </DrawerTrigger>
         <DrawerContent>
           <div className="mx-auto w-full max-w-sm">
@@ -205,11 +199,11 @@ export const TourActionSheet = () => {
                 </CarouselContent>
               </Carousel>
 
-              <div className={'flex gap-2 justify-center mt-4'}>
+              <div className={'mt-4 flex justify-center gap-2'}>
                 {new Array(count).fill(0).map((_, index) => (
                   <div
                     key={index}
-                    className={`w-2 h-2 rounded-full ${current === index + 1 ? 'bg-primary' : 'bg-gray-300'} mx-1`}
+                    className={`size-2 rounded-full ${current === index + 1 ? 'bg-primary' : 'bg-gray-300'} mx-1`}
                   />
                 ))}
               </div>
