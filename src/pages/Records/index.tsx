@@ -1,6 +1,6 @@
 import { TabBar } from '@/components/Header.tsx';
 import rocketImg from '@/assets/rocket.png';
-import { Badge, Progress } from '@ethsign/ui';
+import { Badge, DatePicker, Progress, ScrollArea } from '@ethsign/ui';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { getRaffles } from '@/services';
@@ -62,7 +62,7 @@ const InviteModal = ({ data }: { data: any }) => {
 };
 
 export default function RecordsPage() {
-  const [date] = useState(Date.now());
+  const [date, setDate] = useState(Date.now());
   const { data, isLoading } = useQuery({
     queryKey: ['records', date],
     queryFn: () => getRaffles(date)
@@ -72,9 +72,20 @@ export default function RecordsPage() {
   return (
     <div>
       <TabBar title={'Boost Records'} />
-      <div className={'py-8 px-6 bg-white h-[calc(100vh-48px)]'}>
+      <ScrollArea className={'py-8 px-6 bg-white h-[calc(100vh-48px)]'}>
         <div className={''}>
-          <div className={'text-xl font-bold'}>Boost Records</div>
+          <div className={'flex justify-between items-center'}>
+            <div className={'text-md font-bold'}>Boost Records</div>
+            <DatePicker
+              className={'flex-[0_0_150px] text-xs'}
+              value={new Date(date)}
+              onChange={(date) => {
+                if (date) {
+                  setDate(date?.getTime());
+                }
+              }}
+            />
+          </div>
           <div className="space-y-6">
             {isLoading && <Loading />}
             {data?.rows?.map((item, index) => {
@@ -84,9 +95,24 @@ export default function RecordsPage() {
                 </div>
               );
             })}
+            {data && data?.rows?.length === 0 && (
+              <div
+                className={
+                  'text-center rounded-[8px] py-8 px-4 border border-gray-200 flex flex-col justify-center items-center'
+                }
+              >
+                <div className={'bg-[#ECF2FF] rounded-full w-12 h-12 flex justify-center items-center'}>
+                  <img src={rocketImg} alt="" className={'w-[30px]'} />
+                </div>
+                <div className={'text-black text-sm font-medium mt-4'}>No Boost Record</div>
+                <div className={'text-xs text-[#667085] font-normal'}>
+                  There is no boost record. Spin the wheel to start boosting.
+                </div>
+              </div>
+            )}
           </div>
         </div>
-      </div>
+      </ScrollArea>
     </div>
   );
 }
