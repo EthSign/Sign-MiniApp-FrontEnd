@@ -50,7 +50,7 @@ export default function AttestPage() {
   const { spContract, getSchemaContract, getAttestationContract } = useSignProtocol();
   const { wallet, sender, publicKey } = useConnection();
   const { offchainSchemaId: schemaId } = getTonSpInfo();
-  const raffleId = user?.code || '6TQzCG4gfECcnb6VPVEdW';
+  const raffleId = user?.code;
   const { data } = useQuery({
     queryKey: ['raffle', raffleId],
     queryFn: () => getRaffleInfo(raffleId!)
@@ -105,18 +105,17 @@ export default function AttestPage() {
     const msgRes = JSON.parse(res.message);
     console.log(info, msgRes);
 
-    const attestRes = await submitAttestationByOffchain({
-      signType: 'ton-connect',
-      publicKey: info.publicKey!,
-      signature: res.signature,
-      message: msgRes.fullMessage,
-      attestation: attestationString
-    });
-
-    console.log(attestRes, 'attestRes');
-
     try {
       setLoading(true);
+      const attestRes = await submitAttestationByOffchain({
+        signType: 'ton-connect',
+        publicKey: info.publicKey!,
+        signature: res.signature,
+        message: msgRes.fullMessage,
+        attestation: attestationString
+      });
+
+      console.log(attestRes, 'attestRes');
       await checkTx({
         txHash: attestRes.attestationId,
         raffleId: raffleId

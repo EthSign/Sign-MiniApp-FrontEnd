@@ -8,6 +8,7 @@ export const useDebug = () => {
   const isDebug = searchParams.get('debug');
   const isLocalDebug = window.location.href.includes('localhost');
   const [debug] = useLocalStorage('debug', isDebug || isLocalDebug);
+  console.log(isDebug, isLocalDebug, 'dd');
 
   useEffect(() => {
     if (debug) {
