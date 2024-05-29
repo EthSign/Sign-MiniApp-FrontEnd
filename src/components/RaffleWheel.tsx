@@ -1,7 +1,8 @@
 import { useLotteryInfo } from '@/providers/LotteryInfoProvider';
+import { Events, eventBus } from '@/eventbus';
 import { raffle } from '@/services';
 import classNames from 'classnames';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import WebApp from '@twa-dev/sdk';
 
 export interface RaffleWheelProps {
@@ -24,10 +25,14 @@ export const RaffleWheel = React.forwardRef<HTMLDivElement, RaffleWheelProps>((p
 
   const [degree, setDegree] = useState(0);
 
-  const onSpinButtonClick = async () => {
-    if (loading || isSpining || isRaffling) return;
+  const canSpin = useMemo(
+    () => !loading && !isSpining && !isRaffling && remainingTimes > 0,
+    [isRaffling, isSpining, loading, remainingTimes]
+  );
 
-    if (remainingTimes < 1) {
+  const onSpinButtonClick = async () => {
+    if (!canSpin) {
+      eventBus.emit(Events.noTicketSpin);
       return;
     }
 
@@ -119,7 +124,12 @@ export const RaffleWheel = React.forwardRef<HTMLDivElement, RaffleWheelProps>((p
 
       <div className="relative z-10 flex size-[24%] items-center justify-center overflow-hidden rounded-full bg-[linear-gradient(226deg,#FEDC31_4.15%,#FDC347_13.8%,#FC8682_33.1%,#FA2CD7_59.91%,#987CDB_85.64%,#33D0E0_111.37%)]">
         <div
-          className="absolute inset-[6%] z-10 flex items-center justify-center rounded-full bg-black font-bold text-[28px]"
+          className={classNames(
+            'absolute inset-[6%] z-10 flex items-center justify-center rounded-full bg-black font-bold text-[28px]',
+            {
+              'transition-all duration-150 active:text-[30px]': canSpin
+            }
+          )}
           onClick={onSpinButtonClick}
         >
           Spin
