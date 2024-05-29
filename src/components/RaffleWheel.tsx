@@ -106,7 +106,7 @@ export const RaffleWheel = React.forwardRef<HTMLDivElement, RaffleWheelProps>((p
                   <span className="[text-shadow:2px_2px_0px_black]">{prize.value}</span>
                 ) : (
                   <div>
-                    <img className="size-[52px] object-contain" src={prize.image} alt="" />
+                    <img className="h-[41px] translate-x-[10px] object-contain object-right" src={prize.image} alt="" />
                   </div>
                 )}
               </div>
