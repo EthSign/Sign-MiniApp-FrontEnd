@@ -49,7 +49,7 @@ export const LuckyWheelPage: React.FC = () => {
 
   return (
     <ConfettiProvider>
-      <div className="relative space-y-1">
+      <div className="relative space-y-2">
         <div className="space-y-6">
           <div className="relative rounded-[6px] bg-white px-4 py-2 text-center font-bold text-[#101828]">
             <span>Sign Score: </span>
