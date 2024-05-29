@@ -20,7 +20,9 @@ const routerConfig: RouteObject[] = [
           {
             path: '',
             loader: () => {
-              return redirect('/lucky-wheel');
+              const search = location.search;
+
+              return redirect('/lucky-wheel' + search);
             }
           },
           {

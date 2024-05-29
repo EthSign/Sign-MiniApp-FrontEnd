@@ -32,13 +32,6 @@ export const useCountDown = (props: { targetDate: Date; onFinish?: () => void })
   }, [now, targetDate]);
 
   useEffect(() => {
-    const ms = targetDate.getTime() - Date.now();
-
-    if (ms <= 0) {
-      onFinish?.();
-      return;
-    }
-
     const timer = setInterval(() => {
       setNow(Date.now());
     }, 1000);
@@ -49,6 +42,15 @@ export const useCountDown = (props: { targetDate: Date; onFinish?: () => void })
       }
     };
   }, [onFinish, targetDate]);
+
+  useEffect(() => {
+    const ms = targetDate.getTime() - Date.now();
+
+    if (ms <= 0) {
+      onFinish?.();
+      return;
+    }
+  }, [onFinish, targetDate, now]);
 
   return remain;
 };
