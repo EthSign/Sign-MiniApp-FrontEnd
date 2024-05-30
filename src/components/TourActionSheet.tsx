@@ -6,17 +6,26 @@ import {
   DrawerTitle,
   DrawerTrigger
 } from '@/components/Drawer.tsx';
-import React, { useEffect, useState } from 'react';
-import { Carousel, CarouselApi, CarouselContent, CarouselItem, useCarousel } from '@/components/Carousel.tsx';
+import React, { useState } from 'react';
+import {
+  Carousel,
+  CarouselApi,
+  CarouselContent,
+  CarouselItem,
+  DotButton,
+  useCarousel,
+  useDotButton
+} from '@/components/Carousel.tsx';
 import { Button } from '@ethsign/ui';
 import { StepIcon } from '@/components/Icons.tsx';
 import classNames from 'classnames';
 import dropImg from '@/assets/drop.png';
 import { useLocalStorage } from 'react-use';
+import AutoHeight from 'embla-carousel-auto-height';
 
 const StepTab = ({ items, current }: { items: any; current: number }) => {
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-6">
       {items.map((item: any, index: number) => {
         return (
           <div key={index} className={classNames('gap-4 flex relative')}>
@@ -31,7 +40,7 @@ const StepTab = ({ items, current }: { items: any; current: number }) => {
             </div>
 
             <div className={'text-left'}>
-              <div className={'font-medium text-md text-primary'}>{item.title}</div>
+              <div className={'font-medium text-md text-gray-700'}>{item.title}</div>
               <div className={'mt-1 text-sm font-normal text-gray-500'}>{item.description}</div>
             </div>
           </div>
@@ -81,7 +90,7 @@ const PageOne = () => {
     }
   ];
   return (
-    <div className={'flex h-full flex-col items-center justify-center'}>
+    <div className={'flex flex-col items-center justify-center h-[300px]'}>
       <DrawerHeader className={'p-0'}>
         <DrawerTitle className={'font-bold text-[25px]'}>What to win?</DrawerTitle>
         <DrawerDescription className={'space-y-2 text-left'}>
@@ -94,7 +103,7 @@ const PageOne = () => {
               <div className={'flex size-[50px] items-center justify-center rounded-full bg-[#ECF2FF]'}>
                 <img src={reward.img} alt="reward" className={'w-auto'} />
               </div>
-              <div className={'mt-2 text-[12px] font-normal text-primary'}>{reward.title}</div>
+              <div className={'mt-2 text-[10px] font-normal text-primary whitespace-nowrap'}>{reward.title}</div>
             </div>
           ))}
         </div>
@@ -110,7 +119,7 @@ const PageTwo = () => {
   const { scrollNext } = useCarousel();
 
   return (
-    <div>
+    <div className={'h-[480px]'}>
       <DrawerHeader className={'p-0'}>
         <DrawerTitle className={'font-bold text-[25px]'}>How to play?</DrawerTitle>
         <DrawerDescription className={'space-y-2 text-left'}>
@@ -130,7 +139,7 @@ const PageTwo = () => {
 
 const PageThree = ({ onStart }: { onStart: () => void }) => {
   return (
-    <div className={'flex h-full flex-col justify-center'}>
+    <div className={'flex flex-col justify-center h-[370px]'}>
       <div className={'mb-2 flex justify-center text-center'}>
         <img src={dropImg} alt="drop" className={'w-[150px]'} />
       </div>
@@ -153,22 +162,9 @@ const PageThree = ({ onStart }: { onStart: () => void }) => {
 
 export const TourActionSheet: React.FC = () => {
   const [api, setApi] = useState<CarouselApi>();
-  const [current, setCurrent] = useState(0);
-  const [count, setCount] = useState(0);
   const [open, setOpen] = useLocalStorage('tour-open', true);
 
-  useEffect(() => {
-    if (!api) {
-      return;
-    }
-
-    setCount(api.scrollSnapList().length);
-    setCurrent(api.selectedScrollSnap() + 1);
-
-    api.on('select', () => {
-      setCurrent(api.selectedScrollSnap() + 1);
-    });
-  }, [api]);
+  const { selectedIndex, scrollSnaps, onDotButtonClick } = useDotButton(api);
 
   return (
     <>
@@ -185,8 +181,9 @@ export const TourActionSheet: React.FC = () => {
                 opts={{
                   align: 'start'
                 }}
+                plugins={[AutoHeight()]}
               >
-                <CarouselContent>
+                <CarouselContent className={'items-start'}>
                   <CarouselItem>
                     <PageOne />
                   </CarouselItem>
@@ -200,10 +197,11 @@ export const TourActionSheet: React.FC = () => {
               </Carousel>
 
               <div className={'mt-4 flex justify-center gap-2'}>
-                {new Array(count).fill(0).map((_, index) => (
-                  <div
+                {scrollSnaps.map((_, index) => (
+                  <DotButton
                     key={index}
-                    className={`size-2 rounded-full ${current === index + 1 ? 'bg-primary' : 'bg-gray-300'} mx-1`}
+                    onClick={() => onDotButtonClick(index)}
+                    className={`size-2 rounded-full ${selectedIndex === index ? 'bg-primary' : 'bg-gray-300'} mx-1`}
                   />
                 ))}
               </div>

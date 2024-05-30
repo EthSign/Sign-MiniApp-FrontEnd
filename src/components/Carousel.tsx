@@ -6,6 +6,7 @@ import { ArrowLeft, ArrowRight } from 'lucide-react';
 
 import { cn } from '@ethsign/ui/dist/lib/utils';
 import { Button } from '@ethsign/ui';
+import { PropsWithChildren, useCallback, useEffect, useState } from 'react';
 
 type CarouselApi = UseEmblaCarouselType[1];
 type UseCarouselParameters = Parameters<typeof useEmblaCarousel>;
@@ -223,4 +224,73 @@ const CarouselNext = React.forwardRef<HTMLButtonElement, React.ComponentProps<ty
 );
 CarouselNext.displayName = 'CarouselNext';
 
-export { type CarouselApi, Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext, useCarousel };
+type UseDotButtonType = {
+  selectedIndex: number;
+  scrollSnaps: number[];
+  onDotButtonClick: (index: number) => void;
+};
+
+const useDotButton = (
+  emblaApi: CarouselApi | undefined,
+  onButtonClick?: (emblaApi: CarouselApi) => void
+): UseDotButtonType => {
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
+
+  const onDotButtonClick = useCallback(
+    (index: number) => {
+      if (!emblaApi) return;
+      emblaApi.scrollTo(index);
+      if (onButtonClick) onButtonClick(emblaApi);
+    },
+    [emblaApi, onButtonClick]
+  );
+
+  const onInit = useCallback((emblaApi: CarouselApi) => {
+    emblaApi && setScrollSnaps(emblaApi.scrollSnapList());
+  }, []);
+
+  const onSelect = useCallback((emblaApi: CarouselApi) => {
+    emblaApi && setSelectedIndex(emblaApi.selectedScrollSnap());
+  }, []);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+
+    onInit(emblaApi);
+    onSelect(emblaApi);
+
+    emblaApi.on('reInit', onInit).on('reInit', onSelect).on('select', onSelect);
+  }, [emblaApi, onInit, onSelect]);
+
+  return {
+    selectedIndex,
+    scrollSnaps,
+    onDotButtonClick
+  };
+};
+
+type PropType = PropsWithChildren<
+  React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>
+>;
+
+export const DotButton: React.FC<PropType> = (props) => {
+  const { children, ...restProps } = props;
+
+  return (
+    <button type="button" {...restProps}>
+      {children}
+    </button>
+  );
+};
+
+export {
+  type CarouselApi,
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselPrevious,
+  CarouselNext,
+  useCarousel,
+  useDotButton
+};

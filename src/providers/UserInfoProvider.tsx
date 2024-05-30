@@ -7,12 +7,6 @@ import { useQuery } from '@tanstack/react-query';
 import { ReactNode, createContext, useContext, useEffect, useMemo } from 'react';
 import { useWalletBind } from '../hooks/useWalletBind';
 
-// eslint-disable-next-line react-refresh/only-export-components
-export const getUserData = async () => {
-  const user = await getMyInfo();
-  return user;
-};
-
 interface UserInfoContextProps {
   user?: IUser;
   isLoading: boolean;
@@ -40,7 +34,7 @@ export const useFetchUser = () => {
     isFetched
   } = useQuery({
     queryKey: ['user'],
-    queryFn: () => getUserData(),
+    queryFn: () => getMyInfo(),
     retry: false
   });
   return {

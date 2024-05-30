@@ -14,6 +14,7 @@ export default {
     },
     extend: {
       fontFamily: {
+        normal: ["'IBM Plex Sans Light'", 'sans-serif'],
         italic: ["'IBM Plex Sans Italic'", 'sans-serif'],
         medium: ["'IBM Plex Sans Medium'", 'sans-serif'],
         mediumItalic: ["'IBM Plex Sans Medium Italic'", 'sans-serif'],

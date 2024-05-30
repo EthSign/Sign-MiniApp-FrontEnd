@@ -27,11 +27,11 @@ interface ITMAInitData {
   start_param?: string; //code
 }
 
-// const debugData =
-//   'user=%7B%22id%22%3A6301306860%2C%22first_name%22%3A%22evan%22%2C%22last_name%22%3A%22yuan%22%2C%22username%22%3A%22evansyuan%22%2C%22language_code%22%3A%22zh-hans%22%2C%22allows_write_to_pm%22%3Atrue%7D&chat_instance=2591784536152034999&chat_type=private&start_param=eyJyYWZmbGVJZCI6IjIxcFQtaklfN2ROempYZThEWmpHQSIsImludml0ZVVzZXIiOiJ5YW55dWFuZmUifQ&auth_date=1716969039&hash=fd62660a81e796e0cce93179711769a03aef8d95efb5dfe6d4d286aeb667becf';
+const debugData =
+  'user=%7B%22id%22%3A1312579605%2C%22first_name%22%3A%22Evan%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22yanyuanfe%22%2C%22language_code%22%3A%22zh-hans%22%2C%22allows_write_to_pm%22%3Atrue%7D&chat_instance=-6858595359197215319&chat_type=supergroup&start_param=eyJyYWZmbGVJZCI6InFFOUJvMGJ3NkppLVFKR1czaEh0XyIsImludml0ZVVzZXIiOiJ5YW55dWFuZmUifQ%3D%3D&auth_date=1717034965&hash=16b53392ba124947885b8af0de9e85559c22618e1a80d20c2cbed6357086532c';
 
 export const getTMAInitData = (): ITMAInitData | null => {
-  const initDataRaw = window.Telegram.WebApp?.initData; // user=...&query_id=...&...
+  const initDataRaw = window.Telegram.WebApp?.initData || debugData; // user=...&query_id=...&...
   console.log(window.Telegram.WebApp?.initData, 'initDataRaw');
 
   if (!initDataRaw) return null;

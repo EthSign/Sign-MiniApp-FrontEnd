@@ -43,9 +43,9 @@ export const RankPage: React.FC = () => {
             <span className={'-rotate-45'}>2</span>
           </div>
           <div className={'mt-2.5 font-bold text-sm text-[#009BD6]'}>{userData[1]?.score}</div>
-          <div className={'mt-2 font-medium text-xs text-gray-500'}>{userData[1]?.username}</div>
+          <div className={'font-medium text-[8px] text-gray-500'}>{userData[1]?.username}</div>
         </div>
-        <div className="flex h-[126px] flex-1 flex-col items-center rounded-t-[28px] bg-[#F4F8FF] py-6">
+        <div className="flex h-[122px] flex-1 flex-col items-center rounded-t-[28px] bg-[#F4F8FF] py-6">
           <div
             className={
               'flex size-4 rotate-45 items-center justify-center rounded-[5px] bg-yellow-400 text-center text-white'
@@ -54,7 +54,7 @@ export const RankPage: React.FC = () => {
             <span className={'-rotate-45'}>1</span>
           </div>
           <div className={'mt-3 font-bold text-sm text-[#FFAA00]'}>{userData[0]?.score}</div>
-          <div className={'mt-5 font-medium text-xs text-gray-500'}>{userData[0]?.username}</div>
+          <div className={'font-medium text-[8px] text-gray-500'}>{userData[0]?.username}</div>
           {/*<div className={'mt-2 text-xs'}>@username</div>*/}
         </div>
         <div className="flex flex-1 flex-col items-center rounded-r-[12px] bg-[#ECF2FF] py-2">
@@ -66,7 +66,7 @@ export const RankPage: React.FC = () => {
             <span className={'-rotate-45'}>3</span>
           </div>
           <div className={'mt-2.5 font-bold text-xs text-[#00D95F]'}>{userData[2]?.score}</div>
-          <div className={'mt-2 font-medium text-xs text-gray-500'}>{userData[2]?.username}</div>
+          <div className={'font-medium text-[8px] text-gray-500'}>{userData[2]?.username}</div>
           {/*<div className={'text-xs'}>@username</div>*/}
         </div>
       </div>
@@ -92,10 +92,10 @@ export const RankPage: React.FC = () => {
                 >
                   {index + 4}
                 </span>
-                <span>{item.username}</span>
+                <div className={'text-xs font-medium w-[100px] text-ellipsis'}>{item.username}</div>
               </div>
-              <div className={'flex-[0_0_100px] px-2 text-center'}>{item.score}</div>
-              <div className={'flex-[0_0_80px] px-2 text-right'}>-</div>
+              <div className={'flex-[0_0_100px] px-2 text-center text-xs font-normal'}>{item.score}</div>
+              <div className={'flex-[0_0_50px] px-2 text-right'}>--</div>
             </div>
           );
         })}

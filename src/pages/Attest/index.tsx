@@ -1,6 +1,6 @@
 import { Button, Input, Label, Modal, Select, toast } from '@ethsign/ui';
 import { useState } from 'react';
-import { ButtonSelect } from '@/components/ButtonSelect.tsx';
+// import { ButtonSelect } from '@/components/ButtonSelect.tsx';
 import { attestPrepare, checkTx, getRaffleInfo, submitAttestationByOffchain } from '@/services';
 import { useUserInfo } from '@/providers/UserInfoProvider';
 import { ChainType } from '@/core/types.ts';
@@ -42,7 +42,7 @@ export const AboutModal = () => {
 // const schemaId = 'SPS_uRupYWqUadWNjKuPHUOyh';
 
 export default function AttestPage() {
-  const [type, setType] = useState('offchain');
+  const [type] = useState('offchain');
   const [template, setTemplate] = useState(offChainSchema.name);
   const [loading, setLoading] = useState(false);
   const { user, isBindingWallet, bindWallet } = useUserInfo();
@@ -190,6 +190,8 @@ export default function AttestPage() {
     }
   };
 
+  console.log(user, 'user');
+
   return (
     <div>
       <TabBar title={'Sign Event'} />
@@ -206,20 +208,20 @@ export default function AttestPage() {
         {/*</div>*/}
 
         <div className="rounded-[6px] bg-white">
-          <ButtonSelect
-            options={[
-              {
-                label: 'On-Chain',
-                value: 'onchain'
-              },
-              {
-                label: 'Off-Chain',
-                value: 'offchain'
-              }
-            ]}
-            value={type}
-            onChange={(v) => setType(v as string)}
-          />
+          {/*<ButtonSelect*/}
+          {/*  options={[*/}
+          {/*    {*/}
+          {/*      label: 'On-Chain',*/}
+          {/*      value: 'onchain'*/}
+          {/*    },*/}
+          {/*    {*/}
+          {/*      label: 'Off-Chain',*/}
+          {/*      value: 'offchain'*/}
+          {/*    }*/}
+          {/*  ]}*/}
+          {/*  value={type}*/}
+          {/*  onChange={(v) => setType(v as string)}*/}
+          {/*/>*/}
           <div className="space-y-6 py-6">
             <div className={'space-y-1'}>
               <Label>Choose a template</Label>
@@ -238,7 +240,7 @@ export default function AttestPage() {
             <div>
               {user?.walletAddress ? (
                 <Button loading={loading} disabled={!!isExpired} className={'w-full'} onClick={handleSubmit}>
-                  {isExpired ? 'Expired' : 'Sign Event'}
+                  {isExpired ? 'Boost Expired' : 'Sign Event'}
                 </Button>
               ) : (
                 <Button loading={isBindingWallet} className={'w-full'} onClick={bindWallet}>

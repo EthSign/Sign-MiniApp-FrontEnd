@@ -46,7 +46,7 @@ const InviteModal = ({ data }: { data: any }) => {
                 'mt-2.5 bg-[#EAECF0] [&>div]:rounded-full [&>div]:bg-[linear-gradient(90deg,#C7D9FF_0%,#0052FF_100%)]'
               }
             />
-            <div className={'flex justify-between items-center mt-2 text-xs'}>
+            <div className={'flex justify-between items-center mt-2 text-[10px]'}>
               <div>Current: {levelInfo?.currentScore} pts</div>
               <div>{levelInfo?.nextScore ? `Next Level: ${levelInfo?.nextScore} pts` : 'Max'}</div>
             </div>
