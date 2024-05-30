@@ -111,7 +111,7 @@ export default function RecordsPage() {
                 </div>
                 <div className={'text-black text-sm font-medium mt-4'}>No Boost Records</div>
                 <div className={'text-xs text-[#667085] font-normal'}>
-                  There is no boost records. Spin the wheel to start boosting.
+                  There are no boost records. Spin the wheel to start boosting.
                 </div>
               </div>
             )}
