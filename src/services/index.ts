@@ -1,6 +1,6 @@
 // POST /mini/auth
 import { ApiClient, apiClient } from '@/utils/api-client.ts';
-import { IRankData, IUser, LotteryInfo, RaffleResult } from '@/types';
+import { IRaffleRecord, IRankData, IUser, LotteryInfo, RaffleInfo, RaffleResult } from '@/types';
 import { OffChainRpc } from '@ethsign/sp-sdk';
 import { ENVS } from '@/constants/config.ts';
 
@@ -49,8 +49,18 @@ export const attestPrepare = async (data: { raffleId: string }) => {
   }>('/mini/campaigns/lottery/attest-prepare', data);
 };
 
+// GET /mini/campaigns/lottery/raffle-info?id=EaAm_aeRPhjJuu8s5c87U
+export const getRaffleInfo = async (id: string) => {
+  return await apiClient.get<RaffleInfo>(`/mini/campaigns/lottery/raffle-info?id=${id}`);
+};
+
+// GET /mini/campaigns/lottery/raffles?date=1716799249189
+export const getRaffles = async (date: number) => {
+  return await apiClient.get<{ rows: IRaffleRecord[]; total: number }>(`/mini/campaigns/lottery/raffles?date=${date}`);
+};
+
 const rpcMap = {
-  dev: 'http://43.198.156.58:3020/api', //'http://43.198.156.58:3020/api'
+  dev: 'https://sign-mini.dev.ethsign.xyz/api', //'http://43.198.156.58:3020/api'
   prod: OffChainRpc.mainnet
 };
 

@@ -6,14 +6,14 @@ import { Outlet } from 'react-router-dom';
 
 const TABS: TabItem[] = [
   {
-    label: 'Rank',
-    to: '/rank',
-    icon: <BarChart01 size={24} color="#FFF" />
-  },
-  {
     label: 'Lucky Wheel',
     to: '/lucky-wheel',
-    icon: <Diamond01 size={24} color="#FFF" />
+    icon: ({ active }) => <Diamond01 size={24} color={active ? '#0052FF' : '#98A2B3'} />
+  },
+  {
+    label: 'Rank',
+    to: '/rank',
+    icon: ({ active }) => <BarChart01 size={24} color={active ? '#0052FF' : '#98A2B3'} />
   }
 ];
 
@@ -21,8 +21,8 @@ function Home() {
   return (
     <>
       <Header />
-      <ScrollArea className={'h-[calc(100vh-167px)] [&>[data-radix-scroll-area-viewport]>div]:!block'}>
-        <div className="relative p-6">
+      <ScrollArea className={'h-[calc(100vh-151px)] [&>[data-radix-scroll-area-viewport]>div]:!block'}>
+        <div className="relative p-4">
           <Outlet />
         </div>
       </ScrollArea>

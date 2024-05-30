@@ -14,6 +14,7 @@ export default {
     },
     extend: {
       fontFamily: {
+        normal: ["'IBM Plex Sans Light'", 'sans-serif'],
         italic: ["'IBM Plex Sans Italic'", 'sans-serif'],
         medium: ["'IBM Plex Sans Medium'", 'sans-serif'],
         mediumItalic: ["'IBM Plex Sans Medium Italic'", 'sans-serif'],
@@ -312,7 +313,8 @@ export default {
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
-        'accordion-up': 'accordion-up 0.2s ease-out'
+        'accordion-up': 'accordion-up 0.2s ease-out',
+        shake: 'shake 500ms'
       }
     }
   },

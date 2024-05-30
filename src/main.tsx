@@ -11,8 +11,8 @@ import { TonProvider } from '@/core/providers/ton';
 
 WebApp.ready();
 
-WebApp.setBackgroundColor('#05051E');
-WebApp.setHeaderColor('#05051E');
+WebApp.setBackgroundColor('#fff');
+WebApp.setHeaderColor('#fff');
 
 const manifestUrl = 'https://app.ethsign.xyz/manifest.json';
 
@@ -31,7 +31,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       }
     >
       <QueryClientProvider client={queryClient}>
-        <ThemeProvider defaultTheme={'dark'} storageKey={'theme'}>
+        <ThemeProvider defaultTheme={'light'} storageKey={'theme'}>
           <LotteryInfoProvider>
             <Router />
             <Toaster />

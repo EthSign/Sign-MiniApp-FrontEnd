@@ -2,6 +2,7 @@ import { Loading } from '@/components/Loading';
 import { getLotteryInfo } from '@/services';
 import { LotteryInfo } from '@/types';
 import React, { PropsWithChildren, createContext, useCallback, useContext, useState } from 'react';
+import { useLocalStorage } from 'react-use';
 
 export interface LotteryInfoContextData {
   loading: boolean;
@@ -9,7 +10,8 @@ export interface LotteryInfoContextData {
   hasSpinedToday: boolean;
   currentScore: number;
   prizes: LotteryInfo['prizes'];
-  currentDayRaffleResult?: LotteryInfo['currentDayRaffleResult'];
+  currentDayRaffleResult?: LotteryInfo['currentRaffleResult'];
+  remainingTimes: LotteryInfo['remainingTimes'];
 }
 
 // eslint-disable-next-line react-refresh/only-export-components
@@ -18,12 +20,19 @@ export const DEFAULT_LOTTERY_INFO: LotteryInfoContextData = {
   totalPoint: 0,
   currentScore: 0,
   hasSpinedToday: false,
-  prizes: []
+  prizes: [],
+  remainingTimes: 0
 };
 
 export const LotteryInfoContext = createContext<
   LotteryInfoContextData & {
+    flags: {
+      doNotShowBackToWheelTipModal: boolean;
+      backToWheelButtonClicked: boolean;
+    };
     refresh: (props?: { showLoading?: boolean }) => Promise<void>;
+    checkNotShowBackToWheelTipModal: () => void;
+    setBackToWheelButtonClicked: (value: boolean) => void;
   }
 >({
   loading: true,
@@ -31,7 +40,14 @@ export const LotteryInfoContext = createContext<
   currentScore: 0,
   hasSpinedToday: false,
   prizes: [],
-  refresh: async () => {}
+  remainingTimes: 0,
+  flags: {
+    doNotShowBackToWheelTipModal: false,
+    backToWheelButtonClicked: false
+  },
+  refresh: async () => {},
+  checkNotShowBackToWheelTipModal: () => {},
+  setBackToWheelButtonClicked: () => {}
 });
 
 export const LotteryInfoProvider: React.FC<PropsWithChildren> = (props) => {
@@ -41,6 +57,13 @@ export const LotteryInfoProvider: React.FC<PropsWithChildren> = (props) => {
 
   const [loadingVisible, setLoadingVisible] = useState(false);
 
+  const [doNotShowBackToWheelTipModalFlag = false, setDoNotShowBackToWheelTipModal] = useLocalStorage(
+    'v1.0.1_doNotShowBackToWheelTipModal',
+    false
+  );
+
+  const [backToWheelButtonClicked, setBackToWheelButtonClicked] = useState(false);
+
   const fetchPageData = useCallback(async () => {
     setLotteryInfo((old) => ({ ...old, loading: true }));
 
@@ -49,10 +72,11 @@ export const LotteryInfoProvider: React.FC<PropsWithChildren> = (props) => {
     setLotteryInfo({
       loading: false,
       totalPoint: response.totalPoint,
-      currentScore: response.currentDayRaffleResult?.currentScore ?? 0,
-      hasSpinedToday: response.currentDayRaffleResult !== null,
+      currentScore: response.currentRaffleResult?.currentScore ?? 0,
+      hasSpinedToday: response.currentRaffleResult !== null,
       prizes: response.prizes,
-      currentDayRaffleResult: response.currentDayRaffleResult
+      currentDayRaffleResult: response.currentRaffleResult,
+      remainingTimes: response.remainingTimes
     });
   }, []);
 
@@ -71,11 +95,21 @@ export const LotteryInfoProvider: React.FC<PropsWithChildren> = (props) => {
     [fetchPageData]
   );
 
+  const checkNotShowBackToWheelTipModal = useCallback(() => {
+    setDoNotShowBackToWheelTipModal(true);
+  }, [setDoNotShowBackToWheelTipModal]);
+
   return (
     <LotteryInfoContext.Provider
       value={{
         ...lotteryInfo,
-        refresh
+        flags: {
+          doNotShowBackToWheelTipModal: doNotShowBackToWheelTipModalFlag,
+          backToWheelButtonClicked: backToWheelButtonClicked
+        },
+        refresh,
+        checkNotShowBackToWheelTipModal,
+        setBackToWheelButtonClicked
       }}
     >
       {children}

@@ -4,14 +4,8 @@ import { auth, getMyInfo } from '@/services';
 import { IUser } from '@/types';
 import { getTMAInitData } from '@/utils/common.ts';
 import { useQuery } from '@tanstack/react-query';
-import { ReactNode, createContext, useContext, useEffect } from 'react';
+import { ReactNode, createContext, useContext, useEffect, useMemo } from 'react';
 import { useWalletBind } from '../hooks/useWalletBind';
-
-// eslint-disable-next-line react-refresh/only-export-components
-export const getUserData = async () => {
-  const user = await getMyInfo();
-  return user;
-};
 
 interface UserInfoContextProps {
   user?: IUser;
@@ -40,7 +34,7 @@ export const useFetchUser = () => {
     isFetched
   } = useQuery({
     queryKey: ['user'],
-    queryFn: () => getUserData(),
+    queryFn: () => getMyInfo(),
     retry: false
   });
   return {
@@ -60,9 +54,26 @@ export const UserInfoProvider = ({ children }: { children: ReactNode }) => {
     onBindSuccess: fetchUser
   });
 
+  const inviteData = useMemo(() => {
+    try {
+      if (authData?.start_param) {
+        const inviteData = JSON.parse(window.atob(decodeURIComponent(authData.start_param)));
+        console.log(inviteData, 'iv');
+        return {
+          raffleId: inviteData.raffleId,
+          inviteUser: inviteData?.inviteUser
+        };
+      }
+      return null;
+    } catch (e) {
+      console.error(e);
+      return null;
+    }
+  }, [authData]);
+
   const handleAuth = async () => {
     if (authData) {
-      const res = await auth({ webappData: authData, referenceCode: authData.start_param || '' });
+      const res = await auth({ webappData: authData, referenceCode: inviteData?.raffleId || '' });
       console.log(res, 'res');
       fetchUser();
     }
@@ -80,7 +91,8 @@ export const UserInfoProvider = ({ children }: { children: ReactNode }) => {
       value={{
         user: {
           ...user,
-          code: authData?.start_param
+          code: inviteData?.raffleId,
+          inviteUser: inviteData?.inviteUser
         },
         isLoading,
         isBindingWallet,

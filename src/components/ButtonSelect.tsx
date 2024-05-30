@@ -16,15 +16,15 @@ export const ButtonSelect = ({
   disabled?: boolean;
 }) => {
   return (
-    <div className={cn('flex items-center rounded-md overflow-hidden', className)}>
+    <div className={cn('flex items-center rounded-md overflow-hidden border border-gray-200', className)}>
       {options.map((option, index) => (
         <Button
           disabled={disabled}
           variant="outline"
           key={index}
           onClick={() => onChange(option.value)}
-          className={`h-auto flex-1 flex-col rounded-none border-none py-2.5 text-sm hover:bg-gray-700 hover:text-white ${
-            value === option.value ? 'bg-grey-650 text-white' : 'bg-card text-gray-500'
+          className={`h-auto flex-1 flex-col rounded-none border-none py-2.5 text-md font-bold hover:bg-[#ECF2FF] hover:text-primary ${
+            value === option.value ? 'bg-[#ECF2FF] text-primary' : 'bg-card text-black'
           }`}
         >
           <div>{option.label}</div>

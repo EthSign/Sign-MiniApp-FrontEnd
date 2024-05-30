@@ -3,6 +3,111 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: 'IBM Plex Sans';
+  src: url('https://cdn-hk.ethsign.xyz/fonts/IBMPlexSans/IBMPlexSans-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'IBM Plex Sans Italic';
+  src: url('https://cdn-hk.ethsign.xyz/fonts/IBMPlexSans/IBMPlexSans-Italic.ttf') format('truetype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'IBM Plex Sans Thin';
+  src: url('https://cdn-hk.ethsign.xyz/fonts/IBMPlexSans/IBMPlexSans-Thin.ttf') format('truetype');
+  font-weight: 100;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'IBM Plex Sans Thin Italic';
+  src: url('https://cdn-hk.ethsign.xyz/fonts/IBMPlexSans/IBMPlexSans-ThinItalic.ttf') format('truetype');
+  font-weight: 100;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'IBM Plex Sans ExtraLight';
+  src: url('https://cdn-hk.ethsign.xyz/fonts/IBMPlexSans/IBMPlexSans-ExtraLight.ttf') format('truetype');
+  font-weight: 200;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'IBM Plex Sans ExtraLight Italic';
+  src: url('https://cdn-hk.ethsign.xyz/fonts/IBMPlexSans/IBMPlexSans-ExtraLightItalic.ttf') format('truetype');
+  font-weight: 200;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'IBM Plex Sans Light';
+  src: url('https://cdn-hk.ethsign.xyz/fonts/IBMPlexSans/IBMPlexSans-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'IBM Plex Sans Light Italic';
+  src: url('https://cdn-hk.ethsign.xyz/fonts/IBMPlexSans/IBMPlexSans-LightItalic.ttf') format('truetype');
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'IBM Plex Sans Medium';
+  src: url('https://cdn-hk.ethsign.xyz/fonts/IBMPlexSans/IBMPlexSans-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'IBM Plex Sans Medium Italic';
+  src: url('https://cdn-hk.ethsign.xyz/fonts/IBMPlexSans/IBMPlexSans-MediumItalic.ttf') format('truetype');
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'IBM Plex Sans SemiBold';
+  src: url('https://cdn-hk.ethsign.xyz/fonts/IBMPlexSans/IBMPlexSans-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'IBM Plex Sans SemiBold Italic';
+  src: url('https://cdn-hk.ethsign.xyz/fonts/IBMPlexSans/IBMPlexSans-SemiBoldItalic.ttf') format('truetype');
+  font-weight: 600;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'IBM Plex Sans Bold';
+  src: url('https://cdn-hk.ethsign.xyz/fonts/IBMPlexSans/IBMPlexSans-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'IBM Plex Sans Bold Italic';
+  src: url('https://cdn-hk.ethsign.xyz/fonts/IBMPlexSans/IBMPlexSans-BoldItalic.ttf') format('truetype');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -15,7 +120,7 @@
     --card-foreground: 240 71.43% 6.86%;
     --border: 210 18.18% 95.69%;
     --input: 210 18.18% 95.69%;
-    --primary: 16.93 82.11% 48.24%;
+    --primary: 221 100% 50%;
     --primary-foreground: 240 33.33% 99.41%;
     --secondary: 216 23.81% 95.88%;
     --secondary-foreground: 240 100% 3.33%;
@@ -23,7 +128,7 @@
     --accent-foreground: 240 100% 3.33%;
     --destructive: 3.91 85.98% 58.04%;
     --destructive-foreground: 240 33.33% 99.41%;
-    --ring: 20.87, 86.61%, 53.14%;
+    --ring: 220.71deg 100% 50%;
     --radius: 0.5rem;
   }
 
@@ -82,4 +187,27 @@
 html,body {
   height: 100%;
   width: 100%;
+}
+
+@keyframes shake {
+  10%, 90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+  
+  20%, 80% {
+    transform: translate3d(1px, 0, 0);
+  }
+
+  30%, 50%, 70% {
+    transform: translate3d(-2px, 0, 0);
+  }
+
+  40%, 60% {
+    transform: translate3d(2px, 0, 0);
+  }
+}
+
+*:focus {
+  outline: none !important;
+  box-shadow: none !important;
 }

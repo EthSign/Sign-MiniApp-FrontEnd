@@ -1,13 +1,24 @@
-import { Card } from '@/components/Card';
+import { TourActionSheet } from '@/components/TourActionSheet.tsx';
 import { LuckyWheel } from '@/pages/LuckyWheel/components/LuckyWheel';
-import { CoinsStacked01 } from '@ethsign/icons';
-import React, { useEffect, useRef } from 'react';
-import { useLotteryInfo } from '../../providers/LotteryInfoProvider';
+import { ConfettiProvider } from '@/providers/ConfettiProvider';
 import { useUserInfo } from '@/providers/UserInfoProvider';
+import { Rocket01 } from '@ethsign/icons';
+import React, { useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useLotteryInfo } from '../../providers/LotteryInfoProvider';
+import { TicketsButton } from './components/TicketsButton';
 
 export const LuckyWheelPage: React.FC = () => {
   const { user } = useUserInfo();
-  const { totalPoint, hasSpinedToday, refresh } = useLotteryInfo();
+
+  const {
+    totalPoint,
+    hasSpinedToday,
+    flags: { backToWheelButtonClicked },
+    refresh
+  } = useLotteryInfo();
+
+  const navigate = useNavigate();
 
   const firstLoadingRef = useRef(false);
 
@@ -22,7 +33,7 @@ export const LuckyWheelPage: React.FC = () => {
         await refresh({ showLoading: true });
       }
 
-      if (hasSpinedToday) {
+      if (hasSpinedToday && !backToWheelButtonClicked) {
         timer = setInterval(() => {
           refresh({ showLoading: false });
         }, 10 * 1000);
@@ -34,27 +45,41 @@ export const LuckyWheelPage: React.FC = () => {
     return () => {
       if (timer) clearInterval(timer);
     };
-  }, [hasSpinedToday, refresh, user]);
+  }, [backToWheelButtonClicked, hasSpinedToday, refresh, user]);
 
   return (
-    <div className="relative space-y-5">
-      <Card>
-        <div className="text-center font-bold text-white">Sign Score</div>
-        <div className="mt-2 flex items-center justify-center gap-2 text-3xl">
-          <CoinsStacked01 size={24} color="#FCFCFD" />
+    <ConfettiProvider>
+      <div className="relative space-y-2">
+        <div className="space-y-6">
+          <div className="relative rounded-[6px] bg-white px-4 py-2 text-center font-bold text-[#101828]">
+            <span>Signie Points: </span>
+            <span> {totalPoint}</span>
 
-          <span> {totalPoint}</span>
+            <div className="absolute right-4 top-1/2 -translate-y-1/2">
+              <TourActionSheet />
+            </div>
+          </div>
+
+          {(!hasSpinedToday || (hasSpinedToday && backToWheelButtonClicked)) && (
+            <div className="flex gap-3">
+              <div
+                className="flex-1 rounded-[6px] bg-white px-4 py-2 text-center font-bold text-[#101828] transition-all duration-75 active:shadow-lg"
+                onClick={() => {
+                  navigate('/records');
+                }}
+              >
+                <div className="flex items-center gap-2">
+                  <Rocket01 size={16} />
+                  <span className="whitespace-nowrap">Boost Records</span>
+                </div>
+              </div>
+              <TicketsButton />
+            </div>
+          )}
         </div>
-      </Card>
 
-      <LuckyWheel />
-
-      {/*<Link*/}
-      {/*  to="/attest"*/}
-      {/*  className="fixed bottom-[105px] right-4 flex size-[66px] items-center justify-center rounded-full border border-[#CF5C10] bg-[#EF6820] font-bold text-sm"*/}
-      {/*>*/}
-      {/*  <span>Attest</span>*/}
-      {/*</Link>*/}
-    </div>
+        <LuckyWheel />
+      </div>
+    </ConfettiProvider>
   );
 };

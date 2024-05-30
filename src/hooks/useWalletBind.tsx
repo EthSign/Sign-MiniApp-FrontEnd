@@ -44,6 +44,7 @@ export const useWalletBind = (props: { onBindSuccess?: () => void }) => {
     if (isBindingRef.current) return;
 
     try {
+      setBinding(true);
       isBindingRef.current = true;
       await bindWallet(data);
       onBindSuccess?.();
