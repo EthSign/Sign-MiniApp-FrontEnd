@@ -70,7 +70,7 @@ export const LuckyWheelPage: React.FC = () => {
               >
                 <div className="flex items-center gap-2">
                   <Rocket01 size={16} />
-                  <span className="whitespace-nowrap">Boost Record</span>
+                  <span className="whitespace-nowrap">Boost Records</span>
                 </div>
               </div>
               <TicketsButton />

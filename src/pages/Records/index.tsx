@@ -109,9 +109,9 @@ export default function RecordsPage() {
                 <div className={'bg-[#ECF2FF] rounded-full w-12 h-12 flex justify-center items-center'}>
                   <img src={rocketImg} alt="" className={'w-[30px]'} />
                 </div>
-                <div className={'text-black text-sm font-medium mt-4'}>No Boost Record</div>
+                <div className={'text-black text-sm font-medium mt-4'}>No Boost Records</div>
                 <div className={'text-xs text-[#667085] font-normal'}>
-                  There is no boost record. Spin the wheel to start boosting.
+                  There is no boost records. Spin the wheel to start boosting.
                 </div>
               </div>
             )}
