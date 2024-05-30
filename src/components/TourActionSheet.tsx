@@ -121,7 +121,7 @@ const PageTwo = () => {
   const { scrollNext } = useCarousel();
 
   return (
-    <div className={'h-[480px]'}>
+    <div className={'h-[500px]'}>
       <DrawerHeader className={'p-0'}>
         <DrawerTitle className={'font-bold text-[25px]'}>How to play?</DrawerTitle>
         <DrawerDescription className={'space-y-2 text-left'}>
@@ -141,7 +141,7 @@ const PageTwo = () => {
 
 const PageThree = ({ onStart }: { onStart: () => void }) => {
   return (
-    <div className={'flex h-[370px] flex-col justify-center'}>
+    <div className={'flex h-[380px] flex-col justify-center'}>
       <div className={'mb-2 flex justify-center text-center'}>
         <img src={dropImg} alt="drop" className={'w-[150px]'} />
       </div>
