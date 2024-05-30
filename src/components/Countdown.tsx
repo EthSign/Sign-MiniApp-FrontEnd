@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { createRef, useEffect, useMemo, useState } from 'react';
+import { createRef, useEffect, useMemo, useRef, useState } from 'react';
 import { Transition, TransitionGroup } from 'react-transition-group';
 
 function formatCountdownTime(milliseconds: number) {
@@ -20,6 +20,8 @@ export const useCountDown = (props: { targetDate: Date; onFinish?: () => void })
   const { targetDate, onFinish } = props;
 
   const [now, setNow] = useState(Date.now());
+
+  const finished = useRef(false);
 
   const remain = useMemo(() => {
     const ms = targetDate.getTime() - now;
@@ -47,8 +49,10 @@ export const useCountDown = (props: { targetDate: Date; onFinish?: () => void })
     const ms = targetDate.getTime() - Date.now();
 
     if (ms <= 0) {
-      onFinish?.();
-      return;
+      if (!finished.current) {
+        onFinish?.();
+        finished.current = true;
+      }
     }
   }, [onFinish, targetDate, now]);
 
@@ -115,7 +119,7 @@ export const CountDown: React.FC<CountDownProps> = (props) => {
                 );
               })}
             </div>
-            <div className="text-xs font-normal text-[#6B7280]">{groupItem.label}</div>
+            <div className="font-normal text-xs text-[#6B7280]">{groupItem.label}</div>
           </div>
         ))}
       </div>
