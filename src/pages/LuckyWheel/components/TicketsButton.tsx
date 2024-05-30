@@ -53,7 +53,10 @@ export const TicketsButton: React.FC<{
 
   return (
     <div
-      className={classNames('flex-1 rounded-[6px] bg-white px-4 py-2 text-center font-bold text-[#101828]', className)}
+      className={classNames(
+        'flex-1 rounded-[6px] bg-[#ECF2FF] px-4 py-2 text-center font-bold text-[#101828]',
+        className
+      )}
     >
       <div ref={ticketButtonRef} className="flex items-center justify-center gap-2 text-[#0052FF]">
         <Ticket01 size={16} color="#0052FF" />

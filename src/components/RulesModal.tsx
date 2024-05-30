@@ -15,7 +15,7 @@ export const LotteryRulesModal: React.FC<PropsWithChildren> = (props) => {
     const data = [
       {
         label: 'Levels',
-        values: levels.map((item) => 'Level ' + (item.level === 0 ? '0 (Base)' : item.level))
+        values: levels.map((item) => (item.level === 0 ? 'Base' : 'Level ' + item.level))
       },
       {
         label: 'Bonus',
@@ -26,7 +26,7 @@ export const LotteryRulesModal: React.FC<PropsWithChildren> = (props) => {
         values: levels.map((item, index) => {
           const steps = index === 0 ? item.steps : item.steps - levels[index - 1].steps;
 
-          return steps === 0 ? 0 : steps + ' steps';
+          return steps === 0 ? '-' : steps + ' steps';
         })
       }
     ];
@@ -44,7 +44,7 @@ export const LotteryRulesModal: React.FC<PropsWithChildren> = (props) => {
       >
         <div className={'text-gray-900'}>
           <h2 className={'text-center font-bold text-[25px]'}>Activity Rules</h2>
-          <div className={'mt-3 text-[14px] font-normal [&_ul]:list-disc [&_ul]:pl-4'}>
+          <div className={'mt-3 font-normal text-[14px] [&_ul]:list-disc [&_ul]:pl-4'}>
             <p>Earn extra Signie points by asking friends to sign events through your referral link.</p>
             <ul className="my-2">
               <li>
@@ -68,10 +68,10 @@ export const LotteryRulesModal: React.FC<PropsWithChildren> = (props) => {
             <TableBody>
               {tableData.map((row, index) => (
                 <TableRow key={index} className="border-gray-200">
-                  <TableCell className="w-[76px] px-2 font-medium">{row.label}</TableCell>
+                  <TableCell className="w-[76px] whitespace-nowrap px-2 font-medium">{row.label}</TableCell>
 
                   {row.values.map((value, index) => (
-                    <TableCell key={index} className="w-[75px] px-2">
+                    <TableCell key={index} className="w-[75px] whitespace-nowrap px-2">
                       {value}
                     </TableCell>
                   ))}
