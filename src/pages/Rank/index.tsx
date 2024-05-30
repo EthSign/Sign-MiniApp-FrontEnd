@@ -74,7 +74,7 @@ export const RankPage: React.FC = () => {
       <div className={'mt-4'}>
         <div className={'flex items-center justify-around text-xs font-normal text-white'}>
           <div className={'flex-1'}>Rank</div>
-          <div className={'flex-[0_0_200px] text-center'}>Score</div>
+          <div className={'flex-[0_0_200px] text-center'}>Points</div>
           {/*<div className={'flex-[0_0_80px] text-right'}>Rewards</div>*/}
         </div>
       </div>
@@ -90,7 +90,7 @@ export const RankPage: React.FC = () => {
             </span>
             <div className={'text-xs font-medium w-[100px] text-ellipsis'}>{user?.username}</div>
           </div>
-          <div className={'flex-[0_0_200px] px-2 text-center text-xs font-normal'}>{data?.userRank?.score || '-'}</div>
+          <div className={'flex-[0_0_200px] text-center text-xs font-normal'}>{data?.userRank?.score || '-'}</div>
           {/*<div className={'flex-[0_0_50px] px-2 text-right'}>--</div>*/}
         </div>
         {restUsers?.map((item, index) => {
@@ -109,7 +109,7 @@ export const RankPage: React.FC = () => {
                 </span>
                 <div className={'text-xs font-medium w-[100px] text-ellipsis'}>{item.username}</div>
               </div>
-              <div className={'flex-[0_0_200px] px-2 text-center text-xs font-normal'}>{item.score}</div>
+              <div className={'flex-[0_0_200px] text-center text-xs font-normal'}>{item.score}</div>
               {/*<div className={'flex-[0_0_50px] px-2 text-right'}>--</div>*/}
             </div>
           );
