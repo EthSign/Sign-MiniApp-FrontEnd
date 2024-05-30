@@ -2,11 +2,11 @@ import { TourActionSheet } from '@/components/TourActionSheet.tsx';
 import { LuckyWheel } from '@/pages/LuckyWheel/components/LuckyWheel';
 import { ConfettiProvider } from '@/providers/ConfettiProvider';
 import { useUserInfo } from '@/providers/UserInfoProvider';
-import { Rocket01, Ticket01 } from '@ethsign/icons';
+import { Rocket01 } from '@ethsign/icons';
 import React, { useEffect, useRef } from 'react';
-import { useLotteryInfo } from '../../providers/LotteryInfoProvider';
-import { Events, eventBus } from '@/eventbus';
 import { useNavigate } from 'react-router-dom';
+import { useLotteryInfo } from '../../providers/LotteryInfoProvider';
+import { TicketsButton } from './components/TicketsButton';
 
 export const LuckyWheelPage: React.FC = () => {
   const { user } = useUserInfo();
@@ -15,15 +15,12 @@ export const LuckyWheelPage: React.FC = () => {
     totalPoint,
     hasSpinedToday,
     flags: { backToWheelButtonClicked },
-    remainingTimes,
     refresh
   } = useLotteryInfo();
 
   const navigate = useNavigate();
 
   const firstLoadingRef = useRef(false);
-
-  const ticketButtonRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
@@ -50,32 +47,6 @@ export const LuckyWheelPage: React.FC = () => {
     };
   }, [backToWheelButtonClicked, hasSpinedToday, refresh, user]);
 
-  useEffect(() => {
-    const handler = () => {
-      const ticketButtonEl = ticketButtonRef.current;
-
-      if (!ticketButtonEl) return;
-
-      const animationClassName = 'animate-shake';
-
-      if (!animationClassName) return;
-
-      ticketButtonEl.classList.remove(animationClassName);
-
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          ticketButtonEl.classList.add(animationClassName);
-        });
-      });
-    };
-
-    eventBus.on(Events.noTicketSpin, handler);
-
-    return () => {
-      eventBus.off(Events.noTicketSpin, handler);
-    };
-  }, []);
-
   return (
     <ConfettiProvider>
       <div className="relative space-y-2">
@@ -90,29 +61,20 @@ export const LuckyWheelPage: React.FC = () => {
           </div>
 
           {(!hasSpinedToday || (hasSpinedToday && backToWheelButtonClicked)) && (
-            <>
-              <div className="flex gap-3">
-                <div
-                  className="flex-1 rounded-[6px] bg-white px-4 py-2 text-center font-bold text-[#101828] transition-all duration-75 active:shadow-lg"
-                  onClick={() => {
-                    navigate('/records');
-                  }}
-                >
-                  <div className="flex items-center gap-2">
-                    <Rocket01 size={16} />
-                    <span className="whitespace-nowrap">Boost Record</span>
-                  </div>
-                </div>
-                <div className="flex-1 rounded-[6px] bg-white px-4 py-2 text-center font-bold text-[#101828]">
-                  <div ref={ticketButtonRef} className="flex items-center justify-center gap-2 text-[#0052FF]">
-                    <Ticket01 size={16} color="#0052FF" />
-                    <span>{remainingTimes}</span>
-                    <span>Ticket</span>
-                    {/* <PlusCircle size={16} color="#0052FF" /> */}
-                  </div>
+            <div className="flex gap-3">
+              <div
+                className="flex-1 rounded-[6px] bg-white px-4 py-2 text-center font-bold text-[#101828] transition-all duration-75 active:shadow-lg"
+                onClick={() => {
+                  navigate('/records');
+                }}
+              >
+                <div className="flex items-center gap-2">
+                  <Rocket01 size={16} />
+                  <span className="whitespace-nowrap">Boost Record</span>
                 </div>
               </div>
-            </>
+              <TicketsButton />
+            </div>
           )}
         </div>
 

@@ -43,8 +43,8 @@ export const LuckyWheel: React.FC = () => {
               className={classNames('scale-100 transition-all duration-200 origin-center mt-3 -mx-4', {
                 '!scale-50 opacity-0': state === 'exiting'
               })}
-              onStopped={() => {
-                refresh();
+              onStopped={async () => {
+                await refresh();
                 setBackToWheelButtonClicked(false);
               }}
             />

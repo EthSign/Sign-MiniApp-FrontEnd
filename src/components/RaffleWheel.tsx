@@ -32,9 +32,11 @@ export const RaffleWheel = React.forwardRef<HTMLDivElement, RaffleWheelProps>((p
 
   const onSpinButtonClick = async () => {
     if (!canSpin) {
-      eventBus.emit(Events.noTicketSpin);
+      if (remainingTimes < 1) eventBus.emit(Events.noTicketSpin);
       return;
     }
+
+    eventBus.emit(Events.spin);
 
     setIsRaffling(true);
 
@@ -42,6 +44,8 @@ export const RaffleWheel = React.forwardRef<HTMLDivElement, RaffleWheelProps>((p
       refresh();
       throw error;
     });
+
+    eventBus.emit(Events.raffleResultReceived);
 
     setIsRaffling(false);
 
