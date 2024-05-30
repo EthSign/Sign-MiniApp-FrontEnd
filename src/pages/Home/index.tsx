@@ -6,14 +6,14 @@ import { Outlet } from 'react-router-dom';
 
 const TABS: TabItem[] = [
   {
-    label: 'Rank',
-    to: '/rank',
-    icon: ({ active }) => <BarChart01 size={24} color={active ? '#0052FF' : '#98A2B3'} />
-  },
-  {
     label: 'Lucky Wheel',
     to: '/lucky-wheel',
     icon: ({ active }) => <Diamond01 size={24} color={active ? '#0052FF' : '#98A2B3'} />
+  },
+  {
+    label: 'Rank',
+    to: '/rank',
+    icon: ({ active }) => <BarChart01 size={24} color={active ? '#0052FF' : '#98A2B3'} />
   }
 ];
 
