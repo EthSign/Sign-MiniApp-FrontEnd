@@ -45,17 +45,17 @@ export const LotteryRulesModal: React.FC<PropsWithChildren> = (props) => {
         <div className={'text-gray-900'}>
           <h2 className={'text-center font-bold text-[25px]'}>Activity Rules</h2>
           <div className={'mt-3 text-[14px] font-normal [&_ul]:list-disc [&_ul]:pl-4'}>
-            <p>Earn extra [mini-app score] by asking friends to make attestations through your referral link.</p>
+            <p>Earn extra Signie points by asking friends to sign events through your referral link.</p>
             <ul className="my-2">
               <li>
-                During the boosting process, you will go through 4 levels. Each time you level up, the Sign score will
-                be inflated.
+                During the boosting process, you will go through 4 levels. Each time you level up, the Signie points
+                will be inflated.
               </li>
               <li>
-                Every attestation made by your friend will push you step forward to the next level.
+                Every event signed made by your friend will push you step forward to the next level.
                 <ul>
-                  <li>An on-chain attestation is worth 5 steps.</li>
-                  <li>An off-chain attestation is worth 1 step.</li>
+                  <li>An on-chain event is worth 5 steps.</li>
+                  <li>An off-chain event is worth 1 step.</li>
                 </ul>
               </li>
             </ul>

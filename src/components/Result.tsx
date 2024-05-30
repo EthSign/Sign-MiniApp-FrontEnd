@@ -135,7 +135,7 @@ export const ResultCard = React.forwardRef<
             )}
             {!timesUp && nextLevel && (
               <div className={'mb-5 mt-2.5 text-sm font-normal text-[#101828]'}>
-                Ask friends to make attestations to boost your score up to{' '}
+                Ask friends to sign event to boost your score up to{' '}
                 <span className={'font-bold text-[#0052FF]'}>{nextLevel.multiplier}x points</span>.
               </div>
             )}
@@ -194,7 +194,7 @@ export const ResultCard = React.forwardRef<
           </Button>
         )}
 
-        {nextLevel !== undefined && !reachedMax && (
+        {nextLevel !== undefined && !reachedMax && !timesUp && (
           <Button className={'flex-1 gap-2'} onClick={handleInvite}>
             <Send01 color={'#FFF'} size={16} />
             <span className="whitespace-nowrap">Ask Friends</span>

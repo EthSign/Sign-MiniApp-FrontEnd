@@ -1,5 +1,4 @@
 import React from 'react';
-import { LotteryRulesModal } from '@/components/RulesModal';
 import { useQuery } from '@tanstack/react-query';
 import { getRank } from '@/services';
 import { Loading } from '@/components/Loading.tsx';
@@ -30,10 +29,10 @@ export const RankPage: React.FC = () => {
   const restUsers = userData.slice(3);
   return (
     <div className={'pt-0'}>
-      <div className={'px-2 text-right text-white'}>
-        <LotteryRulesModal />
-      </div>
-      <div className={'mt-[-20px] flex items-end'}>
+      {/*<div className={'px-2 text-right text-white'}>*/}
+      {/*  <LotteryRulesModal />*/}
+      {/*</div>*/}
+      <div className={'mt-0 flex items-end'}>
         <div className="flex flex-1 flex-col items-center rounded-l-[12px] bg-[#ECF2FF] py-2">
           <div
             className={

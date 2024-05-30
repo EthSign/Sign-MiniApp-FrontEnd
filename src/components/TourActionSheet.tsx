@@ -1,5 +1,6 @@
 import {
   Drawer,
+  DrawerClose,
   DrawerContent,
   DrawerDescription,
   DrawerHeader,
@@ -22,6 +23,7 @@ import classNames from 'classnames';
 import dropImg from '@/assets/drop.png';
 import { useLocalStorage } from 'react-use';
 import AutoHeight from 'embla-carousel-auto-height';
+import { XClose } from '@ethsign/icons';
 
 const StepTab = ({ items, current }: { items: any; current: number }) => {
   return (
@@ -80,10 +82,10 @@ const PageOne = () => {
       img: 'https://ethsign-public.s3.ap-east-1.amazonaws.com/telegram-miniapp/Frame 2085654244_240528062557.webp',
       title: 'SignPass'
     },
-    {
-      img: 'https://ethsign-public.s3.ap-east-1.amazonaws.com/telegram-miniapp/Frame 2085654245_240528062557.webp',
-      title: '$TON Token'
-    },
+    // {
+    //   img: 'https://ethsign-public.s3.ap-east-1.amazonaws.com/telegram-miniapp/Frame 2085654245_240528062557.webp',
+    //   title: '$TON Token'
+    // },
     {
       img: 'https://ethsign-public.s3.ap-east-1.amazonaws.com/telegram-miniapp/Frame 2085654246_240528062557.webp',
       title: '$NOT Token'
@@ -94,10 +96,10 @@ const PageOne = () => {
       <DrawerHeader className={'p-0'}>
         <DrawerTitle className={'font-bold text-[25px]'}>What to win?</DrawerTitle>
         <DrawerDescription className={'space-y-2 text-left'}>
-          <div>Welcome to SIGN Game, a simple but highly rewarding online arcade.</div>
+          <div>Welcome to Signie, a simple but highly rewarding online arcade.</div>
           <div>Here you can spin to win a wide pool of prizes.</div>
         </DrawerDescription>
-        <div className={'mt-8 flex gap-3'}>
+        <div className={'mt-8 flex justify-around'}>
           {rewards.map((reward, index) => (
             <div key={index} className={''}>
               <div className={'flex size-[50px] items-center justify-center rounded-full bg-[#ECF2FF]'}>
@@ -147,8 +149,8 @@ const PageThree = ({ onStart }: { onStart: () => void }) => {
         <DrawerTitle className={'font-bold text-[25px]'}>Mystery Drop</DrawerTitle>
         <DrawerDescription className={'space-y-2 text-left'}>
           <div>
-            Red pocket rain, like token-filled gift boxes, will be distributed to every online player at random time of
-            the day,
+            Mystery drop, like token-filled gift boxes, will be distributed to every online player at random time of the
+            day,
           </div>
           <div>Stay tuned and enjoy the free gifts!</div>
         </DrawerDescription>
@@ -173,6 +175,11 @@ export const TourActionSheet: React.FC = () => {
           <span className="text-xs text-[#0052FF] underline">Guide</span>
         </DrawerTrigger>
         <DrawerContent>
+          <div className={'flex justify-end p-2'}>
+            <DrawerClose asChild>
+              <XClose className="h-[24px] w-[24px]" color="#667085" />
+            </DrawerClose>
+          </div>
           <div className="mx-auto w-full max-w-sm">
             <div className="px-6 py-8">
               <Carousel

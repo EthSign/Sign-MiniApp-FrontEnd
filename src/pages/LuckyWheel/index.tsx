@@ -81,7 +81,7 @@ export const LuckyWheelPage: React.FC = () => {
       <div className="relative space-y-2">
         <div className="space-y-6">
           <div className="relative rounded-[6px] bg-white px-4 py-2 text-center font-bold text-[#101828]">
-            <span>Signie Score: </span>
+            <span>Signie Points: </span>
             <span> {totalPoint}</span>
 
             <div className="absolute right-4 top-1/2 -translate-y-1/2">
