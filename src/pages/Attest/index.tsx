@@ -226,7 +226,7 @@ export default function AttestPage() {
             <div className={'space-y-1'}>
               <Label>Choose a template</Label>
               <Select
-                options={[{ label: 'Boost EthSign Score for a friend', value: offChainSchema.name }]}
+                options={[{ label: 'Boost Signie points for a friend', value: offChainSchema.name }]}
                 value={template}
                 onChange={setTemplate}
               />

@@ -4,7 +4,7 @@ import { Badge, DatePicker, Progress, ScrollArea } from '@ethsign/ui';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { getRaffles } from '@/services';
-import { formatDate } from '@/utils/common.ts';
+import { formatDate, getUTCTimeByDate } from '@/utils/common.ts';
 import { Drawer, DrawerContent, DrawerTrigger } from '@/components/Drawer.tsx';
 import { ResultCard } from '@/components/Result.tsx';
 import { useLotteryInfo } from '@/providers/LotteryInfoProvider.tsx';
@@ -63,7 +63,7 @@ const InviteModal = ({ data }: { data: any }) => {
 };
 
 export default function RecordsPage() {
-  const [date, setDate] = useState(Date.now());
+  const [date, setDate] = useState(getUTCTimeByDate(new Date()));
   const { data, isLoading } = useQuery({
     queryKey: ['records', date],
     queryFn: () => getRaffles(date)
@@ -78,11 +78,14 @@ export default function RecordsPage() {
           <div className={'flex justify-between items-center'}>
             <div className={'text-md font-bold'}>Boost Records</div>
             <DatePicker
+              calendarProps={{
+                footer: <div className={'text-xs text-[#667085] px-2'}>Time Zone: UTC+0</div>
+              }}
               className={'flex-[0_0_150px] text-xs'}
               value={new Date(date)}
               onChange={(date) => {
                 if (date) {
-                  setDate(date?.getTime());
+                  setDate(getUTCTimeByDate(date));
                 }
               }}
             />

@@ -64,3 +64,10 @@ export const initTelegramApp = (): void => {
 export const formatDate = (time: number) => {
   return dayjs(time).format('MMMM DD, YYYY');
 };
+
+export function getUTCTimeByDate(date: Date) {
+  const utcYear = date.getFullYear();
+  const utcMonth = date.getMonth();
+  const utcDate = date.getDate();
+  return new Date(Date.UTC(utcYear, utcMonth, utcDate, 0, 0, 0, 0)).valueOf();
+}
