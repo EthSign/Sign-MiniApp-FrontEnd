@@ -78,9 +78,10 @@ export const ResultCard = React.forwardRef<
       raffleId: data?.raffleId,
       inviteUser: user?.username || 'SIGN user'
     };
+    console.log(inviteData, 'data');
     utils.openTelegramLink(
-      `https://t.me/share/url?url=${ENVS.TG_APP_LINK}?startapp=${window.btoa(
-        JSON.stringify(inviteData)
+      `https://t.me/share/url?url=${ENVS.TG_APP_LINK}?startapp=${encodeURIComponent(
+        window.btoa(JSON.stringify(inviteData))
       )}&text=${encodeURIComponent(desc)}`
     );
   };

@@ -49,6 +49,7 @@ export interface IRankData {
   total: number;
   rows: IRank[];
   size: number;
+  userRank: { score: number; rank: number };
 }
 
 export interface IRank {

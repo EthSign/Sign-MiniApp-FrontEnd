@@ -92,7 +92,7 @@ const PageOne = () => {
     }
   ];
   return (
-    <div className={'flex flex-col items-center justify-center h-[300px]'}>
+    <div className={'flex flex-col items-center justify-center h-[320px]'}>
       <DrawerHeader className={'p-0'}>
         <DrawerTitle className={'font-bold text-[25px]'}>What to win?</DrawerTitle>
         <DrawerDescription className={'space-y-2 text-left'}>

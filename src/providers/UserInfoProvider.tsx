@@ -57,7 +57,7 @@ export const UserInfoProvider = ({ children }: { children: ReactNode }) => {
   const inviteData = useMemo(() => {
     try {
       if (authData?.start_param) {
-        const inviteData = JSON.parse(window.atob(authData.start_param));
+        const inviteData = JSON.parse(window.atob(decodeURIComponent(authData.start_param)));
         console.log(inviteData, 'iv');
         return {
           raffleId: inviteData.raffleId,

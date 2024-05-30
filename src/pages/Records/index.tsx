@@ -78,6 +78,7 @@ export default function RecordsPage() {
           <div className={'flex justify-between items-center'}>
             <div className={'text-md font-bold'}>Boost Records</div>
             <DatePicker
+              autoHidden
               calendarProps={{
                 footer: <div className={'text-xs text-[#667085] px-2'}>Time Zone: UTC+0</div>
               }}
@@ -102,7 +103,7 @@ export default function RecordsPage() {
             {data && data?.rows?.length === 0 && (
               <div
                 className={
-                  'text-center rounded-[8px] py-8 px-4 border border-gray-200 flex flex-col justify-center items-center'
+                  'text-center rounded-[8px] mt-6 py-8 px-4 border border-gray-200 flex flex-col justify-center items-center'
                 }
               >
                 <div className={'bg-[#ECF2FF] rounded-full w-12 h-12 flex justify-center items-center'}>

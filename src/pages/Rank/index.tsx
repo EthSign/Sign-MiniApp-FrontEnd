@@ -2,8 +2,10 @@ import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getRank } from '@/services';
 import { Loading } from '@/components/Loading.tsx';
+import { useUserInfo } from '@/providers/UserInfoProvider.tsx';
 
 export const RankPage: React.FC = () => {
+  const { user } = useUserInfo();
   const { data } = useQuery({
     queryKey: ['rank'],
     queryFn: () => getRank()
@@ -72,18 +74,32 @@ export const RankPage: React.FC = () => {
       <div className={'mt-4'}>
         <div className={'flex items-center justify-around text-xs font-normal text-white'}>
           <div className={'flex-1'}>Rank</div>
-          <div className={'flex-[0_0_100px] text-center'}>Score</div>
-          <div className={'flex-[0_0_80px] text-right'}>Rewards</div>
+          <div className={'flex-[0_0_200px] text-center'}>Score</div>
+          {/*<div className={'flex-[0_0_80px] text-right'}>Rewards</div>*/}
         </div>
       </div>
       <div className={'mt-3 space-y-2'}>
+        <div className={'flex items-center justify-around rounded-[4px] bg-primary px-2 py-2.5 text-white'}>
+          <div className={'flex flex-1 gap-4 items-center'}>
+            <span
+              className={
+                'flex size-6 items-center justify-center rounded-full bg-[#ECF2FF] font-medium text-xs text-primary'
+              }
+            >
+              {data?.userRank?.rank}
+            </span>
+            <div className={'text-xs font-medium w-[100px] text-ellipsis'}>{user?.username}</div>
+          </div>
+          <div className={'flex-[0_0_200px] px-2 text-center text-xs font-normal'}>{data?.userRank?.score || '-'}</div>
+          {/*<div className={'flex-[0_0_50px] px-2 text-right'}>--</div>*/}
+        </div>
         {restUsers?.map((item, index) => {
           return (
             <div
               key={index}
               className={'flex items-center justify-around rounded-[4px] bg-white px-2 py-2.5 text-gray-900'}
             >
-              <div className={'flex flex-1 gap-4'}>
+              <div className={'flex flex-1 gap-4 items-center'}>
                 <span
                   className={
                     'flex size-6 items-center justify-center rounded-full bg-[#ECF2FF] font-medium text-xs text-primary'
@@ -93,8 +109,8 @@ export const RankPage: React.FC = () => {
                 </span>
                 <div className={'text-xs font-medium w-[100px] text-ellipsis'}>{item.username}</div>
               </div>
-              <div className={'flex-[0_0_100px] px-2 text-center text-xs font-normal'}>{item.score}</div>
-              <div className={'flex-[0_0_50px] px-2 text-right'}>--</div>
+              <div className={'flex-[0_0_200px] px-2 text-center text-xs font-normal'}>{item.score}</div>
+              {/*<div className={'flex-[0_0_50px] px-2 text-right'}>--</div>*/}
             </div>
           );
         })}

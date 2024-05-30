@@ -28,7 +28,7 @@ interface ITMAInitData {
 }
 
 // const debugData =
-//   'user=%7B%22id%22%3A1312579605%2C%22first_name%22%3A%22Evan%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22yanyuanfe%22%2C%22language_code%22%3A%22zh-hans%22%2C%22allows_write_to_pm%22%3Atrue%7D&chat_instance=-6858595359197215319&chat_type=supergroup&start_param=eyJyYWZmbGVJZCI6InFFOUJvMGJ3NkppLVFKR1czaEh0XyIsImludml0ZVVzZXIiOiJ5YW55dWFuZmUifQ%3D%3D&auth_date=1717034965&hash=16b53392ba124947885b8af0de9e85559c22618e1a80d20c2cbed6357086532c';
+//   'query_id=AAEVYDxOAAAAABVgPE7JSo__&user=%7B%22id%22%3A1312579605%2C%22first_name%22%3A%22Evan%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22yanyuanfe%22%2C%22language_code%22%3A%22zh-hans%22%2C%22allows_write_to_pm%22%3Atrue%7D&auth_date=1717061028&hash=5762aa7b06f8d48589d57c131142069d5b13780a570b8134ba78c7b32ce3e4a8';
 
 export const getTMAInitData = (): ITMAInitData | null => {
   const initDataRaw = window.Telegram.WebApp?.initData; // user=...&query_id=...&...
