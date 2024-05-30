@@ -62,7 +62,12 @@ export const ResultCard = React.forwardRef<
 
     if (timesUp) return <span className="font-bold">{`You've reached Level[${currentLevel}]`}</span>;
 
-    return `${remainSteps} more step${remainSteps !== undefined && remainSteps > 0 ? 's' : ''} to level up`;
+    return (
+      <span>
+        <span className="font-bold">{remainSteps}</span>{' '}
+        {`more step${remainSteps !== undefined && remainSteps > 0 ? 's' : ''} to level up`}
+      </span>
+    );
   }, [currentLevel, reachedMax, remainSteps, timesUp]);
 
   const { confetti } = useConfetti();
@@ -120,7 +125,7 @@ export const ResultCard = React.forwardRef<
         {!reachedMax ? (
           <>
             <h1 className={'mb-2 text-center font-bold text-xl text-[#101828]'}>
-              {timesUp ? "⏰ Time's up for boosting" : 'Boost your score in'}
+              {timesUp ? "⏰ Time's up for boosting" : 'Boost your points in'}
             </h1>
             {dueDate && (
               <div className="flex justify-center">
@@ -134,9 +139,9 @@ export const ResultCard = React.forwardRef<
               </div>
             )}
             {!timesUp && nextLevel && (
-              <div className={'mb-5 mt-2.5 text-sm font-normal text-[#101828]'}>
-                Ask friends to sign event to boost your score up to{' '}
-                <span className={'font-bold text-[#0052FF]'}>{nextLevel.multiplier}x points</span>.
+              <div className={'mb-5 mt-2.5 font-normal text-sm text-[#101828]'}>
+                Ask friends to sign event to boost your signie points up to{' '}
+                <span className={'font-italic text-[#0052FF] [font-weight:700]'}>{nextLevel.multiplier}x points</span>.
               </div>
             )}
           </>
@@ -159,7 +164,7 @@ export const ResultCard = React.forwardRef<
         )}
 
         <div className="">
-          <div className={'mt-4 text-center text-sm font-normal text-[#101828]'}>{levelTips}</div>
+          <div className={'mt-4 text-center font-normal text-sm text-[#101828]'}>{levelTips}</div>
 
           <Progress
             value={progress}
@@ -167,7 +172,7 @@ export const ResultCard = React.forwardRef<
           />
 
           {!reachedMax && (
-            <div className={'mt-3 flex items-center justify-between text-xs font-normal text-[#101828]'}>
+            <div className={'mt-3 flex items-center justify-between font-normal text-xs text-[#101828]'}>
               <div>Current: {currentScore} pts</div>
 
               <div>{nextScore ? `Next Level: ${nextScore} pts` : 'Max'}</div>

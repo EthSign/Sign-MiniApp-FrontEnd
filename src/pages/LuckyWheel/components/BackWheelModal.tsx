@@ -15,7 +15,7 @@ export const BackToWheelModal: React.FC<{ open?: boolean; onOpenChange?: (visibl
       onOpenChange={(visible) => onOpenChange?.(visible)}
       maskClosable={false}
       hiddenCloseIcon
-      header={<div className="font-extrabold">Boosting Process Continues</div>}
+      header={<div className="text-xl font-extrabold">Boosting Process Continues</div>}
       className="w-[95vw] rounded-[24px] border border-white/20 bg-white p-4 pt-6 sm:w-[410px]"
       footer={false}
     >
