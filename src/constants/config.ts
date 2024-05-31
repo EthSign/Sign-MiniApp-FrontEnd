@@ -3,7 +3,8 @@ export const ENVS = {
   CHAIN_ENV: import.meta.env.VITE_CHAIN_ENV,
   TG_APP_LINK: import.meta.env.VITE_TMA_LINK, //t.me/ethsignddev_bot/minidev t.me/ChainDevBot/chainapp
   ENV: import.meta.env.VITE_ENV,
-  SHARE_DESC: 'Spin to win $NOT and more！'
+  SHARE_DESC: 'Spin to win $NOT and more！',
+  INITDATA: import.meta.env.VITE_INITDATA
 };
 
 export const tonSp = {
