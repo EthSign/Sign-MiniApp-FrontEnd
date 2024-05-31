@@ -101,11 +101,11 @@ const PageOne = () => {
         </DrawerDescription>
         <div className={'mt-8 flex justify-around'}>
           {rewards.map((reward, index) => (
-            <div key={index} className={''}>
+            <div key={index} className={'flex flex-col items-center'}>
               <div className={'flex size-[50px] items-center justify-center rounded-full bg-[#ECF2FF]'}>
                 <img src={reward.img} alt="reward" className={'w-auto'} />
               </div>
-              <div className={'mt-2 whitespace-nowrap font-normal text-[10px] text-primary'}>{reward.title}</div>
+              <div className={'mt-2 whitespace-nowrap font-normal text-[12px] text-primary'}>{reward.title}</div>
             </div>
           ))}
         </div>
