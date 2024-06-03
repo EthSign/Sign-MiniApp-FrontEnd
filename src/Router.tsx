@@ -7,6 +7,8 @@ import { createBrowserRouter, redirect, RouteObject, RouterProvider } from 'reac
 import CreateSchema from './pages/CreateSchema';
 import { LuckyWheelPage } from './pages/LuckyWheel';
 import { RankPage } from './pages/Rank';
+import Tasks from '@/pages/Tasks';
+import Invite from '@/pages/Invite';
 
 const routerConfig: RouteObject[] = [
   {
@@ -49,6 +51,14 @@ const routerConfig: RouteObject[] = [
       {
         path: '/schema',
         element: <CreateSchema />
+      },
+      {
+        path: '/tasks',
+        element: <Tasks />
+      },
+      {
+        path: '/invite',
+        element: <Invite />
       }
     ]
   },
