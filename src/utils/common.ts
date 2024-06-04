@@ -51,11 +51,16 @@ export const initTelegramApp = (): void => {
   if (isTelegramApp()) {
     const WebApp = window.Telegram.WebApp;
     console.log('info', WebApp.version);
-    WebApp.expand();
+    // WebApp.expand();
     WebApp.enableClosingConfirmation();
     WebApp.onEvent('viewportChanged', () => {
       window.Telegram.WebApp.expand();
     });
+
+    WebApp.expand();
+    window.addEventListener('touchmove', (e) => e.preventDefault(), { passive: false });
+    window.scrollTo(0, 100);
+    WebApp.ready();
   }
 };
 

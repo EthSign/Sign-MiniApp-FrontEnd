@@ -71,15 +71,15 @@ const PageOne = () => {
   const { scrollNext } = useCarousel();
   const rewards = [
     {
-      img: 'https://ethsign-public.s3.ap-east-1.amazonaws.com/telegram-miniapp/Frame 2085654242_240528062557.webp',
+      img: 'https://ethsign-public.s3.ap-east-1.amazonaws.com/telegram-miniapp/Frame 2085654242_240603065354.webp',
       title: 'Phone'
     },
     {
-      img: 'https://ethsign-public.s3.ap-east-1.amazonaws.com/telegram-miniapp/Frame 2085654243_240528062557.webp',
+      img: 'https://ethsign-public.s3.ap-east-1.amazonaws.com/telegram-miniapp/Frame 2085654243_240603065354.webp',
       title: 'Ballet Wallet'
     },
     {
-      img: 'https://ethsign-public.s3.ap-east-1.amazonaws.com/telegram-miniapp/Frame 2085654244_240528062557.webp',
+      img: 'https://ethsign-public.s3.ap-east-1.amazonaws.com/telegram-miniapp/Frame 2085654244_240603065354.webp',
       title: 'SignPass'
     },
     // {
@@ -87,7 +87,7 @@ const PageOne = () => {
     //   title: '$TON Token'
     // },
     {
-      img: 'https://ethsign-public.s3.ap-east-1.amazonaws.com/telegram-miniapp/Frame 2085654246_240528062557.webp',
+      img: 'https://ethsign-public.s3.ap-east-1.amazonaws.com/telegram-miniapp/Frame 2085654245_240603065354.webp',
       title: '$NOT Token'
     }
   ];

@@ -1,9 +1,21 @@
 import { Header } from '@/components/Header.tsx';
 import starImg from '@/assets/StarCoin.png';
-import { Badge } from '@ethsign/ui';
-import { ChevronRight } from '@ethsign/icons';
-import { ReactNode } from 'react';
+import { Badge, Button } from '@ethsign/ui';
+import { ChevronRight, XClose } from '@ethsign/icons';
+import React, { ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger
+} from '@/components/Drawer.tsx';
+import { WalletFactory } from '@/core/WalletFactory.tsx';
+import { ChainType } from '@/core/types.ts';
+import { getCustomNaNoId } from '@/utils/common.ts';
 
 const TaskItem = ({
   title,
@@ -40,8 +52,56 @@ const TaskItem = ({
   );
 };
 
+const TaskDrawer = ({
+  trigger,
+  title,
+  desc,
+  action
+}: {
+  trigger: ReactNode;
+  title: string;
+  desc: string;
+  action: ReactNode;
+}) => {
+  const [open, setOpen] = React.useState(false);
+  return (
+    <Drawer open={open} onOpenChange={setOpen}>
+      <DrawerTrigger asChild>{trigger}</DrawerTrigger>
+      <DrawerContent>
+        <div className={'flex justify-end p-2'}>
+          <DrawerClose asChild>
+            <XClose className="size-[24px]" color="#667085" />
+          </DrawerClose>
+        </div>
+        <div className="mx-auto w-full max-w-sm">
+          <div className="px-6 pb-8 pt-2">
+            <DrawerHeader className={'p-0'}>
+              <DrawerTitle className={'font-bold text-[25px]'}>{title}</DrawerTitle>
+              <DrawerDescription className={'space-y-2 text-left'}>{desc}</DrawerDescription>
+              {action}
+            </DrawerHeader>
+          </div>
+        </div>
+      </DrawerContent>
+    </Drawer>
+  );
+};
+
 export default function Tasks() {
   const navigate = useNavigate();
+
+  const bindWallet = async () => {
+    const fullMessage = {
+      statement: 'Welcome to Sign Mini APP',
+      issuedAt: new Date().toISOString(),
+      nonce: getCustomNaNoId()
+    };
+
+    const originMsg = JSON.stringify(fullMessage, null, '  ');
+    const walletIns = WalletFactory.getWallet(ChainType.Ton);
+    const res = await walletIns.sign(originMsg);
+    console.log(res);
+  };
   return (
     <div>
       <Header />
@@ -50,6 +110,9 @@ export default function Tasks() {
         <h2 className={'text-xl font-bold text-white'}>Daily Tasks</h2>
         <div className={'mt-2 space-y-2'}>
           <TaskItem
+            onClick={() => {
+              navigate('/quizzes');
+            }}
             title={'Quizzes for fun'}
             description={'Accure points by taking quizzes'}
             score={100}
@@ -71,7 +134,16 @@ export default function Tasks() {
 
         <h2 className={'text-xl font-bold text-white mt-4'}>Tasks</h2>
         <div className={'mt-2 space-y-2'}>
-          <TaskItem title={'Connect wallet'} description={'Accure 1k coins tomorrow'} score={'5,000'} />
+          <TaskDrawer
+            title={'Connect wallet'}
+            desc={'Connect wallet to receive 5,000 Signie points'}
+            trigger={<TaskItem title={'Connect wallet'} description={'Accure 1k coins tomorrow'} score={'5,000'} />}
+            action={
+              <Button className={'mt-8'} onClick={bindWallet}>
+                Connect wallet now
+              </Button>
+            }
+          />
           <TaskItem title={'Join TG channel'} description={'Accure 1k coins tomorrow'} score={'1,000'} />
           <TaskItem title={'Join TG group'} description={'Accure 1k coins tomorrow'} score={'1,000'} />
         </div>

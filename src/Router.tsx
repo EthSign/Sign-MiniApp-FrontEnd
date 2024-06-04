@@ -9,6 +9,7 @@ import { LuckyWheelPage } from './pages/LuckyWheel';
 import { RankPage } from './pages/Rank';
 import Tasks from '@/pages/Tasks';
 import Invite from '@/pages/Invite';
+import Quizzes from '@/pages/Quizzes';
 
 const routerConfig: RouteObject[] = [
   {
@@ -59,6 +60,10 @@ const routerConfig: RouteObject[] = [
       {
         path: '/invite',
         element: <Invite />
+      },
+      {
+        path: '/quizzes',
+        element: <Quizzes />
       }
     ]
   },

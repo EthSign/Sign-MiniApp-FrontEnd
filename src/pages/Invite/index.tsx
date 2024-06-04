@@ -3,7 +3,6 @@ import { Button, ScrollArea } from '@ethsign/ui';
 import { UsersPlus } from '@ethsign/icons';
 import { PointsIcon } from '@/components/Icons.tsx';
 import starImg from '@/assets/StarCoin.png';
-import { Scroll } from 'lucide-react';
 
 const INVITE_DATA = [
   {
