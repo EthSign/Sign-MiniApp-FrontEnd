@@ -1,19 +1,15 @@
-import { Button, Label, Select, toast } from '@ethsign/ui';
+import { Button, Label, Select } from '@ethsign/ui';
 import { getTonSpInfo, offChainSchema } from '@/constants/config.ts';
 import { useState } from 'react';
 import { useUserInfo } from '@/providers/UserInfoProvider.tsx';
 import { useTonConnectUI } from '@tonconnect/ui-react';
 import { useSignProtocol } from '@/utils/ton-sp/hooks/useSignProtocol.ts';
 import { useConnection } from '@/utils/ton-sp/hooks/useConnection.ts';
-import { attestPrepare, checkTx, submitAttestationByOffchain } from '@/services';
-import { WalletFactory } from '@/core/WalletFactory.tsx';
-import { ChainType } from '@/core/types.ts';
 import { AttestationConfig } from '@/utils/ton-sp/wrappers';
 import { Address } from '@ton/core';
 import { DataLocation } from '@/utils/ton-sp/utils';
 
 export const AttestTabs = () => {
-  const [type] = useState('onchain');
   const [template, setTemplate] = useState(offChainSchema.name);
   const [loading, setLoading] = useState(false);
   const { user, isBindingWallet, bindWallet } = useUserInfo();
@@ -21,85 +17,13 @@ export const AttestTabs = () => {
   const [tonConnectUI] = useTonConnectUI();
   const { spContract, getSchemaContract, getAttestationContract } = useSignProtocol();
   const { wallet, sender, publicKey } = useConnection();
-  const { offchainSchemaId: schemaId } = getTonSpInfo();
-  const raffleId = user?.code;
-
-  const createAttestationByOffchain = async () => {
-    if (!raffleId) {
-      toast({
-        title: 'Error',
-        description: 'User code is not found',
-        variant: 'error'
-      });
-      return;
-    }
-    const prepareData = await attestPrepare({ raffleId: raffleId });
-    console.log(prepareData, 'prepareData');
-    const data = {
-      userId: prepareData.userId,
-      boostCode: raffleId,
-      message: `Hey, ${user?.inviteUser}! I've boosted Signie points for you. --${user?.username || 'Sign User'}`, // TODO
-      signature: prepareData.signature
-    };
-
-    const attestationObj = {
-      schemaId,
-      linkedAttestationId: '',
-      validUntil: 0,
-      recipients: [user?.walletAddress],
-      indexingValue: raffleId,
-      dataLocation: offChainSchema.dataLocation,
-      data: JSON.stringify(data)
-    };
-
-    const attestationString = JSON.stringify(attestationObj, null, '  ');
-
-    const walletIns = WalletFactory.getWallet(ChainType.Ton);
-    const res = await walletIns.sign(attestationString);
-    console.log(res, 'res');
-    const info = walletIns.getWallet();
-
-    if (info.address?.toLowerCase() !== user?.walletAddress.toLowerCase()) {
-      toast({
-        title: 'Error',
-        description: `Current Wallet address ${info.address} does not match the user bind's wallet address ${user?.walletAddress}`,
-        variant: 'error'
-      });
-      return;
-    }
-    const msgRes = JSON.parse(res.message);
-    console.log(info, msgRes);
-
-    try {
-      setLoading(true);
-      const attestRes = await submitAttestationByOffchain({
-        signType: 'ton-connect',
-        publicKey: info.publicKey!,
-        signature: res.signature,
-        message: msgRes.fullMessage,
-        attestation: attestationString
-      });
-
-      console.log(attestRes, 'attestRes');
-      await checkTx({
-        txHash: attestRes.attestationId,
-        raffleId: raffleId
-      });
-      toast({
-        title: 'Success',
-        description: 'sign event has been made successfully',
-        variant: 'success'
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const createAttestationByOnchain = async () => {
     const schemaAddress = getTonSpInfo().schemaAddress;
     console.log(schemaAddress, getTonSpInfo(), 'schemaAddress');
     const schema = getSchemaContract(schemaAddress);
     const schemaData = await schema!.getSchemaData();
+    setLoading(true);
     const attestation: AttestationConfig = {
       attestationCounterId: (await spContract?.getAttestationCounter()) ?? 0,
       attester: Address.parse(wallet?.account.address ?? ''),
@@ -115,8 +39,9 @@ export const AttestTabs = () => {
     };
     await spContract?.sendAttest(sender, attestation, schemaData);
     const attestId = await spContract?.getAttestationId(attestation);
+    console.log('attestId', attestId);
     // 校验是否成功，2分钟后直接超时失败
-    await new Promise((resolve, reject) => {
+    return await new Promise((resolve, reject) => {
       const intervaler = setInterval(async () => {
         try {
           const attestationContract = await getAttestationContract(attestId?.toString() ?? '');
@@ -135,23 +60,14 @@ export const AttestTabs = () => {
         reject('Timeout');
       }, 120000);
     });
-
-    console.log('attestId', attestId);
   };
 
   const handleSubmit = async () => {
-    if (type === 'offchain') {
-      if (wallet) {
-        await tonConnectUI.disconnect();
-      }
-      await createAttestationByOffchain();
+    if (tonConnectUI.connected) {
+      const res = await createAttestationByOnchain();
+      console.log(res, 'res');
     } else {
-      if (tonConnectUI.connected) {
-        await createAttestationByOnchain();
-      } else {
-        await tonConnectUI.openModal();
-      }
-      console.log('lala');
+      await tonConnectUI.openModal();
     }
   };
 

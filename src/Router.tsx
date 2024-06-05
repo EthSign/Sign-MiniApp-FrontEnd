@@ -36,6 +36,10 @@ const routerConfig: RouteObject[] = [
           {
             path: '/rank',
             element: <RankPage />
+          },
+          {
+            path: '/tasks',
+            element: <Tasks />
           }
         ]
         // loader: () => {
@@ -53,10 +57,6 @@ const routerConfig: RouteObject[] = [
       {
         path: '/schema',
         element: <CreateSchema />
-      },
-      {
-        path: '/tasks',
-        element: <Tasks />
       },
       {
         path: '/invite',

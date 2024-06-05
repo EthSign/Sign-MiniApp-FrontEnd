@@ -1,6 +1,6 @@
 import { Header } from '@/components/Header.tsx';
 import { TabItem, Tabbar } from '@/components/Tabbar.tsx';
-import { BarChart01, Diamond01 } from '@ethsign/icons';
+import { BarChart01, CoinsStacked02, Diamond01 } from '@ethsign/icons';
 import { ScrollArea } from '@ethsign/ui';
 import { Outlet } from 'react-router-dom';
 
@@ -14,6 +14,11 @@ const TABS: TabItem[] = [
     label: 'Rank',
     to: '/rank',
     icon: ({ active }) => <BarChart01 size={24} color={active ? '#0052FF' : '#98A2B3'} />
+  },
+  {
+    label: 'Tasks',
+    to: '/tasks',
+    icon: ({ active }) => <CoinsStacked02 size={24} color={active ? '#0052FF' : '#98A2B3'} />
   }
 ];
 

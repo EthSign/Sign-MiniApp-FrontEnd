@@ -68,3 +68,19 @@ export const PointsIcon = () => {
     </svg>
   );
 };
+
+export const CheckSuccess = () => {
+  return (
+    <svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="0.5" y="1.04248" width="15" height="15" rx="7.5" fill="#0052FF" />
+      <rect x="0.5" y="1.04248" width="15" height="15" rx="7.5" stroke="#0052FF" />
+      <path
+        d="M11.3333 6.04248L6.74996 10.6258L4.66663 8.54248"
+        stroke="#FCFCFD"
+        strokeWidth="1.66667"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+};
