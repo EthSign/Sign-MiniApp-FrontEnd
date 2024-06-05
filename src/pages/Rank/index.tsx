@@ -74,23 +74,25 @@ export const RankPage: React.FC = () => {
       <div className={'mt-4'}>
         <div className={'flex items-center justify-around text-xs font-normal text-white'}>
           <div className={'flex-1'}>Rank</div>
-          <div className={'flex-[0_0_180px] text-right pr-4'}>Points</div>
+          <div className={'flex-[0_0_100px] text-right pr-4'}>Points</div>
           {/*<div className={'flex-[0_0_80px] text-right'}>Rewards</div>*/}
         </div>
       </div>
       <div className={'mt-3 space-y-2'}>
         <div className={'flex items-center justify-around rounded-[4px] bg-primary px-2 py-2.5 text-white'}>
           <div className={'flex flex-1 gap-4 items-center'}>
-            <span
-              className={
-                'flex items-center justify-center rounded-3xl w-[50px] bg-[#ECF2FF] font-medium text-xs text-primary'
-              }
-            >
-              {data?.userRank?.rank}
-            </span>
+            <div className={'w-[50px]'}>
+              <span
+                className={
+                  'inline-flex items-center justify-center rounded-3xl min-w-6 px-[2px] h-6 bg-[#ECF2FF] font-medium text-xs text-primary'
+                }
+              >
+                {data?.userRank?.rank}
+              </span>
+            </div>
             <div className={'text-xs font-medium w-[100px] text-ellipsis'}>{user?.username}</div>
           </div>
-          <div className={'flex-[0_0_180px] text-right text-xs font-normal pr-4'}>{data?.userRank?.score || '-'}</div>
+          <div className={'flex-[0_0_100px] text-right text-xs font-normal pr-4'}>{data?.userRank?.score || '-'}</div>
           {/*<div className={'flex-[0_0_50px] px-2 text-right'}>--</div>*/}
         </div>
         {restUsers?.map((item, index) => {
@@ -111,7 +113,7 @@ export const RankPage: React.FC = () => {
                 </div>
                 <div className={'text-xs font-medium w-[100px] text-ellipsis'}>{item.username}</div>
               </div>
-              <div className={'flex-[0_0_180px] text-right text-xs font-normal pr-4'}>{item.score}</div>
+              <div className={'flex-[0_0_100px] text-right text-xs font-normal pr-4'}>{item.score}</div>
               {/*<div className={'flex-[0_0_50px] px-2 text-right'}>--</div>*/}
             </div>
           );
