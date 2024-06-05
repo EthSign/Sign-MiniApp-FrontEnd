@@ -10,6 +10,7 @@ import { RankPage } from './pages/Rank';
 import Tasks from '@/pages/Tasks';
 import Invite from '@/pages/Invite';
 import Quizzes from '@/pages/Quizzes';
+import Tickets from '@/pages/Tickets';
 
 const routerConfig: RouteObject[] = [
   {
@@ -64,6 +65,10 @@ const routerConfig: RouteObject[] = [
       {
         path: '/quizzes',
         element: <Quizzes />
+      },
+      {
+        path: '/tickets',
+        element: <Tickets />
       }
     ]
   },

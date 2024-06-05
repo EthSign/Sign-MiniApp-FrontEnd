@@ -83,7 +83,7 @@ export const RankPage: React.FC = () => {
           <div className={'flex flex-1 gap-4 items-center'}>
             <span
               className={
-                'flex size-6 items-center justify-center rounded-full bg-[#ECF2FF] font-medium text-xs text-primary'
+                'flex items-center justify-center rounded-3xl w-[50px] bg-[#ECF2FF] font-medium text-xs text-primary'
               }
             >
               {data?.userRank?.rank}
@@ -100,13 +100,15 @@ export const RankPage: React.FC = () => {
               className={'flex items-center justify-around rounded-[4px] bg-white px-2 py-2.5 text-gray-900'}
             >
               <div className={'flex flex-1 gap-4 items-center'}>
-                <span
-                  className={
-                    'flex size-6 items-center justify-center rounded-full bg-[#ECF2FF] font-medium text-xs text-primary'
-                  }
-                >
-                  {index + 4}
-                </span>
+                <div className={'w-[50px]'}>
+                  <span
+                    className={
+                      'flex size-6 items-center justify-center rounded-full bg-[#ECF2FF] font-medium text-xs text-primary'
+                    }
+                  >
+                    {index + 4}
+                  </span>
+                </div>
                 <div className={'text-xs font-medium w-[100px] text-ellipsis'}>{item.username}</div>
               </div>
               <div className={'flex-[0_0_180px] text-right text-xs font-normal pr-4'}>{item.score}</div>

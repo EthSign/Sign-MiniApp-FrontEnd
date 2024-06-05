@@ -1,5 +1,5 @@
 import { TabBar } from '@/components/Header.tsx';
-import { Button, Label, Modal, Radio, RadioGroup, RadioGroupItem } from '@ethsign/ui';
+import { Button, Label, Modal, RadioGroup, RadioGroupItem } from '@ethsign/ui';
 import chestImg from '@/assets/Chest.png';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
