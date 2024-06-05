@@ -60,9 +60,9 @@ export const initTelegramApp = (): void => {
     });
 
     WebApp.expand();
-    window.addEventListener('touchmove', (e) => e.preventDefault(), { passive: false });
-    window.scrollTo(0, 100);
-    WebApp.ready();
+    // window.addEventListener('touchmove', (e) => e.preventDefault(), { passive: false });
+    // window.scrollTo(0, 100);
+    // WebApp.ready();
   }
 };
 
