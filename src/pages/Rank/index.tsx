@@ -4,7 +4,7 @@ import { getRank } from '@/services';
 import { Loading } from '@/components/Loading.tsx';
 import { useUserInfo } from '@/providers/UserInfoProvider.tsx';
 
-export const RankPage: React.FC = () => {
+const RankPage: React.FC = () => {
   const { user } = useUserInfo();
   const { data } = useQuery({
     queryKey: ['rank'],
@@ -122,3 +122,5 @@ export const RankPage: React.FC = () => {
     </div>
   );
 };
+
+export default RankPage;
