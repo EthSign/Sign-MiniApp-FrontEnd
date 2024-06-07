@@ -86,3 +86,8 @@ export interface NextLevel {
   steps: number;
   multiplier: number;
 }
+
+export interface ITaskData {
+  remainingAvailableTasks: number;
+  addressBound: boolean;
+}

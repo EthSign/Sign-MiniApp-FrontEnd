@@ -2,6 +2,7 @@ import queryString from 'query-string';
 import { customAlphabet } from 'nanoid';
 import dayjs from 'dayjs';
 import { ENVS } from '@/constants/config.ts';
+import { initUtils } from '@tma.js/sdk';
 
 export const stringifyQueryString = (obj: Record<string, any>): string => {
   return queryString.stringify(obj, { skipNull: true, skipEmptyString: true });
@@ -40,6 +41,11 @@ export const getTMAInitData = (): ITMAInitData | null => {
 
 export const isTelegramApp = (): boolean => {
   return !!window.TelegramWebviewProxy;
+};
+
+export const initTmaUtils = () => {
+  const utils = initUtils();
+  return utils;
 };
 
 export const getCustomNaNoId = (): string => {

@@ -1,6 +1,6 @@
 // POST /mini/auth
 import { ApiClient, apiClient } from '@/utils/api-client.ts';
-import { IRaffleRecord, IRankData, IUser, LotteryInfo, RaffleInfo, RaffleResult } from '@/types';
+import { IRaffleRecord, IRankData, ITaskData, IUser, LotteryInfo, RaffleInfo, RaffleResult } from '@/types';
 import { OffChainRpc } from '@ethsign/sp-sdk';
 import { ENVS } from '@/constants/config.ts';
 
@@ -57,6 +57,11 @@ export const getRaffleInfo = async (id: string) => {
 // GET /mini/campaigns/lottery/raffles?date=1716799249189
 export const getRaffles = async (date: number) => {
   return await apiClient.get<{ rows: IRaffleRecord[]; total: number }>(`/mini/campaigns/lottery/raffles?date=${date}`);
+};
+
+// GET mini/campaigns/lottery/task
+export const getTask = async () => {
+  return await apiClient.get<ITaskData>('/mini/campaigns/lottery/task');
 };
 
 const rpcMap = {

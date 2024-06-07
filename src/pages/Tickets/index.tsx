@@ -1,7 +1,7 @@
 import { TabBar } from '@/components/Header.tsx';
 import { LotteryRulesModal } from '@/components/RulesModal.tsx';
 import ticketImg from '@/assets/ticket.png';
-import { Badge } from '@ethsign/ui';
+import { Badge, Modal } from '@ethsign/ui';
 import React, { ReactNode } from 'react';
 import {
   Drawer,
@@ -14,6 +14,7 @@ import {
 } from '@/components/Drawer.tsx';
 import { XClose } from '@ethsign/icons';
 import { AttestTabs } from '@/components/AttestTabs.tsx';
+import { useNavigate } from 'react-router-dom';
 
 const TicketDrawer = ({
   trigger,
@@ -51,6 +52,7 @@ const TicketDrawer = ({
 };
 
 export default function Tickets() {
+  const navigate = useNavigate();
   return (
     <div>
       <TabBar title={'Earn Tickets'} />
@@ -85,6 +87,34 @@ export default function Tickets() {
           </TicketDrawer>
         </div>
       </div>
+
+      <Modal
+        open={true}
+        footerClassName={'flex-row gap-2 mt-0'}
+        confirmButtonProps={{
+          variant: 'primary',
+          className: 'flex-1'
+        }}
+        confirmText={'Play'}
+        cancelText={'Close'}
+        cancelButtonProps={{
+          className: 'flex-1'
+        }}
+        onConfirm={() => {
+          navigate('/lucky-wheel');
+        }}
+        className={'w-[359px] rounded-[24px]'}
+      >
+        <div>
+          <img src={ticketImg} className={'w-[80px] mx-auto'} alt="" />
+        </div>
+        <div className={'text-center mt-4'}>
+          <div className={'text-xl font-semibold text-black-100'}>1 Ticket Received</div>
+          <div className={'text-md font-normal text-gray-600 mt-2'}>
+            Spin the wheel with your tickets and earn signie points
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }

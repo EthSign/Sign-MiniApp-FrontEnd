@@ -4,7 +4,8 @@ export const ENVS = {
   TG_APP_LINK: import.meta.env.VITE_TMA_LINK, //t.me/ethsignddev_bot/minidev t.me/ChainDevBot/chainapp
   ENV: import.meta.env.VITE_ENV,
   SHARE_DESC: 'Spin to win $NOT and more！',
-  INITDATA: import.meta.env.VITE_INITDATA
+  INITDATA: import.meta.env.VITE_INITDATA,
+  TG_GROUP_LINK: 'https://t.me/signeverythingonchain'
 };
 
 export const tonSp = {

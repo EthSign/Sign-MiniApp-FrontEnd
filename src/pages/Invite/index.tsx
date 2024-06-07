@@ -1,14 +1,15 @@
 import { TabBar } from '@/components/Header.tsx';
 import { Button, ScrollArea } from '@ethsign/ui';
 import { UsersPlus } from '@ethsign/icons';
-import { PointsIcon } from '@/components/Icons.tsx';
+import { CheckSuccess, PointsIcon } from '@/components/Icons.tsx';
 import starImg from '@/assets/StarCoin.png';
 
 const INVITE_DATA = [
   {
     id: '1th',
     title: 'Invite 1 friend',
-    points: '1k'
+    points: '1k',
+    success: true
   },
   {
     id: '2nd',
@@ -54,9 +55,7 @@ export default function Invite() {
                   >
                     <div className={'flex flex-col items-center'}>
                       <div className={'text-neutral-500 text-xs font-normal'}>+{item.points}</div>
-                      <div className={'mt-[2px]'}>
-                        <PointsIcon />
-                      </div>
+                      <div className={'mt-[2px]'}>{item.success ? <CheckSuccess /> : <PointsIcon />}</div>
                     </div>
                   </div>
                   <div className={'text-xs font-normal text-neutral-500 text-center mt-2'}>{item.id}</div>

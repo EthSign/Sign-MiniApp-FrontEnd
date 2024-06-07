@@ -1,6 +1,6 @@
 import starImg from '@/assets/StarCoin.png';
 import { Badge, Button } from '@ethsign/ui';
-import { ChevronRight, XClose, CheckCircle } from '@ethsign/icons';
+import { ChevronRight, XClose } from '@ethsign/icons';
 import React, { ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -11,11 +11,13 @@ import {
   DrawerHeader,
   DrawerTitle
 } from '@/components/Drawer.tsx';
-import { WalletFactory } from '@/core/WalletFactory.tsx';
-import { ChainType } from '@/core/types.ts';
-import { getCustomNaNoId } from '@/utils/common.ts';
+import { initTmaUtils } from '@/utils/common.ts';
 import { cn } from '@/utils/tailwind.ts';
 import { CheckSuccess } from '@/components/Icons.tsx';
+import { useQuery } from '@tanstack/react-query';
+import { getTask } from '@/services';
+import { ENVS } from '@/constants/config.ts';
+import { useUserInfo } from '@/providers/UserInfoProvider.tsx';
 
 const TaskItem = ({
   title,
@@ -106,18 +108,23 @@ const TaskDrawer = ({
 
 export default function Tasks() {
   const navigate = useNavigate();
+  const { data, refetch } = useQuery({
+    queryKey: ['tasks'],
+    queryFn: getTask
+  });
+  const { isBindingWallet, bindWallet } = useUserInfo();
 
-  const bindWallet = async () => {
-    const fullMessage = {
-      statement: 'Welcome to Sign Mini APP',
-      issuedAt: new Date().toISOString(),
-      nonce: getCustomNaNoId()
-    };
+  console.log(data, 'tt');
 
-    const originMsg = JSON.stringify(fullMessage, null, '  ');
-    const walletIns = WalletFactory.getWallet(ChainType.Ton);
-    const res = await walletIns.sign(originMsg);
-    console.log(res);
+  const handleBindWallet = async () => {
+    await bindWallet();
+    refetch();
+  };
+
+  const handleJoinGroup = () => {
+    // check
+    const utils = initTmaUtils();
+    utils.openTelegramLink(ENVS.TG_GROUP_LINK);
   };
   return (
     <div>
@@ -137,14 +144,14 @@ export default function Tasks() {
               </div>
             }
           />
-          <TaskItem
-            onClick={() => {
-              navigate('/invite');
-            }}
-            title={'Invite friends'}
-            description={'Receive bonus by inviting friends'}
-            score={'5,000'}
-          />
+          {/*<TaskItem*/}
+          {/*  onClick={() => {*/}
+          {/*    navigate('/invite');*/}
+          {/*  }}*/}
+          {/*  title={'Invite friends'}*/}
+          {/*  description={'Receive bonus by inviting friends'}*/}
+          {/*  score={'5,000'}*/}
+          {/*/>*/}
         </div>
 
         <h2 className={'text-xl font-bold text-white mt-4'}>Tasks</h2>
@@ -153,17 +160,30 @@ export default function Tasks() {
             title={'Connect wallet'}
             desc={'Connect wallet to receive 5,000 Signie points'}
             trigger={
-              <TaskItem success title={'Connect wallet'} description={'Accure 1k coins tomorrow'} score={'5,000'} />
+              <TaskItem
+                success={data?.addressBound}
+                title={'Connect wallet'}
+                description={'Accure 1k coins tomorrow'}
+                score={'5,000'}
+              />
             }
             action={
-              <Button className={'mt-8'} onClick={bindWallet}>
+              <Button className={'mt-8'} onClick={handleBindWallet} loading={isBindingWallet}>
                 Connect wallet now
               </Button>
             }
-            success
+            success={data?.addressBound}
           />
-          <TaskItem title={'Join TG channel'} description={'Accure 1k coins tomorrow'} score={'1,000'} />
-          <TaskItem title={'Join TG group'} description={'Accure 1k coins tomorrow'} score={'1,000'} />
+          <TaskDrawer
+            title={'Join our TG channel'}
+            desc={'Join our TG channel to keep up to date and receive 5,000 Signie poitns'}
+            trigger={<TaskItem title={'Join TG group'} description={'Accure 1k coins tomorrow'} score={'1,000'} />}
+            action={
+              <Button className={'mt-8'} onClick={handleJoinGroup}>
+                Join now
+              </Button>
+            }
+          />
         </div>
       </div>
     </div>
