@@ -90,6 +90,7 @@ export interface NextLevel {
 export interface ITaskData {
   remainingAvailableTasks: number;
   addressBound: boolean;
+  groupJoined: boolean;
 }
 
 export enum TaskTypeEnum {

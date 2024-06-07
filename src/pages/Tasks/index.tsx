@@ -127,9 +127,14 @@ export default function Tasks() {
   };
 
   const handleJoinGroup = async () => {
-    await checkTask({
+    const res = (await checkTask({
       taskType: TaskTypeEnum.JOINGOUP
-    });
+    })) as { result: boolean };
+    console.log(res);
+    if (res.result) {
+      refetch();
+      return;
+    }
     const utils = initTmaUtils();
     utils.openTelegramLink(ENVS.TG_GROUP_LINK);
   };
@@ -186,10 +191,16 @@ export default function Tasks() {
             success={data?.addressBound}
           />
           <TaskDrawer
+            success={data?.groupJoined}
             title={'Join our TG channel'}
             desc={'Join our TG channel to keep up to date and receive 5,000 Signie poitns'}
             trigger={
-              <TaskItem title={'Join TG group'} description={'Accure 1k coins tomorrow'} score={'1 Free Ticket/day'} />
+              <TaskItem
+                success={data?.groupJoined}
+                title={'Join TG group'}
+                description={'Accure 1k coins tomorrow'}
+                score={'1 Free Ticket/day'}
+              />
             }
             action={
               <Button className={'mt-8'} onClick={handleJoinGroup}>

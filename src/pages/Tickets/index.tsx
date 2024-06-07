@@ -22,15 +22,18 @@ const TicketDrawer = ({
   title,
   desc,
   children,
-  disabled
+  disabled,
+  open,
+  setOpen
 }: {
   trigger: ReactNode;
   title: string;
   desc?: string;
   children: ReactNode;
   disabled?: boolean;
+  open: boolean;
+  setOpen: (v: boolean) => void;
 }) => {
-  const [open, setOpen] = useState(false);
   return (
     <>
       <Drawer open={open} onOpenChange={setOpen} modal={false}>
@@ -65,6 +68,7 @@ const TicketDrawer = ({
 };
 
 export default function Tickets() {
+  const [open1, setOpen1] = useState(false);
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const { data, refetch } = useQuery({
@@ -74,6 +78,8 @@ export default function Tickets() {
 
   const handleCheck = () => {
     refetch();
+    setOpen(false);
+    setOpen1(true);
   };
   return (
     <div>
@@ -84,6 +90,8 @@ export default function Tickets() {
         </div>
         <div className="mt-6 space-y-6">
           <TicketDrawer
+            open={open}
+            setOpen={setOpen}
             disabled={data?.remainingAvailableTasks === 0}
             title={'Sign event onchain'}
             trigger={
@@ -118,8 +126,8 @@ export default function Tickets() {
       </div>
 
       <Modal
-        open={open}
-        onOpenChange={setOpen}
+        open={open1}
+        onOpenChange={setOpen1}
         footerClassName={'flex-row gap-2 mt-0'}
         confirmButtonProps={{
           variant: 'primary',
