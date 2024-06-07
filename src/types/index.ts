@@ -91,3 +91,31 @@ export interface ITaskData {
   remainingAvailableTasks: number;
   addressBound: boolean;
 }
+
+export enum TaskTypeEnum {
+  QUIZ = 'quiz',
+  JOINGOUP = 'join_group',
+  OFFCHAINATTEST = 'offchain_attest'
+}
+
+export interface QuizInfoData {
+  pointsByQuiz: number;
+  remainingQuizzes: number;
+  committedQuizzes: number;
+  currentQuiz: CurrentQuiz;
+}
+
+export interface CurrentQuiz {
+  quizId: string;
+  type: string;
+  title: string;
+  answer: string;
+  options: Option[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Option {
+  title: string;
+  value: string;
+}

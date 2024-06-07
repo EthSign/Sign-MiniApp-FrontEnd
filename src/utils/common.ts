@@ -80,3 +80,45 @@ export function getUTCTimeByDate(date: Date) {
   const utcDate = date.getDate();
   return new Date(Date.UTC(utcYear, utcMonth, utcDate, 0, 0, 0, 0)).valueOf();
 }
+
+export function validateValues(dataSchema: any[], values: Record<string, any>) {
+  // 检查dataSchema是否有数据定义
+  if (!dataSchema || !Array.isArray(dataSchema)) {
+    throw new Error('Invalid data schema');
+  }
+
+  // 遍历所有的数据定义
+  for (const field of dataSchema) {
+    // 检查values对象是否包含所有必需的字段
+    if (!(field.name in values)) {
+      return {
+        success: false,
+        message: `Missing field: ${field.name}`
+      };
+    }
+
+    // // 根据定义的类型进行校验
+    // switch (field.type) {
+    //   case 'string':
+    //     if (typeof values[field.name] !== 'string') {
+    //       return {
+    //         success: false,
+    //         message: `Invalid type for field ${field.name}, expected string`
+    //       };
+    //     }
+    //     break;
+    //     // 如果有其他类型，可以在这里添加更多的case
+    //   default:
+    //     return {
+    //       success: false,
+    //       message: `Unsupported field type: ${field.type}`
+    //     };
+    // }
+  }
+
+  // 如果所有字段都通过验证，返回成功
+  return {
+    success: true,
+    message: 'All fields are valid'
+  };
+}

@@ -1,38 +1,84 @@
 import { TabBar } from '@/components/Header.tsx';
-import { Button, Label, Modal, RadioGroup, RadioGroupItem } from '@ethsign/ui';
+import { Button, Label, Modal, RadioGroup, RadioGroupItem, toast } from '@ethsign/ui';
 import chestImg from '@/assets/Chest.png';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { checkTask, getQuizInfo } from '@/services';
+import { TaskTypeEnum } from '@/types';
+import { useQuery } from '@tanstack/react-query';
 
 export default function Quizzes() {
   const [quitModal, setQuitModal] = useState(false);
   const navigate = useNavigate();
+  const { data, refetch } = useQuery({
+    queryKey: ['quiz-info'],
+    queryFn: getQuizInfo
+  });
+  const [loading, setLoading] = useState(false);
+  const [answer, setAnswer] = useState('');
+  const [isFinish, setIsFinish] = useState(false);
+
+  console.log(data);
+
+  const handleSubmit = async () => {
+    if (!answer) {
+      toast({
+        variant: 'error',
+        title: 'Error',
+        description: 'Please select an answer'
+      });
+      return;
+    }
+    try {
+      setLoading(true);
+      await checkTask({
+        taskType: TaskTypeEnum.QUIZ,
+        taskId: data?.currentQuiz?.quizId,
+        value: answer
+      });
+      setAnswer('');
+      refetch();
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (data?.remainingQuizzes === 0) {
+      setIsFinish(true);
+    }
+  }, [data]);
   return (
     <div>
       <TabBar title={'Quizzes for fun'} />
       <div className={'bg-white py-8 px-6 h-[calc(100vh-48px)] relative'}>
         <div className={'bg-[#ECF2FF] rounded-[12px] py-2.5 px-5'}>
           Signie points earned:
-          <span className={'text-md font-bold text-primary ml-2'}>1,000 points</span>
+          <span className={'text-md font-bold text-primary ml-2'}>{data?.pointsByQuiz} points</span>
         </div>
 
         <div className={'mt-8 px-6'}>
-          <div className={'text-sm font-normal text-gray-500'}>1/10</div>
-          <div className={'text-md font-semibold mt-2'}>Is Sign Protocol a blockchain?</div>
+          <div className={'text-sm font-normal text-gray-500'}>
+            {data?.committedQuizzes}/{(data?.committedQuizzes || 0) + (data?.remainingQuizzes || 0)}
+          </div>
+          <div className={'text-md font-semibold mt-2'}>{data?.currentQuiz?.title}</div>
           <div className={'pt-4 space-y-2'}>
-            <RadioGroup>
-              <div className={'flex justify-between items-center p-4 border border-gray-200 rounded-[8px]'}>
-                <div>
-                  <Label htmlFor={'yes'}>YES</Label>
-                </div>
-                <RadioGroupItem value={'yes'}>Yes</RadioGroupItem>
-              </div>
-              <div className={'flex justify-between items-center p-4 border border-gray-200 rounded-[8px]'}>
-                <div>
-                  <Label htmlFor={'yes'}>No</Label>
-                </div>
-                <RadioGroupItem value={'yes'}>No</RadioGroupItem>
-              </div>
+            <RadioGroup
+              value={answer}
+              onValueChange={(v) => {
+                setAnswer(v);
+              }}
+            >
+              {data?.currentQuiz?.options?.map((option) => {
+                return (
+                  <div className={'flex justify-between items-center p-4 border border-gray-200 rounded-[8px]'}>
+                    <div>
+                      <Label htmlFor={option.value}>{option.title}</Label>
+                    </div>
+                    <RadioGroupItem value={option.value}></RadioGroupItem>
+                  </div>
+                );
+              })}
             </RadioGroup>
           </div>
         </div>
@@ -47,19 +93,27 @@ export default function Quizzes() {
           >
             Quit
           </Button>
-          <Button className={'flex-1'}>Next</Button>
+          <Button loading={loading} className={'flex-1'} onClick={handleSubmit}>
+            Next
+          </Button>
         </div>
       </div>
 
-      <Modal open={false} footer={false} className={'w-[359px] rounded-[24px]'}>
+      <Modal open={isFinish} onOpenChange={setIsFinish} footer={false} className={'w-[359px] rounded-[24px]'}>
         <div>
           <img src={chestImg} className={'w-[55px] mx-auto'} alt="" />
         </div>
         <div className={'text-center mt-4'}>
-          <div className={'text-xl font-semibold text-black-100'}>You won 1,000 pts</div>
+          <div className={'text-xl font-semibold text-black-100'}>You won {data?.pointsByQuiz} pts</div>
           <div className={'text-md font-normal text-gray-600 mt-2'}>Come and take the quiz tomorrow</div>
         </div>
-        <Button className={'text-primary'} variant={'link-color'}>
+        <Button
+          className={'text-primary'}
+          variant={'link-color'}
+          onClick={() => {
+            navigate(-1);
+          }}
+        >
           Ok
         </Button>
       </Modal>
@@ -90,7 +144,7 @@ export default function Quizzes() {
         <div className={'text-center mt-4'}>
           <div className={'text-xl font-semibold text-black-100'}>Are you sure to quit?</div>
           <div className={'text-md font-normal text-gray-600 mt-2'}>
-            You’ve won 100 pt, but you can always come back at anytime
+            You’ve won {data?.pointsByQuiz} pt, but you can always come back at anytime
           </div>
         </div>
       </Modal>

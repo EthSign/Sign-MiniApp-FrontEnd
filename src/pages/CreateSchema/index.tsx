@@ -1,5 +1,5 @@
 import { Header } from '@/components/Header.tsx';
-import { offChainSchema } from '@/constants/config';
+import { offchainSchemaConfig } from '@/constants/config';
 import { WalletFactory } from '@/core/WalletFactory.tsx';
 import { ChainType } from '@/core/types.ts';
 import { submitSchema } from '@/services';
@@ -9,7 +9,8 @@ import { useTonConnectUI } from '@tonconnect/ui-react';
 import { useState } from 'react';
 
 export default function CreateSchema() {
-  const [schema] = useState(JSON.stringify(offChainSchema, null, '  '))
+  // offChainSchema
+  const [schema] = useState(JSON.stringify(offchainSchemaConfig[0].schema, null, '  '));
   const [tonConnectUI] = useTonConnectUI();
   const { wallet } = useConnection();
   const [schemaResult, setSchemaResult] = useState<any>(null);
@@ -18,13 +19,12 @@ export default function CreateSchema() {
       await tonConnectUI.disconnect();
     }
     const walletIns = WalletFactory.getWallet(ChainType.Ton);
-    const str = JSON.stringify(offChainSchema, null, '  ');
-    const res = await walletIns.sign(str);
+    const res = await walletIns.sign(schema);
     console.log(res, 'res');
     const info = walletIns.getWallet();
     const msgRes = JSON.parse(res.message);
     const schemaInfo = await submitSchema({
-      schema: str,
+      schema: schema,
       signature: res.signature,
       message: msgRes.fullMessage,
       publicKey: info.publicKey!,
@@ -41,16 +41,11 @@ export default function CreateSchema() {
     <div>
       <Header />
       <div className="py-8 px-6 space-y-6">
-        <Textarea defaultValue={schema} readOnly className='h-[50vh]' />
-        <Button className='w-full' onClick={handleCreateSchema}>Create Schema</Button>
-        {
-          schemaResult && (
-            <div className='text-slime-500 text-center'>
-              SchemaId: {schemaResult?.schemaId}
-            </div>
-          )
-        }
-
+        <Textarea defaultValue={schema} readOnly className="h-[50vh]" />
+        <Button className="w-full" onClick={handleCreateSchema}>
+          Create Schema
+        </Button>
+        {schemaResult && <div className="text-slime-500 text-center">SchemaId: {schemaResult?.schemaId}</div>}
       </div>
     </div>
   );

@@ -15,9 +15,10 @@ import { initTmaUtils } from '@/utils/common.ts';
 import { cn } from '@/utils/tailwind.ts';
 import { CheckSuccess } from '@/components/Icons.tsx';
 import { useQuery } from '@tanstack/react-query';
-import { getTask } from '@/services';
+import { checkTask, getQuizInfo, getTask } from '@/services';
 import { ENVS } from '@/constants/config.ts';
 import { useUserInfo } from '@/providers/UserInfoProvider.tsx';
+import { TaskTypeEnum } from '@/types';
 
 const TaskItem = ({
   title,
@@ -112,6 +113,10 @@ export default function Tasks() {
     queryKey: ['tasks'],
     queryFn: getTask
   });
+  const { data: quizData } = useQuery({
+    queryKey: ['quiz-info'],
+    queryFn: getQuizInfo
+  });
   const { isBindingWallet, bindWallet } = useUserInfo();
 
   console.log(data, 'tt');
@@ -121,8 +126,10 @@ export default function Tasks() {
     refetch();
   };
 
-  const handleJoinGroup = () => {
-    // check
+  const handleJoinGroup = async () => {
+    await checkTask({
+      taskType: TaskTypeEnum.JOINGOUP
+    });
     const utils = initTmaUtils();
     utils.openTelegramLink(ENVS.TG_GROUP_LINK);
   };
@@ -132,7 +139,9 @@ export default function Tasks() {
         <h2 className={'text-xl font-bold text-white'}>Daily Tasks</h2>
         <div className={'mt-2 space-y-2'}>
           <TaskItem
+            success={quizData?.remainingQuizzes === 0}
             onClick={() => {
+              if (quizData?.remainingQuizzes === 0) return;
               navigate('/quizzes');
             }}
             title={'Quizzes for fun'}
@@ -140,7 +149,9 @@ export default function Tasks() {
             score={100}
             extra={
               <div className={'ml-4 mr-2'}>
-                <Badge className={'bg-gray-100 text-gray-500'}>0/10</Badge>
+                <Badge className={'bg-gray-100 text-gray-500'}>
+                  {quizData?.committedQuizzes}/{(quizData?.committedQuizzes || 0) + (quizData?.remainingQuizzes || 0)}
+                </Badge>
               </div>
             }
           />
@@ -164,7 +175,7 @@ export default function Tasks() {
                 success={data?.addressBound}
                 title={'Connect wallet'}
                 description={'Accure 1k coins tomorrow'}
-                score={'5,000'}
+                score={'1 Free Ticket/day'}
               />
             }
             action={
@@ -177,7 +188,9 @@ export default function Tasks() {
           <TaskDrawer
             title={'Join our TG channel'}
             desc={'Join our TG channel to keep up to date and receive 5,000 Signie poitns'}
-            trigger={<TaskItem title={'Join TG group'} description={'Accure 1k coins tomorrow'} score={'1,000'} />}
+            trigger={
+              <TaskItem title={'Join TG group'} description={'Accure 1k coins tomorrow'} score={'1 Free Ticket/day'} />
+            }
             action={
               <Button className={'mt-8'} onClick={handleJoinGroup}>
                 Join now
