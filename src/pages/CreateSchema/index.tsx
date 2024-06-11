@@ -12,7 +12,7 @@ export default function CreateSchema() {
   // offChainSchema offchainSchemaConfig[0].schema
   const spInfo = getTonSpInfo();
   const offchainSchemaConfig = spInfo.offchainSchemaConfig;
-  const [schema] = useState(JSON.stringify(offchainSchemaConfig[1].schema, null, '  '));
+  const [schema] = useState(JSON.stringify(offchainSchemaConfig[0].schema, null, '  '));
   const [tonConnectUI] = useTonConnectUI();
   const { wallet } = useConnection();
   const [schemaResult, setSchemaResult] = useState<any>(null);

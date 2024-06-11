@@ -8,6 +8,39 @@ export const ENVS = {
   TG_GROUP_LINK: 'https://t.me/signeverythingonchain'
 };
 
+const schemaList = [
+  {
+    name: 'SIGNIE commitment',
+    description: 'A general schema for committing anything onchain',
+    revocable: true,
+    maxValidFor: 0,
+    types: [
+      {
+        name: 'Commitment content',
+        type: 'string'
+      }
+    ],
+    dataLocation: 'arweave'
+  },
+  {
+    name: 'SIGNIE milestone event',
+    description: 'Record any milestone or important event onchain',
+    revocable: true,
+    maxValidFor: 0,
+    types: [
+      {
+        name: 'event',
+        type: 'string'
+      },
+      {
+        name: 'description',
+        type: 'string'
+      }
+    ],
+    dataLocation: 'arweave'
+  }
+];
+
 export const tonSp = {
   dev: {
     spAddress: 'kQBbxPGNadGSWnVLDyDy0VqGVGHoI9fzXBED5sh3Vd3oadW5',
@@ -16,43 +49,11 @@ export const tonSp = {
     offchainSchemaConfig: [
       {
         id: 'SPS_6B4MBx-3Tf__rmtwcQZhI',
-        schema: {
-          name: 'SIGNIE commitment',
-          description: 'A general schema for committing anything onchain',
-          revocable: true,
-          maxValidFor: 0,
-          types: [
-            {
-              name: 'commitment content',
-              type: 'string'
-            },
-            {
-              name: 'recipient',
-              type: 'string'
-            }
-          ],
-          dataLocation: 'arweave'
-        }
+        schema: schemaList[0]
       },
       {
         id: 'SPS_Rz_mgddeO5vNBKmmu267Z',
-        schema: {
-          name: 'SIGNIE milestone event',
-          description: 'Record any milestone or important event onchain',
-          revocable: true,
-          maxValidFor: 0,
-          types: [
-            {
-              name: 'event',
-              type: 'string'
-            },
-            {
-              name: 'description',
-              type: 'string'
-            }
-          ],
-          dataLocation: 'arweave'
-        }
+        schema: schemaList[1]
       }
     ]
   },
@@ -62,44 +63,12 @@ export const tonSp = {
     offchainSchemaId: 'SPS_2u3kCDZ488Am1woXA6odR',
     offchainSchemaConfig: [
       {
-        id: 'SPS_Og10Zv1yqLEY4nony8y_V',
-        schema: {
-          name: 'SIGNIE commitment',
-          description: 'A general schema for committing anything onchain',
-          revocable: true,
-          maxValidFor: 0,
-          types: [
-            {
-              name: 'commitment content',
-              type: 'string'
-            },
-            {
-              name: 'recipient',
-              type: 'string'
-            }
-          ],
-          dataLocation: 'arweave'
-        }
+        id: 'SPS_TGVj7wO0St5qhpa1Q5jwj',
+        schema: schemaList[0]
       },
       {
         id: 'SPS_kZ8Vzxw-hisHptdnJXVGY',
-        schema: {
-          name: 'SIGNIE milestone event',
-          description: 'Record any milestone or important event onchain',
-          revocable: true,
-          maxValidFor: 0,
-          types: [
-            {
-              name: 'event',
-              type: 'string'
-            },
-            {
-              name: 'description',
-              type: 'string'
-            }
-          ],
-          dataLocation: 'arweave'
-        }
+        schema: schemaList[1]
       }
     ]
   }
@@ -134,46 +103,3 @@ export const offChainSchema = {
   ],
   dataLocation: 'arweave'
 };
-
-export const offchainSchemaConfig = [
-  {
-    id: 'SPS_6B4MBx-3Tf__rmtwcQZhI',
-    schema: {
-      name: 'SIGNIE commitment',
-      description: 'A general schema for committing anything onchain',
-      revocable: true,
-      maxValidFor: 0,
-      types: [
-        {
-          name: 'commitment content',
-          type: 'string'
-        },
-        {
-          name: 'recipient',
-          type: 'string'
-        }
-      ],
-      dataLocation: 'arweave'
-    }
-  },
-  {
-    id: 'SPS_Rz_mgddeO5vNBKmmu267Z',
-    schema: {
-      name: 'SIGNIE milestone event',
-      description: 'Record any milestone or important event onchain',
-      revocable: true,
-      maxValidFor: 0,
-      types: [
-        {
-          name: 'event',
-          type: 'string'
-        },
-        {
-          name: 'description',
-          type: 'string'
-        }
-      ],
-      dataLocation: 'arweave'
-    }
-  }
-];

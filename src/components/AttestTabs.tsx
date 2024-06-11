@@ -190,7 +190,6 @@ export const AttestTabs = ({ onSuccess }: { onSuccess: () => void }) => {
             />
           </div>
           <div className={'space-y-1'}>
-            <Label>Fields</Label>
             <div className="space-y-4">
               {currentSchema?.schema?.types?.map((it) => {
                 return (
@@ -200,6 +199,7 @@ export const AttestTabs = ({ onSuccess }: { onSuccess: () => void }) => {
                       type="text"
                       className="focus:border-primary/20"
                       value={values[it.name] || ''}
+                      placeholder={`Enter ${it.name.toLowerCase()}`}
                       onChange={(e) =>
                         setValues((pre: any) => {
                           return {
