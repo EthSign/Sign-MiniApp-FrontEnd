@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { useLotteryInfo } from '../../providers/LotteryInfoProvider';
 import { TicketsButton } from './components/TicketsButton';
 
-export const LuckyWheelPage: React.FC = () => {
+const LuckyWheelPage: React.FC = () => {
   const { user } = useUserInfo();
 
   const {
@@ -83,3 +83,5 @@ export const LuckyWheelPage: React.FC = () => {
     </ConfettiProvider>
   );
 };
+
+export default LuckyWheelPage;

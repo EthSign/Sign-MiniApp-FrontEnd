@@ -89,7 +89,10 @@ export default {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))'
         },
-        neutral: '#1B1B1B',
+        neutral: {
+          300: '#E4E9F2',
+          500: '#8F9BB3'
+        },
         // dark mode
         light: 'rgba(19, 27, 47, 0.6)',
         gray: {

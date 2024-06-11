@@ -97,7 +97,7 @@ export default function AttestPage() {
     if (info.address?.toLowerCase() !== user?.walletAddress.toLowerCase()) {
       toast({
         title: 'Error',
-        description: 'Wallet address is not matched',
+        description: `Current Wallet address ${info.address} does not match the user bind's wallet address ${user?.walletAddress}`,
         variant: 'error'
       });
       return;
@@ -122,7 +122,7 @@ export default function AttestPage() {
       });
       toast({
         title: 'Success',
-        description: 'Attestation has been made successfully',
+        description: 'sign event has been made successfully',
         variant: 'success'
       });
     } finally {

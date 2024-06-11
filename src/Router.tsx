@@ -1,21 +1,20 @@
-import App from '@/App.tsx';
 import NotFound from '@/pages/404';
-import AttestPage from '@/pages/Attest';
-import Home from '@/pages/Home';
-import RecordsPage from '@/pages/Records';
 import { createBrowserRouter, redirect, RouteObject, RouterProvider } from 'react-router-dom';
-import CreateSchema from './pages/CreateSchema';
-import { LuckyWheelPage } from './pages/LuckyWheel';
-import { RankPage } from './pages/Rank';
 
 const routerConfig: RouteObject[] = [
   {
     path: '/',
-    element: <App />,
+    async lazy() {
+      const Page = await import('@/App.tsx');
+      return { Component: Page.default };
+    },
     children: [
       {
         path: '',
-        element: <Home />,
+        async lazy() {
+          const Page = await import('@/pages/Home');
+          return { Component: Page.default };
+        },
         children: [
           {
             path: '',
@@ -27,11 +26,24 @@ const routerConfig: RouteObject[] = [
           },
           {
             path: '/lucky-wheel',
-            element: <LuckyWheelPage />
+            async lazy() {
+              const Page = await import('@/pages/LuckyWheel');
+              return { Component: Page.default };
+            }
           },
           {
             path: '/rank',
-            element: <RankPage />
+            async lazy() {
+              const Page = await import('@/pages/Rank');
+              return { Component: Page.default };
+            }
+          },
+          {
+            path: '/tasks',
+            async lazy() {
+              const Page = await import('@/pages/Tasks');
+              return { Component: Page.default };
+            }
           }
         ]
         // loader: () => {
@@ -40,15 +52,45 @@ const routerConfig: RouteObject[] = [
       },
       {
         path: '/attest',
-        element: <AttestPage />
+        async lazy() {
+          const Page = await import('@/pages/Attest');
+          return { Component: Page.default };
+        }
       },
       {
         path: '/records',
-        element: <RecordsPage />
+        async lazy() {
+          const Page = await import('@/pages/Records');
+          return { Component: Page.default };
+        }
       },
       {
         path: '/schema',
-        element: <CreateSchema />
+        async lazy() {
+          const Page = await import('@/pages/CreateSchema');
+          return { Component: Page.default };
+        }
+      },
+      {
+        path: '/invite',
+        async lazy() {
+          const Page = await import('@/pages/Invite');
+          return { Component: Page.default };
+        }
+      },
+      {
+        path: '/quizzes',
+        async lazy() {
+          const Page = await import('@/pages/Quizzes');
+          return { Component: Page.default };
+        }
+      },
+      {
+        path: '/tickets',
+        async lazy() {
+          const Page = await import('@/pages/Tickets');
+          return { Component: Page.default };
+        }
       }
     ]
   },

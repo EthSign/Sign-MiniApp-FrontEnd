@@ -3,19 +3,74 @@ export const ENVS = {
   CHAIN_ENV: import.meta.env.VITE_CHAIN_ENV,
   TG_APP_LINK: import.meta.env.VITE_TMA_LINK, //t.me/ethsignddev_bot/minidev t.me/ChainDevBot/chainapp
   ENV: import.meta.env.VITE_ENV,
-  SHARE_DESC: 'Spin to win $NOT and more！'
+  SHARE_DESC: 'Spin to win $NOT and more！',
+  INITDATA: import.meta.env.VITE_INITDATA,
+  TG_GROUP_LINK: 'https://t.me/signeverythingonchain'
 };
+
+const schemaList = [
+  {
+    name: 'SIGNIE commitment',
+    description: 'A general schema for committing anything onchain',
+    revocable: true,
+    maxValidFor: 0,
+    types: [
+      {
+        name: 'Commitment content',
+        type: 'string'
+      }
+    ],
+    dataLocation: 'arweave'
+  },
+  {
+    name: 'SIGNIE milestone event',
+    description: 'Record any milestone or important event onchain',
+    revocable: true,
+    maxValidFor: 0,
+    types: [
+      {
+        name: 'event',
+        type: 'string'
+      },
+      {
+        name: 'description',
+        type: 'string'
+      }
+    ],
+    dataLocation: 'arweave'
+  }
+];
 
 export const tonSp = {
   dev: {
     spAddress: 'kQBbxPGNadGSWnVLDyDy0VqGVGHoI9fzXBED5sh3Vd3oadW5',
     schemaAddress: 'kQCcQmtTwkOktZCbrv8r8gTDCcebzdCNKiOBMxprpo9wRiWq',
-    offchainSchemaId: 'SPS_uRupYWqUadWNjKuPHUOyh' // testnet:SPS_dh0JMcaQCZ2DPKzD0JFF0
+    offchainSchemaId: 'SPS_rMgPlWRqFNUStPeJm2YGT', // testnet:SPS_dh0JMcaQCZ2DPKzD0JFF0
+    offchainSchemaConfig: [
+      {
+        id: 'SPS_6B4MBx-3Tf__rmtwcQZhI',
+        schema: schemaList[0]
+      },
+      {
+        id: 'SPS_Rz_mgddeO5vNBKmmu267Z',
+        schema: schemaList[1]
+      }
+    ]
   },
   prod: {
     spAddress: '',
     schemaAddress: '',
-    offchainSchemaId: 'SPS_9TfGxNsEIY2qNRhsP081L'
+    offchainSchemaId: 'SPS_2u3kCDZ488Am1woXA6odR',
+    offchainSchemaConfig: [
+      {
+        id: 'SPS_TGVj7wO0St5qhpa1Q5jwj',
+        schema: schemaList[0]
+      },
+      {
+        id: 'SPS_kZ8Vzxw-hisHptdnJXVGY',
+        schema: schemaList[1]
+      }
+    ]
   }
 };
 export function getTonSpInfo() {
@@ -23,8 +78,9 @@ export function getTonSpInfo() {
 }
 
 export const offChainSchema = {
-  name: 'SIGN score booster for off-chain',
-  description: 'SIGN TG Mini-app score booster schema for off-chain attestation.',
+  name: 'SIGNIE invitation response',
+  description:
+    'Manage responses to digital invitations/referrals, recoding key fields such as invite code, sender info and message.',
   revocable: true,
   maxValidFor: 0,
   types: [

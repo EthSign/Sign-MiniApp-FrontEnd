@@ -71,15 +71,15 @@ const PageOne = () => {
   const { scrollNext } = useCarousel();
   const rewards = [
     {
-      img: 'https://ethsign-public.s3.ap-east-1.amazonaws.com/telegram-miniapp/Frame 2085654242_240528062557.webp',
+      img: 'https://ethsign-public.s3.ap-east-1.amazonaws.com/telegram-miniapp/Frame 2085654242_240603065354.webp',
       title: 'Phone'
     },
     {
-      img: 'https://ethsign-public.s3.ap-east-1.amazonaws.com/telegram-miniapp/Frame 2085654243_240528062557.webp',
+      img: 'https://ethsign-public.s3.ap-east-1.amazonaws.com/telegram-miniapp/Frame 2085654243_240603065354.webp',
       title: 'Ballet Wallet'
     },
     {
-      img: 'https://ethsign-public.s3.ap-east-1.amazonaws.com/telegram-miniapp/Frame 2085654244_240528062557.webp',
+      img: 'https://ethsign-public.s3.ap-east-1.amazonaws.com/telegram-miniapp/Frame 2085654244_240603065354.webp',
       title: 'SignPass'
     },
     // {
@@ -87,7 +87,7 @@ const PageOne = () => {
     //   title: '$TON Token'
     // },
     {
-      img: 'https://ethsign-public.s3.ap-east-1.amazonaws.com/telegram-miniapp/Frame 2085654246_240528062557.webp',
+      img: 'https://ethsign-public.s3.ap-east-1.amazonaws.com/telegram-miniapp/Frame 2085654245_240603065354.webp',
       title: '$NOT Token'
     }
   ];
@@ -101,11 +101,11 @@ const PageOne = () => {
         </DrawerDescription>
         <div className={'mt-8 flex justify-around'}>
           {rewards.map((reward, index) => (
-            <div key={index} className={''}>
+            <div key={index} className={'flex flex-col items-center'}>
               <div className={'flex size-[50px] items-center justify-center rounded-full bg-[#ECF2FF]'}>
                 <img src={reward.img} alt="reward" className={'w-auto'} />
               </div>
-              <div className={'mt-2 whitespace-nowrap font-normal text-[10px] text-primary'}>{reward.title}</div>
+              <div className={'mt-2 whitespace-nowrap font-normal text-[12px] text-primary'}>{reward.title}</div>
             </div>
           ))}
         </div>

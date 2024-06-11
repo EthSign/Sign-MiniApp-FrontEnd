@@ -1,6 +1,8 @@
 import queryString from 'query-string';
 import { customAlphabet } from 'nanoid';
 import dayjs from 'dayjs';
+import { ENVS } from '@/constants/config.ts';
+import { initUtils } from '@tma.js/sdk';
 
 export const stringifyQueryString = (obj: Record<string, any>): string => {
   return queryString.stringify(obj, { skipNull: true, skipEmptyString: true });
@@ -27,11 +29,8 @@ interface ITMAInitData {
   start_param?: string; //code
 }
 
-// const debugData =
-//   'query_id=AAEVYDxOAAAAABVgPE7JSo__&user=%7B%22id%22%3A1312579605%2C%22first_name%22%3A%22Evan%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22yanyuanfe%22%2C%22language_code%22%3A%22zh-hans%22%2C%22allows_write_to_pm%22%3Atrue%7D&auth_date=1717061028&hash=5762aa7b06f8d48589d57c131142069d5b13780a570b8134ba78c7b32ce3e4a8';
-
 export const getTMAInitData = (): ITMAInitData | null => {
-  const initDataRaw = window.Telegram.WebApp?.initData; // user=...&query_id=...&...
+  const initDataRaw = window.Telegram.WebApp?.initData || ENVS.INITDATA; // user=...&query_id=...&...
   console.log(window.Telegram.WebApp?.initData, 'initDataRaw');
 
   if (!initDataRaw) return null;
@@ -42,6 +41,11 @@ export const getTMAInitData = (): ITMAInitData | null => {
 
 export const isTelegramApp = (): boolean => {
   return !!window.TelegramWebviewProxy;
+};
+
+export const initTmaUtils = () => {
+  const utils = initUtils();
+  return utils;
 };
 
 export const getCustomNaNoId = (): string => {
@@ -76,3 +80,49 @@ export function getUTCTimeByDate(date: Date) {
   const utcDate = date.getDate();
   return new Date(Date.UTC(utcYear, utcMonth, utcDate, 0, 0, 0, 0)).valueOf();
 }
+
+export function validateValues(dataSchema: any[], values: Record<string, any>) {
+  // 检查dataSchema是否有数据定义
+  if (!dataSchema || !Array.isArray(dataSchema)) {
+    throw new Error('Invalid data schema');
+  }
+
+  // 遍历所有的数据定义
+  for (const field of dataSchema) {
+    // 检查values对象是否包含所有必需的字段
+    if (!(field.name in values)) {
+      return {
+        success: false,
+        message: `Missing field: ${field.name}`
+      };
+    }
+
+    // // 根据定义的类型进行校验
+    // switch (field.type) {
+    //   case 'string':
+    //     if (typeof values[field.name] !== 'string') {
+    //       return {
+    //         success: false,
+    //         message: `Invalid type for field ${field.name}, expected string`
+    //       };
+    //     }
+    //     break;
+    //     // 如果有其他类型，可以在这里添加更多的case
+    //   default:
+    //     return {
+    //       success: false,
+    //       message: `Unsupported field type: ${field.type}`
+    //     };
+    // }
+  }
+
+  // 如果所有字段都通过验证，返回成功
+  return {
+    success: true,
+    message: 'All fields are valid'
+  };
+}
+
+export const sleep = (ms: number) => {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+};

@@ -26,7 +26,7 @@ export const Spin = ({ children, loading }: { children: ReactNode; loading: bool
             'absolute left-0 top-0 z-[9999] flex size-full items-center justify-center bg-background/80 backdrop-blur-sm'
           }
         >
-          <Loader2 className="animate-spin" color="#CF5C10" size={32} />
+          <Loader2 className="animate-spin text-primary" size={32} />
         </div>
       )}
       <div className="relative h-full">{children}</div>

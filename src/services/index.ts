@@ -1,6 +1,16 @@
 // POST /mini/auth
 import { ApiClient, apiClient } from '@/utils/api-client.ts';
-import { IRaffleRecord, IRankData, IUser, LotteryInfo, RaffleInfo, RaffleResult } from '@/types';
+import {
+  IRaffleRecord,
+  IRankData,
+  ITaskData,
+  IUser,
+  LotteryInfo,
+  QuizInfoData,
+  RaffleInfo,
+  RaffleResult,
+  TaskTypeEnum
+} from '@/types';
 import { OffChainRpc } from '@ethsign/sp-sdk';
 import { ENVS } from '@/constants/config.ts';
 
@@ -35,9 +45,22 @@ export const checkTx = async (data: { txHash: string; raffleId?: string }) => {
   return await apiClient.post('/mini/campaigns/lottery/tx-check', data);
 };
 
+// POST /mini/campaigns/lottery/task-check
+export const checkTask = async (data: { taskType: TaskTypeEnum; taskId?: string; value?: string }) => {
+  return await apiClient.post<{
+    correctAnswer?: string[];
+    result: boolean;
+  }>('/mini/campaigns/lottery/task-check', data);
+};
+
 // GET /mini/rank
 export const getRank = async () => {
   return await apiClient.get<IRankData>('/mini/rank');
+};
+
+// GET /mini/quiz-info
+export const getQuizInfo = async () => {
+  return await apiClient.get<QuizInfoData>('/mini/quiz-info');
 };
 
 // POST /mini/campaigns/lottery/attest-prepare
@@ -57,6 +80,11 @@ export const getRaffleInfo = async (id: string) => {
 // GET /mini/campaigns/lottery/raffles?date=1716799249189
 export const getRaffles = async (date: number) => {
   return await apiClient.get<{ rows: IRaffleRecord[]; total: number }>(`/mini/campaigns/lottery/raffles?date=${date}`);
+};
+
+// GET mini/campaigns/lottery/task
+export const getTask = async () => {
+  return await apiClient.get<ITaskData>('/mini/campaigns/lottery/tasks');
 };
 
 const rpcMap = {
