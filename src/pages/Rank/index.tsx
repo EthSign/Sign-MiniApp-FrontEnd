@@ -79,12 +79,12 @@ const RankPage: React.FC = () => {
         </div>
       </div>
       <div className={'mt-3 space-y-2'}>
-        <div className={'flex items-center justify-around rounded-[4px] bg-primary px-2 py-2.5 text-white'}>
+        <div className={'flex items-center justify-around rounded-[4px] bg-[#ECF2FF] text-[#1C1C1C] px-2 py-2.5'}>
           <div className={'flex flex-1 gap-4 items-center'}>
             <div className={'w-[50px]'}>
               <span
                 className={
-                  'inline-flex items-center justify-center rounded-3xl min-w-6 px-[2px] h-6 bg-[#ECF2FF] font-medium text-xs text-primary'
+                  'inline-flex items-center justify-center rounded-3xl min-w-6 px-[2px] h-6 font-medium text-xs'
                 }
               >
                 {data?.userRank?.rank}

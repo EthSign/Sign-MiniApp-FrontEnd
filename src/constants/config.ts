@@ -12,12 +12,96 @@ export const tonSp = {
   dev: {
     spAddress: 'kQBbxPGNadGSWnVLDyDy0VqGVGHoI9fzXBED5sh3Vd3oadW5',
     schemaAddress: 'kQCcQmtTwkOktZCbrv8r8gTDCcebzdCNKiOBMxprpo9wRiWq',
-    offchainSchemaId: 'SPS_rMgPlWRqFNUStPeJm2YGT' // testnet:SPS_dh0JMcaQCZ2DPKzD0JFF0
+    offchainSchemaId: 'SPS_rMgPlWRqFNUStPeJm2YGT', // testnet:SPS_dh0JMcaQCZ2DPKzD0JFF0
+    offchainSchemaConfig: [
+      {
+        id: 'SPS_6B4MBx-3Tf__rmtwcQZhI',
+        schema: {
+          name: 'SIGNIE commitment',
+          description: 'A general schema for committing anything onchain',
+          revocable: true,
+          maxValidFor: 0,
+          types: [
+            {
+              name: 'commitment content',
+              type: 'string'
+            },
+            {
+              name: 'recipient',
+              type: 'string'
+            }
+          ],
+          dataLocation: 'arweave'
+        }
+      },
+      {
+        id: 'SPS_Rz_mgddeO5vNBKmmu267Z',
+        schema: {
+          name: 'SIGNIE milestone event',
+          description: 'Record any milestone or important event onchain',
+          revocable: true,
+          maxValidFor: 0,
+          types: [
+            {
+              name: 'event',
+              type: 'string'
+            },
+            {
+              name: 'description',
+              type: 'string'
+            }
+          ],
+          dataLocation: 'arweave'
+        }
+      }
+    ]
   },
   prod: {
     spAddress: '',
     schemaAddress: '',
-    offchainSchemaId: 'SPS_9TfGxNsEIY2qNRhsP081L'
+    offchainSchemaId: 'SPS_2u3kCDZ488Am1woXA6odR',
+    offchainSchemaConfig: [
+      {
+        id: 'SPS_Og10Zv1yqLEY4nony8y_V',
+        schema: {
+          name: 'SIGNIE commitment',
+          description: 'A general schema for committing anything onchain',
+          revocable: true,
+          maxValidFor: 0,
+          types: [
+            {
+              name: 'commitment content',
+              type: 'string'
+            },
+            {
+              name: 'recipient',
+              type: 'string'
+            }
+          ],
+          dataLocation: 'arweave'
+        }
+      },
+      {
+        id: 'SPS_kZ8Vzxw-hisHptdnJXVGY',
+        schema: {
+          name: 'SIGNIE milestone event',
+          description: 'Record any milestone or important event onchain',
+          revocable: true,
+          maxValidFor: 0,
+          types: [
+            {
+              name: 'event',
+              type: 'string'
+            },
+            {
+              name: 'description',
+              type: 'string'
+            }
+          ],
+          dataLocation: 'arweave'
+        }
+      }
+    ]
   }
 };
 export function getTonSpInfo() {

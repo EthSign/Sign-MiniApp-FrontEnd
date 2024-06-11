@@ -1,5 +1,5 @@
 import { Header } from '@/components/Header.tsx';
-import { offchainSchemaConfig } from '@/constants/config';
+import { getTonSpInfo } from '@/constants/config';
 import { WalletFactory } from '@/core/WalletFactory.tsx';
 import { ChainType } from '@/core/types.ts';
 import { submitSchema } from '@/services';
@@ -9,8 +9,10 @@ import { useTonConnectUI } from '@tonconnect/ui-react';
 import { useState } from 'react';
 
 export default function CreateSchema() {
-  // offChainSchema
-  const [schema] = useState(JSON.stringify(offchainSchemaConfig[0].schema, null, '  '));
+  // offChainSchema offchainSchemaConfig[0].schema
+  const spInfo = getTonSpInfo();
+  const offchainSchemaConfig = spInfo.offchainSchemaConfig;
+  const [schema] = useState(JSON.stringify(offchainSchemaConfig[1].schema, null, '  '));
   const [tonConnectUI] = useTonConnectUI();
   const { wallet } = useConnection();
   const [schemaResult, setSchemaResult] = useState<any>(null);

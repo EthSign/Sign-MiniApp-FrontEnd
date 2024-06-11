@@ -1,5 +1,5 @@
 import { Button, Input, Label, Select, toast } from '@ethsign/ui';
-import { getTonSpInfo, offChainSchema, offchainSchemaConfig } from '@/constants/config.ts';
+import { getTonSpInfo, offChainSchema } from '@/constants/config.ts';
 import { useState } from 'react';
 import { useUserInfo } from '@/providers/UserInfoProvider.tsx';
 import { useTonConnectUI } from '@tonconnect/ui-react';
@@ -15,6 +15,8 @@ import { validateValues } from '@/utils/common.ts';
 import { TaskTypeEnum } from '@/types';
 
 export const AttestTabs = ({ onSuccess }: { onSuccess: () => void }) => {
+  const spInfo = getTonSpInfo();
+  const offchainSchemaConfig = spInfo.offchainSchemaConfig;
   const [type] = useState('offchain');
   const [template, setTemplate] = useState(offchainSchemaConfig[0].id);
   const [loading, setLoading] = useState(false);
@@ -28,7 +30,7 @@ export const AttestTabs = ({ onSuccess }: { onSuccess: () => void }) => {
   const currentSchema = offchainSchemaConfig.find((it) => it.id === template);
 
   const createAttestationByOnchain = async () => {
-    const schemaAddress = getTonSpInfo().schemaAddress;
+    const schemaAddress = spInfo.schemaAddress;
     console.log(schemaAddress, getTonSpInfo(), 'schemaAddress');
     const schema = getSchemaContract(schemaAddress);
     const schemaData = await schema!.getSchemaData();

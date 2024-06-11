@@ -32,7 +32,7 @@ const TaskItem = ({
 }: {
   title: string;
   description: string;
-  score: number | string;
+  score?: number | string;
   extra?: ReactNode;
   onClick?: () => void;
   success?: boolean;
@@ -50,7 +50,7 @@ const TaskItem = ({
         <img src={img || starImg} className={'size-[35px]'} alt="" />
         <div>
           <div className={'text-sm font-semibold'}>
-            {title} <span className={'text-xs font-medium text-primary ml-2'}>+{score}</span>
+            {title} {score && <span className={'text-xs font-medium text-primary ml-2'}>+{score}</span>}
           </div>
           <div className={'text-xs font-normal text-gray-600 mt-1'}>{description}</div>
         </div>
@@ -172,7 +172,6 @@ export default function Tasks() {
             }}
             title={'Quizzes for fun'}
             description={'Accure points by taking quizzes'}
-            score={100}
             extra={
               <div className={'ml-4 mr-2'}>
                 <Badge className={'bg-gray-100 text-gray-500 hover:bg-gray-50 hover:text-gray-600'}>

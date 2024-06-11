@@ -10,6 +10,7 @@ import { cn } from '@/utils/tailwind.ts';
 import { X } from 'lucide-react';
 import { Check } from '@/components/Icons.tsx';
 import { Spin } from '@/components/Loading.tsx';
+import { sleep } from '@/utils/common.ts';
 
 export default function Quizzes() {
   const [quitModal, setQuitModal] = useState(false);
@@ -44,14 +45,10 @@ export default function Quizzes() {
         value: answer
       });
       setResult(res?.correctAnswer || []);
-      setTimeout(
-        () => {
-          setAnswer('');
-          refetch();
-          setResult([]);
-        },
-        isRight ? 1000 : 2000
-      );
+      await sleep(isRight ? 1000 : 2000);
+      setAnswer('');
+      refetch();
+      setResult([]);
     } finally {
       setLoading(false);
     }

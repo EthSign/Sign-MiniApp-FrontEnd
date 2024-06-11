@@ -122,3 +122,7 @@ export function validateValues(dataSchema: any[], values: Record<string, any>) {
     message: 'All fields are valid'
   };
 }
+
+export const sleep = (ms: number) => {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+};

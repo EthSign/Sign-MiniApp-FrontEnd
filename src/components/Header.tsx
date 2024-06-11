@@ -27,7 +27,7 @@ export const TabBar = ({ title }: { title: string }) => {
 };
 
 export const Header: React.FC = () => {
-  const { user, bindWallet } = useUserInfo();
+  const { user, bindWallet, isBindingWallet } = useUserInfo();
 
   return (
     <div className="flex h-[72px] shrink-0 items-center justify-between border-b border-[rgba(235,236,239,0.20)] px-4 text-[#344054]">
@@ -40,6 +40,7 @@ export const Header: React.FC = () => {
       <Button
         className={'gap-2 rounded-[12px] border-[#EBECEF] bg-[rgba(255,255,255,0.60)]'}
         variant={'outline'}
+        loading={isBindingWallet}
         onClick={() => {
           if (!user?.walletAddress) bindWallet();
         }}
