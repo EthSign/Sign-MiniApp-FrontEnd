@@ -47,7 +47,10 @@ export const checkTx = async (data: { txHash: string; raffleId?: string }) => {
 
 // POST /mini/campaigns/lottery/task-check
 export const checkTask = async (data: { taskType: TaskTypeEnum; taskId?: string; value?: string }) => {
-  return await apiClient.post('/mini/campaigns/lottery/task-check', data);
+  return await apiClient.post<{
+    correctAnswer?: string[];
+    result: boolean;
+  }>('/mini/campaigns/lottery/task-check', data);
 };
 
 // GET /mini/rank

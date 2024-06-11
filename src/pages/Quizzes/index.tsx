@@ -6,19 +6,26 @@ import { useNavigate } from 'react-router-dom';
 import { checkTask, getQuizInfo } from '@/services';
 import { TaskTypeEnum } from '@/types';
 import { useQuery } from '@tanstack/react-query';
+import { cn } from '@/utils/tailwind.ts';
+import { X } from 'lucide-react';
+import { Check } from '@/components/Icons.tsx';
+import { Spin } from '@/components/Loading.tsx';
 
 export default function Quizzes() {
   const [quitModal, setQuitModal] = useState(false);
   const navigate = useNavigate();
-  const { data, refetch } = useQuery({
+  const { data, refetch, isLoading, isRefetching } = useQuery({
     queryKey: ['quiz-info'],
     queryFn: getQuizInfo
   });
   const [loading, setLoading] = useState(false);
   const [answer, setAnswer] = useState('');
   const [isFinish, setIsFinish] = useState(false);
+  const [result, setResult] = useState<string[]>([]);
 
   console.log(data);
+
+  const isRight = result.includes(answer);
 
   const handleSubmit = async () => {
     if (!answer) {
@@ -31,13 +38,20 @@ export default function Quizzes() {
     }
     try {
       setLoading(true);
-      await checkTask({
+      const res = await checkTask({
         taskType: TaskTypeEnum.QUIZ,
         taskId: data?.currentQuiz?.quizId,
         value: answer
       });
-      setAnswer('');
-      refetch();
+      setResult(res?.correctAnswer || []);
+      setTimeout(
+        () => {
+          setAnswer('');
+          refetch();
+          setResult([]);
+        },
+        isRight ? 1000 : 2000
+      );
     } finally {
       setLoading(false);
     }
@@ -48,58 +62,116 @@ export default function Quizzes() {
       setIsFinish(true);
     }
   }, [data]);
+
   return (
     <div>
       <TabBar title={'Quizzes for fun'} />
-      <div className={'bg-white py-8 px-6 h-[calc(100vh-48px)] relative'}>
-        <div className={'bg-[#ECF2FF] rounded-[12px] py-2.5 px-5'}>
-          Signie points earned:
-          <span className={'text-md font-bold text-primary ml-2'}>{data?.pointsByQuiz} points</span>
-        </div>
-
-        <div className={'mt-8 px-6'}>
-          <div className={'text-sm font-normal text-gray-500'}>
-            {data?.committedQuizzes}/{(data?.committedQuizzes || 0) + (data?.remainingQuizzes || 0)}
+      <Spin loading={isLoading || isRefetching}>
+        <div className={'bg-white py-8 px-6 h-[calc(100vh-48px)] relative'}>
+          <div className={'bg-[#ECF2FF] rounded-[12px] py-2.5 px-5'}>
+            Signie points earned:
+            <span className={'text-md font-bold text-primary ml-2'}>{data?.pointsByQuiz} points</span>
           </div>
-          <div className={'text-md font-semibold mt-2'}>{data?.currentQuiz?.title}</div>
-          <div className={'pt-4 space-y-2'}>
-            <RadioGroup
-              value={answer}
-              onValueChange={(v) => {
-                setAnswer(v);
+
+          <div className={'mt-8 px-6'}>
+            <div className={'text-sm font-normal text-gray-500'}>
+              {(data?.committedQuizzes || 0) + 1}/{(data?.committedQuizzes || 0) + (data?.remainingQuizzes || 0)}
+            </div>
+            <div className={'text-md font-semibold mt-2 flex-1'}>{data?.currentQuiz?.title}</div>
+            <div className={'pt-4 space-y-2'}>
+              <RadioGroup
+                value={answer}
+                onValueChange={(v) => {
+                  setAnswer(v);
+                }}
+              >
+                {data?.currentQuiz?.options?.map((option, index) => {
+                  return (
+                    <div
+                      key={index}
+                      className={cn(
+                        'p-4 border border-gray-200 rounded-[8px]',
+                        result?.length
+                          ? result.includes(option.value)
+                            ? 'bg-slime-400'
+                            : !isRight
+                            ? 'bg-red-500'
+                            : ''
+                          : ''
+                      )}
+                    >
+                      <Label htmlFor={option.value} className={'flex justify-between items-center gap-2 w-full'}>
+                        <div
+                          className={cn(
+                            'flex-1',
+                            result?.length
+                              ? result.includes(option.value)
+                                ? 'text-white'
+                                : !isRight
+                                ? 'text-white'
+                                : ''
+                              : ''
+                          )}
+                        >
+                          {option.title}
+                        </div>
+                        <div className={'flex-[0_0_20px]'}>
+                          {result?.length ? (
+                            result.includes(option.value) ? (
+                              <div className={'size-4 rounded-full flex justify-center items-center bg-white'}>
+                                <Check />
+                              </div>
+                            ) : !isRight ? (
+                              <div className={'size-4 rounded-full flex justify-center items-center bg-white'}>
+                                <X className={'text-red-500'} size={10} />
+                              </div>
+                            ) : (
+                              <RadioGroupItem
+                                className={'border-gray-300'}
+                                id={option.value}
+                                value={option.value}
+                              ></RadioGroupItem>
+                            )
+                          ) : (
+                            <RadioGroupItem
+                              className={'border-gray-300'}
+                              id={option.value}
+                              value={option.value}
+                            ></RadioGroupItem>
+                          )}
+                        </div>
+                      </Label>
+                    </div>
+                  );
+                })}
+              </RadioGroup>
+            </div>
+          </div>
+
+          <div className={'flex justify-between gap-2 absolute bottom-8 left-6 right-6'}>
+            <Button
+              variant={'outline'}
+              className={'flex-1'}
+              onClick={() => {
+                setQuitModal(true);
               }}
             >
-              {data?.currentQuiz?.options?.map((option) => {
-                return (
-                  <div className={'flex justify-between items-center p-4 border border-gray-200 rounded-[8px]'}>
-                    <div>
-                      <Label htmlFor={option.value}>{option.title}</Label>
-                    </div>
-                    <RadioGroupItem value={option.value}></RadioGroupItem>
-                  </div>
-                );
-              })}
-            </RadioGroup>
+              Quit
+            </Button>
+            <Button loading={loading || isRefetching || isLoading} className={'flex-1'} onClick={handleSubmit}>
+              Next
+            </Button>
           </div>
         </div>
+      </Spin>
 
-        <div className={'flex justify-between gap-2 absolute bottom-8 left-6 right-6'}>
-          <Button
-            variant={'outline'}
-            className={'flex-1'}
-            onClick={() => {
-              setQuitModal(true);
-            }}
-          >
-            Quit
-          </Button>
-          <Button loading={loading} className={'flex-1'} onClick={handleSubmit}>
-            Next
-          </Button>
-        </div>
-      </div>
-
-      <Modal open={isFinish} onOpenChange={setIsFinish} footer={false} className={'w-[359px] rounded-[24px]'}>
+      <Modal
+        maskClosable={false}
+        open={isFinish}
+        onOpenChange={setIsFinish}
+        footer={false}
+        className={'w-[359px] rounded-[24px]'}
+      >
         <div>
           <img src={chestImg} className={'w-[55px] mx-auto'} alt="" />
         </div>

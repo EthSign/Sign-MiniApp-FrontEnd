@@ -1,7 +1,7 @@
 import starImg from '@/assets/StarCoin.png';
 import { Badge, Button } from '@ethsign/ui';
 import { ChevronRight, XClose } from '@ethsign/icons';
-import React, { ReactNode } from 'react';
+import React, { forwardRef, ReactNode, useImperativeHandle, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Drawer,
@@ -19,6 +19,7 @@ import { checkTask, getQuizInfo, getTask } from '@/services';
 import { ENVS } from '@/constants/config.ts';
 import { useUserInfo } from '@/providers/UserInfoProvider.tsx';
 import { TaskTypeEnum } from '@/types';
+import ticketImg from '@/assets/ticket.png';
 
 const TaskItem = ({
   title,
@@ -26,7 +27,8 @@ const TaskItem = ({
   score,
   extra,
   onClick,
-  success
+  success,
+  img
 }: {
   title: string;
   description: string;
@@ -34,6 +36,7 @@ const TaskItem = ({
   extra?: ReactNode;
   onClick?: () => void;
   success?: boolean;
+  img?: string;
 }) => {
   return (
     <div
@@ -44,7 +47,7 @@ const TaskItem = ({
       )}
     >
       <div className={'flex items-center gap-4'}>
-        <img src={starImg} className={'size-[35px]'} alt="" />
+        <img src={img || starImg} className={'size-[35px]'} alt="" />
         <div>
           <div className={'text-sm font-semibold'}>
             {title} <span className={'text-xs font-medium text-primary ml-2'}>+{score}</span>
@@ -60,20 +63,28 @@ const TaskItem = ({
   );
 };
 
-const TaskDrawer = ({
-  trigger,
-  title,
-  desc,
-  action,
-  success
-}: {
+interface TaskDrawerProps {
   trigger: ReactNode;
   title: string;
   desc: string;
   action: ReactNode;
   success?: boolean;
-}) => {
+}
+
+interface DrawerRef {
+  close: () => void;
+}
+
+const TaskDrawer = forwardRef<DrawerRef, TaskDrawerProps>(({ trigger, title, desc, action, success }, ref) => {
   const [open, setOpen] = React.useState(false);
+
+  useImperativeHandle(ref, () => {
+    return {
+      close: () => {
+        setOpen(false);
+      }
+    };
+  });
   return (
     <>
       <Drawer open={open} onOpenChange={setOpen}>
@@ -105,7 +116,7 @@ const TaskDrawer = ({
       </div>
     </>
   );
-};
+});
 
 export default function Tasks() {
   const navigate = useNavigate();
@@ -118,25 +129,35 @@ export default function Tasks() {
     queryFn: getQuizInfo
   });
   const { isBindingWallet, bindWallet } = useUserInfo();
+  const [joinLoading, setJoinLoading] = useState(false);
+  const walletDrawerRef = useRef<DrawerRef>();
+  const joinTgDrawerRef = useRef<DrawerRef>();
 
   console.log(data, 'tt');
 
   const handleBindWallet = async () => {
     await bindWallet();
     refetch();
+    walletDrawerRef.current?.close();
   };
 
   const handleJoinGroup = async () => {
-    const res = (await checkTask({
-      taskType: TaskTypeEnum.JOINGOUP
-    })) as { result: boolean };
-    console.log(res);
-    if (res.result) {
-      refetch();
-      return;
+    try {
+      setJoinLoading(true);
+      const res = (await checkTask({
+        taskType: TaskTypeEnum.JOINGOUP
+      })) as { result: boolean };
+      console.log(res);
+      if (res.result) {
+        refetch();
+        joinTgDrawerRef.current?.close();
+        return;
+      }
+      const utils = initTmaUtils();
+      utils.openTelegramLink(ENVS.TG_GROUP_LINK);
+    } finally {
+      setJoinLoading(false);
     }
-    const utils = initTmaUtils();
-    utils.openTelegramLink(ENVS.TG_GROUP_LINK);
   };
   return (
     <div>
@@ -154,7 +175,7 @@ export default function Tasks() {
             score={100}
             extra={
               <div className={'ml-4 mr-2'}>
-                <Badge className={'bg-gray-100 text-gray-500'}>
+                <Badge className={'bg-gray-100 text-gray-500 hover:bg-gray-50 hover:text-gray-600'}>
                   {quizData?.committedQuizzes}/{(quizData?.committedQuizzes || 0) + (quizData?.remainingQuizzes || 0)}
                 </Badge>
               </div>
@@ -174,13 +195,14 @@ export default function Tasks() {
         <div className={'mt-2 space-y-2'}>
           <TaskDrawer
             title={'Connect wallet'}
-            desc={'Connect wallet to receive 5,000 Signie points'}
+            desc={'Connect wallet to earn 1 free tickets per day'}
             trigger={
               <TaskItem
+                img={ticketImg}
                 success={data?.addressBound}
                 title={'Connect wallet'}
-                description={'Accure 1k coins tomorrow'}
-                score={'1 Free Ticket/day'}
+                description={'Earn 1 free tickets per day'}
+                score={'1 free ticket/day'}
               />
             }
             action={
@@ -193,17 +215,18 @@ export default function Tasks() {
           <TaskDrawer
             success={data?.groupJoined}
             title={'Join our TG channel'}
-            desc={'Join our TG channel to keep up to date and receive 5,000 Signie poitns'}
+            desc={'Join our TG channel to keep up to date and earn 1 free tickets per day'}
             trigger={
               <TaskItem
+                img={ticketImg}
                 success={data?.groupJoined}
                 title={'Join TG group'}
-                description={'Accure 1k coins tomorrow'}
-                score={'1 Free Ticket/day'}
+                description={'Earn 1 free tickets per day'}
+                score={'1 free ticket/day'}
               />
             }
             action={
-              <Button className={'mt-8'} onClick={handleJoinGroup}>
+              <Button className={'mt-8'} onClick={handleJoinGroup} loading={joinLoading}>
                 Join now
               </Button>
             }

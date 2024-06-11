@@ -4,6 +4,7 @@ import { useLotteryInfo } from '../../../providers/LotteryInfoProvider';
 import { Events, eventBus } from '@/eventbus';
 import classNames from 'classnames';
 import { useNavigate } from 'react-router-dom';
+import { PlusCircle } from 'lucide-react';
 
 export const TicketsButton: React.FC<{
   className?: string;
@@ -67,7 +68,7 @@ export const TicketsButton: React.FC<{
         <Ticket01 size={16} color="#0052FF" />
         <span>{tickets}</span>
         <span>Ticket</span>
-        {/* <PlusCircle size={16} color="#0052FF" /> */}
+        <PlusCircle size={16} color="#0052FF" />
       </div>
     </div>
   );

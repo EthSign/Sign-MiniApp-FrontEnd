@@ -103,6 +103,7 @@ export interface QuizInfoData {
   pointsByQuiz: number;
   remainingQuizzes: number;
   committedQuizzes: number;
+  dailyMaximum: number;
   currentQuiz: CurrentQuiz;
 }
 
