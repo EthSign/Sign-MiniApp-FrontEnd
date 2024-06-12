@@ -175,7 +175,7 @@ export default function Tasks() {
             extra={
               <div className={'ml-4 mr-2'}>
                 <Badge className={'bg-gray-100 text-gray-500 hover:bg-gray-50 hover:text-gray-600'}>
-                  {quizData?.committedQuizzes}/{(quizData?.committedQuizzes || 0) + (quizData?.remainingQuizzes || 0)}
+                  {quizData?.committedQuizzes}/{quizData?.dailyMaximum || 0}
                 </Badge>
               </div>
             }

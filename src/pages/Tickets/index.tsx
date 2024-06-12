@@ -115,7 +115,7 @@ export default function Tickets() {
             }
           >
             <div className={'w-full'}>
-              <div className={'flex items-center text-sm font-normal gap-2 mt-4'}>
+              <div className={'flex items-center justify-center text-sm font-normal gap-2 mt-4'}>
                 <img src={ticketImg} className={'w-6'} />
                 <div>Earn points for each offchain signing</div>
               </div>
