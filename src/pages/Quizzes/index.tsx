@@ -165,6 +165,7 @@ export default function Quizzes() {
 
       <Modal
         maskClosable={false}
+        hiddenCloseIcon
         open={isFinish}
         onOpenChange={setIsFinish}
         footer={false}
