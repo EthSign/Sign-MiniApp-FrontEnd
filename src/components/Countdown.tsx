@@ -2,6 +2,12 @@ import classNames from 'classnames';
 import { createRef, useEffect, useMemo, useRef, useState } from 'react';
 import { Transition, TransitionGroup } from 'react-transition-group';
 
+export interface CountDownProps {
+  targetDate: Date;
+  className?: string;
+  onFinish?: () => void;
+}
+
 function formatCountdownTime(milliseconds: number) {
   const hours = Math.floor(milliseconds / (1000 * 60 * 60));
   const minutes = Math.floor((milliseconds % (1000 * 60 * 60)) / (1000 * 60));
@@ -10,10 +16,19 @@ function formatCountdownTime(milliseconds: number) {
   return { hours, minutes, seconds };
 }
 
-export interface CountDownProps {
-  targetDate: Date;
-  onFinish?: () => void;
+function padZero(num: number, length: number = 2): string {
+  let numStr = num.toString();
+
+  const zerosNeeded = length - numStr.length;
+
+  if (zerosNeeded > 0) {
+    numStr = '0'.repeat(zerosNeeded) + numStr;
+  }
+
+  return numStr;
 }
+
+const splitDigits = (time: number) => (time < 10 ? ['0', time.toString()] : time.toString().split(''));
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const useCountDown = (props: { targetDate: Date; onFinish?: () => void }) => {
@@ -60,34 +75,32 @@ export const useCountDown = (props: { targetDate: Date; onFinish?: () => void })
 };
 
 export const CountDown: React.FC<CountDownProps> = (props) => {
-  const { targetDate, onFinish } = props;
+  const { targetDate, className, onFinish } = props;
 
   const { hours, minutes, seconds } = useCountDown({
     targetDate,
     onFinish
   });
 
-  const formatCountdownTime = (time: number) => (time < 10 ? ['0', time.toString()] : time.toString().split(''));
-
   const groups = useMemo(() => {
     return [
       {
         label: 'HOURS',
-        value: formatCountdownTime(hours)
+        value: splitDigits(hours)
       },
       {
         label: 'MINUTES',
-        value: formatCountdownTime(minutes)
+        value: splitDigits(minutes)
       },
       {
         label: 'SECONDS',
-        value: formatCountdownTime(seconds)
+        value: splitDigits(seconds)
       }
     ];
   }, [hours, minutes, seconds]);
 
   return (
-    <div className="">
+    <div className={className}>
       <div className="flex w-min justify-between gap-[20px]">
         {groups.map((groupItem, groupIndex) => (
           <div className="flex flex-col items-center gap-1" key={groupIndex}>
@@ -123,6 +136,39 @@ export const CountDown: React.FC<CountDownProps> = (props) => {
           </div>
         ))}
       </div>
+    </div>
+  );
+};
+
+/** 1 小时内的倒计时 */
+export const MiniCountDown: React.FC<CountDownProps> = (props) => {
+  const { targetDate, className, onFinish } = props;
+
+  const timeRemains = useCountDown({
+    targetDate,
+    onFinish
+  });
+
+  const cells = useMemo(() => {
+    const { minutes, seconds } = timeRemains;
+
+    return [
+      { label: 'MIN', value: padZero(minutes, 2) },
+      { label: 'SEC', value: padZero(seconds, 2) }
+    ];
+  }, [timeRemains]);
+
+  return (
+    <div className={classNames('flex gap-2', className)}>
+      {cells.map((cell, index) => (
+        <div key={index} className="flex flex-col items-center">
+          <div className="flex items-center justify-center rounded-sm bg-white px-2 py-1 font-bold text-xs text-[#0052ff]">
+            {cell.value}
+          </div>
+
+          <span className="font-normal text-xs text-white">{cell.label}</span>
+        </div>
+      ))}
     </div>
   );
 };

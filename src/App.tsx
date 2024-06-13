@@ -3,6 +3,7 @@ import { initTelegramApp, isTelegramApp } from '@/utils/common.ts';
 import { useDebug } from '@/hooks/useDebug.tsx';
 import { UserInfoProvider, useUserInfo } from '@/providers/UserInfoProvider';
 import { useEffect, useRef } from 'react';
+import { MysteryDropProvider } from './providers/MysteryDropProvider';
 
 const TGAPP = () => {
   const isTg = isTelegramApp();
@@ -23,7 +24,9 @@ const TGAPP = () => {
 
   return (
     <UserInfoProvider>
-      <App />
+      <MysteryDropProvider>
+        <App />
+      </MysteryDropProvider>
     </UserInfoProvider>
   );
 };
