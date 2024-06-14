@@ -118,3 +118,11 @@ interface IAttestation {
 export const submitAttestationByOffchain = async (data: IAttestation) => {
   return spClient.post<{ attestationId: string }>('/sp/attestations', data);
 };
+
+export const mysteryDropRaffle = async () => {
+  return {
+    value: 20,
+    name: 'ton',
+    grabbed: true
+  };
+};

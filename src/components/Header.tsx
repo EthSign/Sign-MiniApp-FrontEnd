@@ -31,14 +31,14 @@ export const TabBar = ({ title }: { title: string }) => {
 export const Header: React.FC = () => {
   const { user, bindWallet, isBindingWallet } = useUserInfo();
 
-  const { notificationVisible } = useMysteryDropContext();
+  const { notifyBarVisible } = useMysteryDropContext();
 
   return (
     <div className="h-[72px]">
       <div
         className={classNames(
           'flex shrink-0 h-full items-center justify-between border-b border-[rgba(235,236,239,0.20)] px-4 text-[#344054]',
-          { hidden: notificationVisible }
+          { hidden: notifyBarVisible }
         )}
       >
         <img
