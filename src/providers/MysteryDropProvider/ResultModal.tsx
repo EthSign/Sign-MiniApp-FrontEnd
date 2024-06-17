@@ -6,9 +6,9 @@ export interface GrabResult {
   /** 是否抢到了红包 */
   grabbed: boolean;
   /** 红包金额 */
-  value: number;
+  value?: number;
   /** 货币/物品名称 */
-  name: string;
+  name?: string;
 }
 
 export const ResultModal: React.FC<{

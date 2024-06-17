@@ -119,10 +119,21 @@ export const submitAttestationByOffchain = async (data: IAttestation) => {
   return spClient.post<{ attestationId: string }>('/sp/attestations', data);
 };
 
+export const getMysteryDropInfo = async () => {
+  const startTime = new Date(Date.now() + (60 * 5 + 10) * 1000);
+
+  return {
+    nextRainDropTime: {
+      startTime,
+      endTime: new Date(startTime.getTime() + 10 * 1000)
+    }
+  };
+};
+
 export const mysteryDropRaffle = async () => {
   return {
     value: 20,
-    name: 'ton',
+    name: 'TON',
     grabbed: true
   };
 };

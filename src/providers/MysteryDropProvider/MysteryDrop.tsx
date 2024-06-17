@@ -1,7 +1,5 @@
-import { mysteryDropRaffle } from '@/services';
 import { nanoid } from 'nanoid';
 import React, { useEffect, useRef, useState } from 'react';
-import { GrabResult, ResultModal } from './ResultModal';
 import { Transition } from 'react-transition-group';
 
 const DROP_IMAGES = [
@@ -57,12 +55,9 @@ function getDrops(amount: number): Raindrop[] {
 export const MysteryDrop: React.FC<{
   open: boolean;
   onOpenChange: (visible: boolean) => void;
+  onPress: () => void;
 }> = (props) => {
-  const { open, onOpenChange } = props;
-
-  const [resultModalVisible, setResultModalVisible] = useState(false);
-
-  const [grabResult, setGrabResult] = useState<GrabResult>();
+  const { open } = props;
 
   const [rainDrops, setRainDrops] = useState<Raindrop[]>([]);
 
@@ -78,23 +73,9 @@ export const MysteryDrop: React.FC<{
 
   const onPress = async () => {
     if (pressed.current) return;
-
     pressed.current = true;
 
-    // TODO: 向 server 请求抽奖结果
-    const result = await mysteryDropRaffle();
-
-    setGrabResult({
-      grabbed: result.grabbed,
-      name: result.name,
-      value: result.value
-    });
-
-    setTimeout(() => {
-      stopDrop();
-      onOpenChange(false);
-      setResultModalVisible(true);
-    }, 3000);
+    props.onPress?.();
   };
 
   useEffect(() => {
@@ -104,12 +85,13 @@ export const MysteryDrop: React.FC<{
       }, 300);
     }
 
-    startDrop();
+    if (open) startDrop();
+    else stopDrop();
 
     return () => {
       stopDrop();
     };
-  }, []);
+  }, [open]);
 
   return (
     <>
@@ -132,7 +114,6 @@ export const MysteryDrop: React.FC<{
                   src={drop.url}
                   onAnimationEnd={(event) => {
                     const element = event.target as HTMLImageElement;
-
                     element?.remove?.();
                   }}
                 />
@@ -159,8 +140,6 @@ export const MysteryDrop: React.FC<{
           </div>
         )}
       </Transition>
-
-      <ResultModal open={resultModalVisible} result={grabResult} onOpenChange={setResultModalVisible} />
     </>
   );
 };
