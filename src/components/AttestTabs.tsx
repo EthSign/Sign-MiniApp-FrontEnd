@@ -200,7 +200,7 @@ export const AttestTabs = ({ onSuccess }: { onSuccess: () => void }) => {
                       className="focus:border-primary/20"
                       value={values[it.name] || ''}
                       placeholder={`Enter ${it.name.toLowerCase()}`}
-                      onChange={(e) =>
+                      onChange={(e: any) =>
                         setValues((pre: any) => {
                           return {
                             ...pre,

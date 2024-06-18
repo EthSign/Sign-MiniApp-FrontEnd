@@ -7,7 +7,19 @@ import { MysteryDrop } from './MysteryDrop';
 import { NotificationBar } from './NotificationBar';
 import { NotificationModal } from './NotificationModal';
 import { GrabResult, ResultModal } from './ResultModal';
-import { MysteryDropPhase } from './reducer';
+
+enum MysteryDropPhase {
+  // 今天不会下红包雨
+  notTody = 'notTody',
+  // 今天将下红包雨
+  willStartOnToday = 'willStartOnToday',
+  // 即将下红包雨
+  aboutToStart = 'aboutToStart',
+  // 正在下红包雨
+  starting = 'starting',
+  // 红包雨已结束
+  ended = 'ended'
+}
 
 const MysteryDropContext = createContext({
   notifyBarVisible: false
