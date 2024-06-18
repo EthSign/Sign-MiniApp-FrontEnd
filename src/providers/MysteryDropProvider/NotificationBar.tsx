@@ -18,7 +18,7 @@ export const NotificationBar: React.FC<NotificationBarProps> = (props) => {
   const location = useLocation();
 
   const visible = useMemo(() => {
-    const whitelistRoute = ['/lucky-wheel', '/rank', '/tasks', '/claim'];
+    const whitelistRoute = ['/lucky-wheel', '/rank', '/tasks', '/rewards'];
 
     return whitelistRoute.includes(location.pathname);
   }, [location.pathname]);

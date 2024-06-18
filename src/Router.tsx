@@ -44,6 +44,13 @@ const routerConfig: RouteObject[] = [
               const Page = await import('@/pages/Tasks');
               return { Component: Page.default };
             }
+          },
+          {
+            path: '/rewards',
+            async lazy() {
+              const Page = await import('@/pages/Rewards');
+              return { Component: Page.default };
+            }
           }
         ]
         // loader: () => {

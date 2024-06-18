@@ -6,9 +6,9 @@ export interface GrabResult {
   /** 是否抢到了红包 */
   grabbed: boolean;
   /** 红包金额 */
-  value?: number;
-  /** 货币/物品名称 */
-  name?: string;
+  amount?: number;
+  /** 货币名称 */
+  token?: string;
 }
 
 export const ResultModal: React.FC<{
@@ -23,9 +23,9 @@ export const ResultModal: React.FC<{
   const { title, description } = useMemo(() => {
     if (!result) return {};
 
-    const { grabbed, name, value } = result;
+    const { grabbed, token, amount } = result;
 
-    const content = value ? `${value} ${name}` : name;
+    const content = amount ? `${amount} ${token}` : token;
 
     const title = grabbed ? `You got ${content}!` : 'All gifts have been grabbed';
 
@@ -62,7 +62,7 @@ export const ResultModal: React.FC<{
               variant="primary"
               className="w-full"
               onClick={() => {
-                navigate('/claim');
+                navigate('/rewards');
               }}
             >
               Check it now

@@ -18,12 +18,12 @@ export const Tabbar: React.FC<TabbarProps> = (props) => {
   const location = useLocation();
 
   return (
-    <div className="flex shrink-0 items-center justify-center gap-10 border-t border-[#F9FAFB] bg-white">
+    <div className="flex shrink-0 items-center justify-center border-t border-[#F9FAFB] bg-white">
       {tabs.map((tab) => (
-        <Link className={classNames('py-4 flex items-center justify-center')} key={tab.to} to={tab.to}>
+        <Link className={classNames('py-4 flex-1 shrink-0 flex items-center justify-center')} key={tab.to} to={tab.to}>
           <div
             className={classNames(
-              'flex px-2 text-xs justify-center gap-1 flex-col items-center w-[100px] rounded-[6px] transition-all duration-200 text-[#98A2B3]',
+              'flex px-2 text-xs justify-center gap-1 flex-col items-center rounded-[6px] transition-all duration-200 text-[#98A2B3]',
               {
                 '!text-[#0052FF]': tab.to === location.pathname
               }
@@ -32,7 +32,7 @@ export const Tabbar: React.FC<TabbarProps> = (props) => {
             <span className="">
               {typeof tab.icon === 'function' ? tab.icon({ active: tab.to === location.pathname }) : tab.icon}
             </span>
-            <span className="">{tab.label}</span>
+            <span className="whitespace-nowrap">{tab.label}</span>
           </div>
         </Link>
       ))}

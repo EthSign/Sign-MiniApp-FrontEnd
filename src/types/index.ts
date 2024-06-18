@@ -121,3 +121,34 @@ export interface Option {
   title: string;
   value: string;
 }
+
+export interface MysteryDropInfo {
+  nextMysteryDrop: {
+    id: string;
+    startTime: number;
+    endTime: number;
+  };
+}
+
+export interface MysteryDropRaffleResult {
+  grabbed: boolean;
+  amount: number;
+  token: string;
+}
+
+export interface RewardItem {
+  id: string;
+  amount: string;
+  rewardAt: string;
+  season: string;
+  // 目前只有 token
+  type: 'token';
+  name: string;
+  image: string;
+  from: 'mysteryDrop' | 'wheel';
+}
+
+export interface RewardResponse {
+  total: number;
+  rows: RewardItem[];
+}

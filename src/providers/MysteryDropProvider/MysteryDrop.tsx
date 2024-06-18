@@ -81,7 +81,7 @@ export const MysteryDrop: React.FC<{
   useEffect(() => {
     function startDrop() {
       timer.current = setInterval(() => {
-        setRainDrops((old) => [...old, ...getDrops(5)]);
+        setRainDrops((old) => [...old, ...getDrops(8)]);
       }, 300);
     }
 

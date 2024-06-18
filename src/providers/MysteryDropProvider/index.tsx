@@ -1,11 +1,13 @@
+import { Events, eventBus } from '@/eventbus';
 import { getMysteryDropInfo, mysteryDropRaffle } from '@/services';
+import { MysteryDropInfo } from '@/types';
 import React, { PropsWithChildren, createContext, useContext, useEffect, useRef, useState } from 'react';
+import { useLocalStorage } from 'react-use';
 import { MysteryDrop } from './MysteryDrop';
 import { NotificationBar } from './NotificationBar';
 import { NotificationModal } from './NotificationModal';
-import { MysteryDropPhase } from './reducer';
 import { GrabResult, ResultModal } from './ResultModal';
-import { useLocalStorage } from 'react-use';
+import { MysteryDropPhase } from './reducer';
 
 const MysteryDropContext = createContext({
   notifyBarVisible: false
@@ -35,23 +37,32 @@ export const MysteryDropProvider: React.FC<PropsWithChildren> = (props) => {
 
   const [timeframe, setTimeFrame] = useState<Date[]>([]);
 
+  const [nextDropInfo, setNextDropInfo] = useState<MysteryDropInfo['nextMysteryDrop']>();
+
   const [resultModalVisible, setResultModalVisible] = useState(false);
 
   const [grabResult, setGrabResult] = useState<GrabResult>();
 
+  // 用于判读用户是否点击了抢红包，如果红包雨结束还没有抢，则显示没抢到
   const pressed = useRef(false);
 
   const onPress = async () => {
+    if (!nextDropInfo) return;
+
     pressed.current = true;
 
     try {
-      const result = await mysteryDropRaffle();
+      const result = await mysteryDropRaffle(nextDropInfo?.id);
 
       setGrabResult({
         grabbed: result.grabbed,
-        name: result.name,
-        value: result.value
+        token: result.token,
+        amount: result.amount
       });
+
+      if (result.grabbed) {
+        eventBus.emit(Events.mysteryDropGrabbed);
+      }
 
       // 最多延迟 3s 之后给出结果
       const timeRemains = timeframe[1].getTime() - Date.now();
@@ -64,7 +75,6 @@ export const MysteryDropProvider: React.FC<PropsWithChildren> = (props) => {
       }, timeout);
     } catch (error) {
       console.error(error);
-      // TODO: 如果已经过了抽奖时间，则显示已经抢完
     }
   };
 
@@ -73,13 +83,14 @@ export const MysteryDropProvider: React.FC<PropsWithChildren> = (props) => {
 
     const init = async () => {
       const mysteryDropInfo = await getMysteryDropInfo();
+      const nextMysteryDrop = mysteryDropInfo.nextMysteryDrop;
 
-      let { startTime, endTime } = mysteryDropInfo?.nextRainDropTime ?? {};
+      if (!nextMysteryDrop?.startTime || !nextMysteryDrop?.endTime) return;
 
-      if (!startTime || !endTime) return;
+      setNextDropInfo(nextMysteryDrop);
 
-      startTime = new Date(startTime);
-      endTime = new Date(endTime);
+      const startTime = new Date(nextMysteryDrop.startTime);
+      const endTime = new Date(nextMysteryDrop.endTime);
 
       setTimeFrame([startTime, endTime]);
 

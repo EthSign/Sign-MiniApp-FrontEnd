@@ -6,9 +6,12 @@ import {
   ITaskData,
   IUser,
   LotteryInfo,
+  MysteryDropInfo,
+  MysteryDropRaffleResult,
   QuizInfoData,
   RaffleInfo,
   RaffleResult,
+  RewardResponse,
   TaskTypeEnum
 } from '@/types';
 import { OffChainRpc } from '@ethsign/sp-sdk';
@@ -120,20 +123,13 @@ export const submitAttestationByOffchain = async (data: IAttestation) => {
 };
 
 export const getMysteryDropInfo = async () => {
-  const startTime = new Date(Date.now() + (60 * 5 + 10) * 1000);
-
-  return {
-    nextRainDropTime: {
-      startTime,
-      endTime: new Date(startTime.getTime() + 10 * 1000)
-    }
-  };
+  return apiClient.get<MysteryDropInfo>('/mini/mystery-drop-info');
 };
 
-export const mysteryDropRaffle = async () => {
-  return {
-    value: 20,
-    name: 'TON',
-    grabbed: true
-  };
+export const mysteryDropRaffle = async (dropId: string) => {
+  return apiClient.post<MysteryDropRaffleResult>('/mini/mystery-drop-raffle', { dropId });
+};
+
+export const getRewardsInfo = async () => {
+  return apiClient.get<RewardResponse>('/mini/rewards');
 };
