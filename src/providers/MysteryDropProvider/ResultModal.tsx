@@ -63,6 +63,7 @@ export const ResultModal: React.FC<{
               className="w-full"
               onClick={() => {
                 navigate('/rewards');
+                onOpenChange?.(false);
               }}
             >
               Check it now
