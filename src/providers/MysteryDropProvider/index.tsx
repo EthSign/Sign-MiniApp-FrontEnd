@@ -1,7 +1,7 @@
 import { Events, eventBus } from '@/eventbus';
 import { getMysteryDropInfo, mysteryDropRaffle } from '@/services';
 import { MysteryDropInfo } from '@/types';
-import React, { PropsWithChildren, createContext, useContext, useEffect, useRef, useState } from 'react';
+import React, { PropsWithChildren, createContext, useContext, useEffect, useState } from 'react';
 import { useLocalStorage } from 'react-use';
 import { MysteryDrop } from './MysteryDrop';
 import { NotificationBar } from './NotificationBar';
@@ -55,13 +55,8 @@ export const MysteryDropProvider: React.FC<PropsWithChildren> = (props) => {
 
   const [grabResult, setGrabResult] = useState<GrabResult>();
 
-  // 用于判读用户是否点击了抢红包，如果红包雨结束还没有抢，则显示没抢到
-  const pressed = useRef(false);
-
   const onPress = async () => {
     if (!nextDropInfo) return;
-
-    pressed.current = true;
 
     try {
       const result = await mysteryDropRaffle(nextDropInfo?.id);
@@ -166,11 +161,6 @@ export const MysteryDropProvider: React.FC<PropsWithChildren> = (props) => {
           }
 
           case MysteryDropPhase.ended: {
-            // 如果结束时还没点击 press，显示未抢到红包
-            if (!pressed.current) {
-              setGrabResult({ grabbed: false });
-              setResultModalVisible(true);
-            }
             setMysteryDropVisible(false);
             break;
           }
