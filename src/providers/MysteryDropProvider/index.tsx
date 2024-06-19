@@ -16,10 +16,36 @@ enum MysteryDropPhase {
   // 即将下红包雨
   aboutToStart = 'aboutToStart',
   // 正在下红包雨
-  starting = 'starting',
+  started = 'started',
   // 红包雨已结束
   ended = 'ended'
 }
+
+const getPhase = (startTime?: Date, endTime?: Date) => {
+  if (!startTime || !endTime) return MysteryDropPhase.notTody;
+  // 提前 5 分钟开始倒计时
+  const countdownDuration = 5 * 60 * 1000;
+
+  const nowDate = new Date();
+  const now = nowDate.getTime();
+  const delta = startTime.getTime() - now;
+
+  if (isSameDay(startTime, nowDate)) {
+    if (now < startTime.getTime() && delta < countdownDuration) {
+      return MysteryDropPhase.aboutToStart;
+    }
+
+    if (now > startTime.getTime() && now < endTime.getTime()) {
+      return MysteryDropPhase.started;
+    }
+
+    if (now > endTime.getTime()) return MysteryDropPhase.ended;
+
+    return MysteryDropPhase.willStartOnToday;
+  }
+
+  return MysteryDropPhase.notTody;
+};
 
 const MysteryDropContext = createContext({
   notifyBarVisible: false
@@ -88,12 +114,10 @@ export const MysteryDropProvider: React.FC<PropsWithChildren> = (props) => {
   useEffect(() => {
     let timer: NodeJS.Timeout;
 
-    const init = async () => {
+    const fetchLatestMysteryDropInfo = async () => {
       const mysteryDropInfo = await getMysteryDropInfo();
       const nextMysteryDrop = mysteryDropInfo.nextMysteryDrop;
-
-      if (!nextMysteryDrop?.startTime || !nextMysteryDrop?.endTime) return;
-
+      if (!nextMysteryDrop?.startTime || !nextMysteryDrop?.endTime) return null;
       setNextDropInfo(nextMysteryDrop);
 
       const startTime = new Date(nextMysteryDrop.startTime);
@@ -101,35 +125,21 @@ export const MysteryDropProvider: React.FC<PropsWithChildren> = (props) => {
 
       setTimeFrame([startTime, endTime]);
 
-      // 提前 5 分钟开始倒计时
-      const countdownDuration = 5 * 60 * 1000;
+      return { startTime, endTime };
+    };
 
-      const getPhase = () => {
-        const nowDate = new Date();
-        const now = nowDate.getTime();
-        const delta = startTime.getTime() - now;
-
-        if (isSameDay(startTime, nowDate)) {
-          if (now < startTime.getTime() && delta < countdownDuration) {
-            return MysteryDropPhase.aboutToStart;
-          }
-
-          if (now > startTime.getTime() && now < endTime.getTime()) {
-            return MysteryDropPhase.starting;
-          }
-
-          if (now > endTime.getTime()) return MysteryDropPhase.ended;
-
-          return MysteryDropPhase.willStartOnToday;
-        }
-
-        return MysteryDropPhase.notTody;
-      };
-
+    const init = async () => {
       let lastPhase: MysteryDropPhase | null = null;
+      let startTime: Date | undefined = undefined;
+      let endTime: Date | undefined = undefined;
+
+      fetchLatestMysteryDropInfo().then((result) => {
+        startTime = result?.startTime;
+        endTime = result?.endTime;
+      });
 
       const onTimeThrough = () => {
-        const phase = getPhase();
+        const phase = getPhase(startTime, endTime);
 
         if (phase === lastPhase) {
           return;
@@ -154,7 +164,7 @@ export const MysteryDropProvider: React.FC<PropsWithChildren> = (props) => {
             break;
           }
 
-          case MysteryDropPhase.starting: {
+          case MysteryDropPhase.started: {
             setNotifyBarVisible(false);
             setMysteryDropVisible(true);
             break;
@@ -162,6 +172,10 @@ export const MysteryDropProvider: React.FC<PropsWithChildren> = (props) => {
 
           case MysteryDropPhase.ended: {
             setMysteryDropVisible(false);
+            fetchLatestMysteryDropInfo().then((result) => {
+              startTime = result?.startTime;
+              endTime = result?.endTime;
+            });
             break;
           }
         }
