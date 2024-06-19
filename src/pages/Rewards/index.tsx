@@ -22,10 +22,16 @@ export const Rewards: React.FC = () => {
 
   useEffect(() => {
     const fetchRewards = async () => {
-      setLoading(true);
-      const response = await getRewardsInfo();
-      setRewards(response.rows);
-      setLoading(false);
+      try {
+        setLoading(true);
+        const response = await getRewardsInfo();
+        setRewards(response.rows);
+      } catch (error) {
+        console.error(error);
+        setRewards([]);
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchRewards();
