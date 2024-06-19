@@ -41,11 +41,13 @@ export const Rewards: React.FC = () => {
     <div className="relative">
       <h2 className={'font-bold text-xl text-white'}>My Rewards</h2>
 
-      {loading ? (
+      {loading && (
         <div className="flex min-h-[200px] items-center justify-center">
           <Loader2 className="animate-spin text-primary" size={32} />
         </div>
-      ) : (
+      )}
+
+      {!loading && rewards.length > 0 && (
         <div className="mt-2 space-y-2">
           {rewards.map((reward) => (
             <div className="flex items-center gap-4 rounded-[8px] border bg-white px-4 py-3" key={reward.id}>
@@ -66,6 +68,28 @@ export const Rewards: React.FC = () => {
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {!loading && !rewards.length && (
+        <div className="mt-2 rounded-[8px] border bg-white px-8 py-[22px]">
+          <div className="flex justify-center">
+            <div className="flex size-12 items-center justify-center rounded-full bg-[#ECF2FF]">
+              <img
+                className="size-[30px]"
+                src="https://ethsign-public.s3.ap-east-1.amazonaws.com/telegram-miniapp/rewards-empty_240619025114.webp"
+                alt=""
+              />
+            </div>
+          </div>
+
+          <div className="mt-4 text-center">
+            <span className="font-medium text-sm text-black">No Reward</span>
+          </div>
+
+          <p className="mt-1 text-center font-normal text-xs text-[#667085]">
+            There is no reward yet. Spin the wheel and get rewards.
+          </p>
         </div>
       )}
     </div>
