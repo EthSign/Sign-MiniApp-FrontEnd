@@ -65,9 +65,7 @@ export const Rewards: React.FC = () => {
                     {reward.type === 'token' ? `${reward.amount} ${reward.name}` : reward.name}
                   </span>
 
-                  {reward.from === 'mysteryDrop' && (
-                    <div className="ml-2 h-[18px] rounded-full bg-secondary px-2 text-xs text-primary">Competition</div>
-                  )}
+                  <div className="ml-2 h-[18px] rounded-full bg-secondary px-2 text-xs text-primary">Competition</div>
                 </div>
 
                 <div className="font-medium text-xs text-[#475467]">{formatDate(reward.rewardAt)}</div>

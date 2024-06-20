@@ -125,6 +125,8 @@ export interface Option {
 export interface MysteryDropInfo {
   nextMysteryDrop: {
     id: string;
+    noticeStartTime: number;
+    noticeEndTime: number;
     startTime: number;
     endTime: number;
   };
@@ -136,16 +138,24 @@ export interface MysteryDropRaffleResult {
   token: string;
 }
 
+export enum MiniRewardStatus {
+  /** 奖品待分配 */
+  PendingAllocation = 'pending_allocation',
+  /** 奖品已分配 */
+  Allocated = 'allocated',
+  /** 奖品已领取 */
+  Claimed = 'claimed'
+}
+
 export interface RewardItem {
   id: string;
-  amount: string;
+  status: MiniRewardStatus;
+  amount: number;
   rewardAt: string;
-  season: string;
   // 目前只有 token
   type: 'token';
   name: string;
   image: string;
-  from: 'mysteryDrop' | 'wheel';
 }
 
 export interface RewardResponse {

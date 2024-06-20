@@ -123,11 +123,11 @@ export const submitAttestationByOffchain = async (data: IAttestation) => {
 };
 
 export const getMysteryDropInfo = async () => {
-  return apiClient.get<MysteryDropInfo>('/mini/mystery-drop-info');
+  return apiClient.get<MysteryDropInfo>('/mini/campaigns/mystery-drop/drop-info');
 };
 
 export const mysteryDropRaffle = async (dropId: string) => {
-  return apiClient.post<MysteryDropRaffleResult>('/mini/mystery-drop-raffle', { dropId });
+  return apiClient.post<MysteryDropRaffleResult>('/mini/campaigns/mystery-drop/raffle', { dropId });
 };
 
 export const getRewardsInfo = async () => {

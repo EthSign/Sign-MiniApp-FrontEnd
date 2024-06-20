@@ -199,8 +199,8 @@ export const MysteryDropProvider: React.FC<PropsWithChildren> = (props) => {
       <NotificationBar open={notifyBarVisible} startTime={timeframe[0]} onOpenChange={setNotifyBarVisible} />
 
       <NotificationModal
-        startTime={timeframe[0]}
-        endTime={timeframe[1]}
+        startTime={nextDropInfo?.noticeStartTime}
+        endTime={nextDropInfo?.noticeEndTime}
         open={notifyModalVisible}
         onOpenChange={(visible) => {
           if (!visible) setNotifyModalClosedManually(true);
