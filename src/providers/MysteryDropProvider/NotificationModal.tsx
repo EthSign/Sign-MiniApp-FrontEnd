@@ -28,8 +28,8 @@ function formatTo12Hour(date: Date): string {
 }
 interface NotificationModalProps {
   open: boolean;
-  startTime?: Date;
-  endTime?: Date;
+  startTime?: Date | number;
+  endTime?: Date | number;
   onOpenChange: (visible: boolean) => void;
 }
 
@@ -37,10 +37,12 @@ export const NotificationModal: React.FC<NotificationModalProps> = (props) => {
   const { open, onOpenChange } = props;
 
   const [startTime, endTime] = useMemo(() => {
-    const { startTime, endTime } = props;
+    if (!props.startTime || !props.endTime) return ['', ''];
 
-    if (!startTime || !endTime) return ['', ''];
-    return [formatTo12Hour(startTime), formatTo12Hour(endTime)];
+    const startTime = new Date(props.startTime);
+    const endTime = new Date(props.endTime);
+
+    return [formatTo12Hour(startTime), formatTo12Hour(new Date(endTime))];
   }, [props]);
 
   const modalContainerRef = useRef<HTMLDivElement>(null);
