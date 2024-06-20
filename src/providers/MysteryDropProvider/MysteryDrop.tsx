@@ -68,6 +68,7 @@ export const MysteryDrop: React.FC<{
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   const stopDrop = () => {
+    pressed.current = false;
     if (timer.current) clearInterval(timer.current);
   };
 
@@ -93,6 +94,7 @@ export const MysteryDrop: React.FC<{
     return () => {
       stopDrop();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 
   return (
