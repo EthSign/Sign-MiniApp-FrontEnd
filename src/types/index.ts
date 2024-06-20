@@ -121,3 +121,44 @@ export interface Option {
   title: string;
   value: string;
 }
+
+export interface MysteryDropInfo {
+  nextMysteryDrop: {
+    id: string;
+    noticeStartTime: number;
+    noticeEndTime: number;
+    startTime: number;
+    endTime: number;
+  };
+}
+
+export interface MysteryDropRaffleResult {
+  grabbed: boolean;
+  amount: number;
+  token: string;
+}
+
+export enum MiniRewardStatus {
+  /** 奖品待分配 */
+  PendingAllocation = 'pending_allocation',
+  /** 奖品已分配 */
+  Allocated = 'allocated',
+  /** 奖品已领取 */
+  Claimed = 'claimed'
+}
+
+export interface RewardItem {
+  id: string;
+  status: MiniRewardStatus;
+  amount: number;
+  rewardAt: string;
+  // 目前只有 token
+  type: 'token';
+  name: string;
+  image: string;
+}
+
+export interface RewardResponse {
+  total: number;
+  rows: RewardItem[];
+}

@@ -1,6 +1,8 @@
+import { useMysteryDropContext } from '@/providers/MysteryDropProvider';
 import { useUserInfo } from '@/providers/UserInfoProvider';
 import { Button } from '@ethsign/ui';
 import { shortenWalletAddress } from '@ethsign/utils-web';
+import classNames from 'classnames';
 import { ArrowLeft } from 'lucide-react';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -29,31 +31,40 @@ export const TabBar = ({ title }: { title: string }) => {
 export const Header: React.FC = () => {
   const { user, bindWallet, isBindingWallet } = useUserInfo();
 
-  return (
-    <div className="flex h-[72px] shrink-0 items-center justify-between border-b border-[rgba(235,236,239,0.20)] px-4 text-[#344054]">
-      <img
-        className="w-[78px] object-contain"
-        src="https://ethsign-public.s3.ap-east-1.amazonaws.com/telegram-miniapp/logo_240529091048.svg"
-        alt=""
-      />
+  const { notifyBarVisible } = useMysteryDropContext();
 
-      <Button
-        className={'gap-2 rounded-[12px] border-[#EBECEF] bg-[rgba(255,255,255,0.60)]'}
-        variant={'outline'}
-        loading={isBindingWallet}
-        onClick={() => {
-          if (!user?.walletAddress) bindWallet();
-        }}
-      >
-        {user?.walletAddress ? (
-          <>
-            {shortenWalletAddress(user?.walletAddress, 'shorter')}
-            <span className="inline-block size-[11px] rounded-full bg-[#99F36F]"></span>
-          </>
-        ) : (
-          <>Connect Wallet</>
+  return (
+    <div className="h-[72px]">
+      <div
+        className={classNames(
+          'flex shrink-0 h-full items-center justify-between border-b border-[rgba(235,236,239,0.20)] px-4 text-[#344054]',
+          { hidden: notifyBarVisible }
         )}
-      </Button>
+      >
+        <img
+          className="w-[78px] object-contain"
+          src="https://ethsign-public.s3.ap-east-1.amazonaws.com/telegram-miniapp/logo_240529091048.svg"
+          alt=""
+        />
+
+        <Button
+          className={'gap-2 rounded-[12px] border-[#EBECEF] bg-[rgba(255,255,255,0.60)]'}
+          variant={'outline'}
+          loading={isBindingWallet}
+          onClick={() => {
+            if (!user?.walletAddress) bindWallet();
+          }}
+        >
+          {user?.walletAddress ? (
+            <>
+              {shortenWalletAddress(user?.walletAddress, 'shorter')}
+              <span className="inline-block size-[11px] rounded-full bg-[#99F36F]"></span>
+            </>
+          ) : (
+            <>Connect Wallet</>
+          )}
+        </Button>
+      </div>
     </div>
   );
 };

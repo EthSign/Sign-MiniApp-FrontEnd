@@ -6,9 +6,12 @@ import {
   ITaskData,
   IUser,
   LotteryInfo,
+  MysteryDropInfo,
+  MysteryDropRaffleResult,
   QuizInfoData,
   RaffleInfo,
   RaffleResult,
+  RewardResponse,
   TaskTypeEnum
 } from '@/types';
 import { OffChainRpc } from '@ethsign/sp-sdk';
@@ -117,4 +120,16 @@ interface IAttestation {
 
 export const submitAttestationByOffchain = async (data: IAttestation) => {
   return spClient.post<{ attestationId: string }>('/sp/attestations', data);
+};
+
+export const getMysteryDropInfo = async () => {
+  return apiClient.get<MysteryDropInfo>('/mini/campaigns/mystery-drop/drop-info');
+};
+
+export const mysteryDropRaffle = async (dropId: string) => {
+  return apiClient.post<MysteryDropRaffleResult>('/mini/campaigns/mystery-drop/raffle', { dropId });
+};
+
+export const getRewardsInfo = async () => {
+  return apiClient.get<RewardResponse>('/mini/rewards');
 };

@@ -17,7 +17,8 @@ export default function Quizzes() {
   const navigate = useNavigate();
   const { data, refetch, isLoading, isRefetching } = useQuery({
     queryKey: ['quiz-info'],
-    queryFn: getQuizInfo
+    queryFn: getQuizInfo,
+    refetchOnWindowFocus: false
   });
   const [loading, setLoading] = useState(false);
   const [answer, setAnswer] = useState('');
@@ -55,7 +56,7 @@ export default function Quizzes() {
   };
 
   useEffect(() => {
-    if (data?.remainingQuizzes === 0) {
+    if (!data?.remainingQuizzes) {
       setIsFinish(true);
     }
   }, [data]);
@@ -72,7 +73,7 @@ export default function Quizzes() {
 
           <div className={'mt-8 px-6'}>
             <div className={'text-sm font-normal text-gray-500'}>
-              {(data?.committedQuizzes || 0) + 1}/{(data?.committedQuizzes || 0) + (data?.remainingQuizzes || 0)}
+              {(data?.committedQuizzes || 0) + 1}/{data?.dailyMaximum || 0}
             </div>
             <div className={'text-md font-semibold mt-2 flex-1'}>{data?.currentQuiz?.title}</div>
             <div className={'pt-4 space-y-2'}>
@@ -164,6 +165,7 @@ export default function Quizzes() {
 
       <Modal
         maskClosable={false}
+        hiddenCloseIcon
         open={isFinish}
         onOpenChange={setIsFinish}
         footer={false}

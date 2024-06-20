@@ -115,7 +115,7 @@ export default function Tickets() {
             }
           >
             <div className={'w-full'}>
-              <div className={'flex items-center text-sm font-normal gap-2 mt-4'}>
+              <div className={'flex items-center justify-center text-sm font-normal gap-2 mt-4'}>
                 <img src={ticketImg} className={'w-6'} />
                 <div>Earn points for each offchain signing</div>
               </div>
@@ -149,7 +149,7 @@ export default function Tickets() {
         <div className={'text-center mt-4'}>
           <div className={'text-xl font-semibold text-black-100'}>1 Ticket Received</div>
           <div className={'text-md font-normal text-gray-600 mt-2'}>
-            Spin the wheel with your tickets and earn signie points
+            Spin the wheel with your tickets and earn Signie points
           </div>
         </div>
       </Modal>
