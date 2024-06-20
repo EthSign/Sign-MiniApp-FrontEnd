@@ -54,8 +54,7 @@ export const LotteryRulesModal: React.FC<PropsWithChildren> = (props) => {
               <li>
                 Every event signed made by your friend will push you step forward to the next level.
                 <ul>
-                  <li>An on-chain event is worth 5 steps.</li>
-                  <li>An off-chain event is worth 1 step.</li>
+                  <li>An event is worth 5 steps.</li>
                 </ul>
               </li>
             </ul>

@@ -194,7 +194,7 @@ export const AttestTabs = ({ onSuccess }: { onSuccess: () => void }) => {
               {currentSchema?.schema?.types?.map((it) => {
                 return (
                   <div key={it.name}>
-                    <Label>{it.name}</Label>
+                    <Label className="[text-transform:capitalize]">{it.name}</Label>
                     <Input
                       type="text"
                       className="focus:border-primary/20"

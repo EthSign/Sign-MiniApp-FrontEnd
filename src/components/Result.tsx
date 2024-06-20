@@ -141,7 +141,7 @@ export const ResultCard = React.forwardRef<
             )}
             {!timesUp && nextLevel && (
               <div className={'mb-5 mt-2.5 font-normal text-sm text-[#101828]'}>
-                Ask friends to sign event to boost your signie points up to{' '}
+                Ask friends to sign event to boost your Signie points up to{' '}
                 <span className={'font-italic text-[#0052FF] [font-weight:700]'}>{nextLevel.multiplier}x points</span>.
               </div>
             )}
