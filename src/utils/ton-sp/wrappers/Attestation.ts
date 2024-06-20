@@ -17,7 +17,7 @@ export type AttestationConfig = {
   revokeTimestamp?: Date;
   attester: Address;
   attesterPubKey: string;
-  validUntil?: Date;
+  validUntil: Date;
   dataLocation: DataLocation;
   revoked?: boolean;
   recipients: Address[];
@@ -64,7 +64,7 @@ export function attestationConfigToCell(config: AttestationConfig): Cell {
     .storeUint(dateToUnixTimestamp(attestTimestamp), 32)
     .storeUint(revokeTimestamp ? dateToUnixTimestamp(revokeTimestamp) : 0, 32)
     .storeUint(hexStringToInt(attesterPubKey), 256)
-    .storeUint(validUntil ? dateToUnixTimestamp(validUntil) : 0, 32)
+    .storeUint(dateToUnixTimestamp(validUntil), 32)
     .storeUint(dataLocation, 2)
     .storeUint(Number(!!revoked), 1)
     .storeRef(c2)
