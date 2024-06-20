@@ -101,7 +101,7 @@ export const MysteryDrop: React.FC<{
         {() => (
           <div
             ref={wrapperRef}
-            className="fixed inset-0 z-10 flex select-none flex-col justify-center bg-black/50 backdrop-blur"
+            className="fixed inset-0 z-[10000] flex select-none flex-col justify-center bg-black/50 backdrop-blur"
           >
             <div className="absolute inset-0">
               {rainDrops.map((drop) => (
