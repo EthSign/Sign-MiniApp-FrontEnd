@@ -133,3 +133,9 @@ export const mysteryDropRaffle = async (dropId: string) => {
 export const getRewardsInfo = async () => {
   return apiClient.get<RewardResponse>('/mini/rewards');
 };
+
+export const updateClaimAddress = async (address: string) => {
+  return apiClient.post('/mini/update-claim-address', {
+    address
+  });
+};

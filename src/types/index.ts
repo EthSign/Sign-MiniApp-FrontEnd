@@ -4,6 +4,7 @@ export interface IUser {
   walletAddress: string;
   code?: string;
   inviteUser?: string;
+  claimWalletAddress: string;
 }
 
 export interface LotteryInfo {

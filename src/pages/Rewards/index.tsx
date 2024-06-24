@@ -1,9 +1,12 @@
 import { Events, eventBus } from '@/eventbus';
+import { useUserInfo } from '@/providers/UserInfoProvider';
 import { getRewardsInfo } from '@/services';
 import { RewardItem } from '@/types';
 import { Button, Modal } from '@ethsign/ui';
+import { shortenWalletAddress } from '@ethsign/utils-web';
 import { Loader2 } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
+import { ClaimAddressModal } from './comopnents/ClaimAddressModal';
 
 function formatDate(dateString: number | string): string {
   const date = new Date(dateString);
@@ -17,11 +20,15 @@ function formatDate(dateString: number | string): string {
 }
 
 export const Rewards: React.FC = () => {
+  const { user } = useUserInfo();
+
   const [rewards, setRewards] = useState<RewardItem[]>([]);
 
   const [loading, setLoading] = useState(false);
 
   const [claimTipModalVisible, setClaimTipModalVisible] = useState(false);
+
+  const [claimAddressEditModalVisible, setClaimAddressEditModalVisible] = useState(false);
 
   useEffect(() => {
     const fetchRewards = async () => {
@@ -60,6 +67,20 @@ export const Rewards: React.FC = () => {
           How to claim?
         </span>
       </h2>
+
+      <div className="flex items-center justify-between">
+        {user?.claimWalletAddress && (
+          <span className="text-xs text-white">{shortenWalletAddress(user.claimWalletAddress, 'normal')}</span>
+        )}
+        <button
+          className="text-xs text-white underline"
+          onClick={() => {
+            setClaimAddressEditModalVisible(true);
+          }}
+        >
+          Edit
+        </button>
+      </div>
 
       {loading && (
         <div className="flex min-h-[200px] items-center justify-center">
@@ -132,6 +153,8 @@ export const Rewards: React.FC = () => {
           OK
         </Button>
       </Modal>
+
+      <ClaimAddressModal open={claimAddressEditModalVisible} onOpenChange={setClaimAddressEditModalVisible} />
     </div>
   );
 };
