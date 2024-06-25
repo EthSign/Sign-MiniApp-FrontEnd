@@ -163,3 +163,17 @@ export interface RewardResponse {
   total: number;
   rows: RewardItem[];
 }
+
+export interface InvitationInfo {
+  totalInvited: number;
+  totalPoints: number;
+  rule: {
+    count: number;
+    points: number;
+  }[];
+  rows: {
+    id: string;
+    username: string;
+    points: number;
+  }[];
+}

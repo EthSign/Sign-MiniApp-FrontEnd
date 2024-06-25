@@ -93,6 +93,13 @@ const routerConfig: RouteObject[] = [
         }
       },
       {
+        path: '/invite-friends',
+        async lazy() {
+          const Page = await import('@/pages/InviteFriends');
+          return { Component: Page.default };
+        }
+      },
+      {
         path: '/tickets',
         async lazy() {
           const Page = await import('@/pages/Tickets');
