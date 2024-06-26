@@ -96,7 +96,7 @@ export interface ITaskData {
 
 export enum TaskTypeEnum {
   QUIZ = 'quiz',
-  JOINGOUP = 'join_group',
+  JOIN_GROUP = 'join_group',
   OFFCHAINATTEST = 'offchain_attest'
 }
 
