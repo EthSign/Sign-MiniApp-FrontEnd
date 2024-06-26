@@ -48,7 +48,7 @@ export const Rewards: React.FC = () => {
 
   return (
     <div className="relative">
-      <div className="mb-2 flex min-h-20 items-center justify-between overflow-hidden rounded-[8px] bg-[url(https://sign-public-cdn.s3.us-east-1.amazonaws.com/Signie/Card_240626034540.webp)] bg-contain bg-center bg-no-repeat p-4">
+      <div className="mb-2 flex min-h-20 items-center justify-between overflow-hidden rounded-[8px] bg-[url(https://sign-public-cdn.s3.us-east-1.amazonaws.com/Signie/Card_240626034540.webp)] bg-cover bg-center bg-no-repeat p-4">
         <div>
           <div className="flex items-center gap-1 font-medium text-sm text-white">
             <span>My wallet address</span>
