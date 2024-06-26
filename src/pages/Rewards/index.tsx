@@ -2,11 +2,14 @@ import { Events, eventBus } from '@/eventbus';
 import { useUserInfo } from '@/providers/UserInfoProvider';
 import { getRewardsInfo } from '@/services';
 import { RewardItem } from '@/types';
-import { Button, Modal } from '@ethsign/ui';
+import { Edit02, InfoCircle } from '@ethsign/icons';
+import { Button } from '@ethsign/ui';
 import { shortenWalletAddress } from '@ethsign/utils-web';
 import { Loader2 } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
-import { ClaimAddressModal } from './comopnents/ClaimAddressModal';
+import { ClaimAddressEditModal } from './comopnents/ClaimAddressEditModal';
+import { ClaimAddressTipModal } from './comopnents/ClaimAddressTipModal';
+import { HowToClaimModal } from './comopnents/HowToClaimModal';
 
 function formatDate(dateString: number | string): string {
   const date = new Date(dateString);
@@ -27,8 +30,8 @@ export const Rewards: React.FC = () => {
   const [loading, setLoading] = useState(false);
 
   const [claimTipModalVisible, setClaimTipModalVisible] = useState(false);
-
   const [claimAddressEditModalVisible, setClaimAddressEditModalVisible] = useState(false);
+  const [claimAddressTipModalVisible, setClaimAddressTipModalVisible] = useState(false);
 
   useEffect(() => {
     const fetchRewards = async () => {
@@ -55,6 +58,37 @@ export const Rewards: React.FC = () => {
 
   return (
     <div className="relative">
+      <div className="mb-2 flex min-h-20 items-center justify-between overflow-hidden rounded-[8px] bg-[url(https://sign-public-cdn.s3.us-east-1.amazonaws.com/Signie/Card_240626034540.webp)] bg-contain bg-center bg-no-repeat p-4">
+        <div>
+          <div className="flex items-center gap-1 font-medium text-sm text-white">
+            <span>My wallet address</span>
+            <InfoCircle
+              size={18}
+              color="white"
+              onClick={() => {
+                setClaimAddressTipModalVisible(true);
+              }}
+            />
+          </div>
+
+          <div className="mt-1">
+            <span className="text-sm font-semibold text-white">
+              {user?.claimWalletAddress ? shortenWalletAddress(user.claimWalletAddress, 'normal') : 'No Wallet Address'}
+            </span>
+          </div>
+        </div>
+
+        <Button
+          className="bg-white text-xs hover:bg-white focus:bg-white active:bg-white"
+          onClick={() => {
+            setClaimAddressEditModalVisible(true);
+          }}
+        >
+          <span className="mr-2 text-sm text-[#0052FF]">Edit</span>
+          <Edit02 size={16} color="#0052FF" />
+        </Button>
+      </div>
+
       <h2 className="flex items-center justify-between font-bold text-xl text-white">
         <span>My Rewards</span>
 
@@ -67,20 +101,6 @@ export const Rewards: React.FC = () => {
           How to claim?
         </span>
       </h2>
-
-      <div className="flex items-center justify-between">
-        {user?.claimWalletAddress && (
-          <span className="text-xs text-white">{shortenWalletAddress(user.claimWalletAddress, 'normal')}</span>
-        )}
-        <button
-          className="text-xs text-white underline"
-          onClick={() => {
-            setClaimAddressEditModalVisible(true);
-          }}
-        >
-          Edit
-        </button>
-      </div>
 
       {loading && (
         <div className="flex min-h-[200px] items-center justify-center">
@@ -132,29 +152,11 @@ export const Rewards: React.FC = () => {
         </div>
       )}
 
-      <Modal
-        className="w-[95vw] rounded-[24px] border border-white/20 bg-white p-4 pt-6 sm:w-[410px]"
-        header={<h2 className="text-center font-bold text-[25px]">How to claim?</h2>}
-        open={claimTipModalVisible}
-        onOpenChange={setClaimTipModalVisible}
-        footer={false}
-      >
-        <p className="text-sm text-gray-900">
-          We will issue rewards to you at fixed times and notify you to provide wallet address.
-        </p>
+      <HowToClaimModal open={claimTipModalVisible} onOpenChange={setClaimTipModalVisible} />
 
-        <Button
-          variant="primary"
-          className="w-full"
-          onClick={() => {
-            setClaimTipModalVisible(false);
-          }}
-        >
-          OK
-        </Button>
-      </Modal>
+      <ClaimAddressEditModal open={claimAddressEditModalVisible} onOpenChange={setClaimAddressEditModalVisible} />
 
-      <ClaimAddressModal open={claimAddressEditModalVisible} onOpenChange={setClaimAddressEditModalVisible} />
+      <ClaimAddressTipModal open={claimAddressTipModalVisible} onOpenChange={setClaimAddressTipModalVisible} />
     </div>
   );
 };
