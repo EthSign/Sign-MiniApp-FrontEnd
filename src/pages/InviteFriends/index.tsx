@@ -1,8 +1,12 @@
 import { TabBar } from '@/components/Header';
 import { Star } from '@/components/Icons';
+import { ENVS } from '@/constants/config';
+import { useUserInfo } from '@/providers/UserInfoProvider';
 import { InvitationInfo } from '@/types';
+import { encodeTelegramStartParam } from '@/utils';
 import { UserPlus01 } from '@ethsign/icons';
 import { Button, ScrollArea } from '@ethsign/ui';
+import { initUtils } from '@tma.js/sdk';
 import classNames from 'classnames';
 import { Check, Loader2 } from 'lucide-react';
 import { nanoid } from 'nanoid';
@@ -35,6 +39,8 @@ const InviteFriendsPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
 
   const [invitationInfo, setInvitationInfo] = useState<InvitationInfo>();
+
+  const { user } = useUserInfo();
 
   useEffect(() => {
     const refreshInvitationInfo = async () => {
@@ -92,6 +98,24 @@ const InviteFriendsPage: React.FC = () => {
       };
     });
   }, [invitationInfo?.rule, invitationInfo?.totalInvited]);
+
+  const onInviteButtonClick = () => {
+    const utils = initUtils();
+
+    const inviteData = {
+      invitedBy: user?.userId
+    };
+
+    const description = 'Come and play together to win $NOT！';
+
+    const startParam = encodeTelegramStartParam(inviteData);
+
+    const url = `https://t.me/share/url?url=${ENVS.TG_APP_LINK}?startapp=${startParam}&text=${encodeURIComponent(
+      description
+    )}`;
+
+    utils.openTelegramLink(url);
+  };
 
   return (
     <div className="flex h-full flex-col">
@@ -152,9 +176,9 @@ const InviteFriendsPage: React.FC = () => {
               </div>
             )}
 
-            <Button className="mt-4 flex w-full items-center justify-center">
+            <Button className="mt-4 flex w-full items-center justify-center" onClick={onInviteButtonClick}>
               <UserPlus01 className="mr-2" size={16} color="white" />
-              Invite Friends
+              <span>Invite Friends</span>
             </Button>
           </div>
 

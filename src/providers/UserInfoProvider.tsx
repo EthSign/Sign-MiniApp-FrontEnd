@@ -6,6 +6,7 @@ import { getTMAInitData } from '@/utils/common.ts';
 import { useQuery } from '@tanstack/react-query';
 import { ReactNode, createContext, useContext, useEffect, useMemo } from 'react';
 import { useWalletBind } from '../hooks/useWalletBind';
+import { decodeTelegramStartParam } from '@/utils';
 
 interface UserInfoContextProps {
   user?: IUser;
@@ -54,14 +55,15 @@ export const UserInfoProvider = ({ children }: { children: ReactNode }) => {
     onBindSuccess: fetchUser
   });
 
-  const inviteData = useMemo(() => {
+  const startParam = useMemo(() => {
     try {
       if (authData?.start_param) {
-        const inviteData = JSON.parse(window.atob(decodeURIComponent(authData.start_param)));
-        console.log(inviteData, 'iv');
+        const decodedStartParam = decodeTelegramStartParam(authData.start_param);
+
         return {
-          raffleId: inviteData.raffleId,
-          inviteUser: inviteData?.inviteUser
+          raffleId: decodedStartParam.raffleId,
+          inviteUser: decodedStartParam?.inviteUser,
+          invitedBy: decodedStartParam?.invitedBy
         };
       }
       return null;
@@ -73,8 +75,12 @@ export const UserInfoProvider = ({ children }: { children: ReactNode }) => {
 
   const handleAuth = async () => {
     if (authData) {
-      const res = await auth({ webappData: authData, referenceCode: inviteData?.raffleId || '' });
-      console.log(res, 'res');
+      await auth({
+        webappData: authData,
+        referenceCode: startParam?.raffleId || '',
+        invitedBy: startParam?.invitedBy
+      });
+
       fetchUser();
     }
   };
@@ -91,8 +97,8 @@ export const UserInfoProvider = ({ children }: { children: ReactNode }) => {
       value={{
         user: {
           ...user,
-          code: inviteData?.raffleId,
-          inviteUser: inviteData?.inviteUser
+          code: startParam?.raffleId,
+          inviteUser: startParam?.inviteUser
         },
         isLoading,
         isBindingWallet,

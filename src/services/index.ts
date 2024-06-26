@@ -17,7 +17,7 @@ import {
 import { OffChainRpc } from '@ethsign/sp-sdk';
 import { ENVS } from '@/constants/config.ts';
 
-export const auth = async (data: { webappData: Record<string, any>; referenceCode: string }) => {
+export const auth = async (data: { webappData: Record<string, any>; referenceCode: string; invitedBy?: string }) => {
   return await apiClient.post('/mini/auth', data);
 };
 
