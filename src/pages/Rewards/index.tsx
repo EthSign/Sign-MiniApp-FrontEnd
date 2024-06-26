@@ -1,7 +1,7 @@
 import { Events, eventBus } from '@/eventbus';
 import { useUserInfo } from '@/providers/UserInfoProvider';
 import { getRewardsInfo } from '@/services';
-import { RewardItem } from '@/types';
+import { RewardInfo } from '@/types';
 import { Edit02, InfoCircle } from '@ethsign/icons';
 import { Button } from '@ethsign/ui';
 import { shortenWalletAddress } from '@ethsign/utils-web';
@@ -10,22 +10,12 @@ import React, { useEffect, useState } from 'react';
 import { ClaimAddressEditModal } from './comopnents/ClaimAddressEditModal';
 import { ClaimAddressTipModal } from './comopnents/ClaimAddressTipModal';
 import { HowToClaimModal } from './comopnents/HowToClaimModal';
-
-function formatDate(dateString: number | string): string {
-  const date = new Date(dateString);
-
-  const options: Intl.DateTimeFormatOptions = {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  };
-  return date.toLocaleDateString('en-US', options);
-}
+import { RewardItem } from './comopnents/RewardItem';
 
 export const Rewards: React.FC = () => {
   const { user } = useUserInfo();
 
-  const [rewards, setRewards] = useState<RewardItem[]>([]);
+  const [rewards, setRewards] = useState<RewardInfo[]>([]);
 
   const [loading, setLoading] = useState(false);
 
@@ -111,21 +101,7 @@ export const Rewards: React.FC = () => {
       {!loading && rewards.length > 0 && (
         <div className="mt-2 space-y-2">
           {rewards.map((reward) => (
-            <div className="flex items-center gap-4 rounded-[8px] border bg-white px-4 py-3" key={reward.id}>
-              <img className="size-8 object-contain" src={reward.image} alt="" />
-
-              <div className="space-y-1">
-                <div className="flex items-center">
-                  <span className="font-bold text-sm text-[#101828]">
-                    {reward.type === 'token' ? `${reward.amount} ${reward.name}` : reward.name}
-                  </span>
-
-                  <div className="ml-2 h-[18px] rounded-full bg-secondary px-2 text-xs text-primary">Mystery Drop</div>
-                </div>
-
-                <div className="font-medium text-xs text-[#475467]">{formatDate(reward.rewardAt)}</div>
-              </div>
-            </div>
+            <RewardItem key={reward.id} reward={reward} />
           ))}
         </div>
       )}

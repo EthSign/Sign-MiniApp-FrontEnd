@@ -148,7 +148,7 @@ export enum MiniRewardStatus {
   Claimed = 'claimed'
 }
 
-export interface RewardItem {
+export interface RewardInfo {
   id: string;
   status: MiniRewardStatus;
   amount: number;
@@ -161,7 +161,7 @@ export interface RewardItem {
 
 export interface RewardResponse {
   total: number;
-  rows: RewardItem[];
+  rows: RewardInfo[];
 }
 
 export interface InvitationInfo {
