@@ -92,7 +92,7 @@ export interface ITaskData {
   remainingAvailableTasks: number;
   addressBound: boolean;
   groupJoined: boolean;
-visitBalletCrypto: boolean;
+  visitBalletCrypto: boolean;
   visitSafepal: boolean;
   joinSafePalTgGroup: boolean;
 }
@@ -173,12 +173,8 @@ export interface RewardResponse {
 export interface InvitationInfo {
   totalInvited: number;
   totalPoints: number;
-  rule: {
-    count: number;
-    points: number;
-  }[];
-  rows: {
-    id: string;
+  rules: number[];
+  invitedList: {
     username: string;
     points: number;
   }[];

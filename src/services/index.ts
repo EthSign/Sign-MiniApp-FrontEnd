@@ -5,6 +5,7 @@ import {
   IRankData,
   ITaskData,
   IUser,
+  InvitationInfo,
   LotteryInfo,
   MysteryDropInfo,
   MysteryDropRaffleResult,
@@ -138,4 +139,8 @@ export const updateClaimAddress = async (address: string) => {
   return apiClient.post('/mini/update-claim-address', {
     address
   });
+};
+
+export const getInvitationInfo = async () => {
+  return apiClient.get<InvitationInfo>('/mini/campaigns/invitation/result/today');
 };
