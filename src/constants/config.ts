@@ -5,7 +5,8 @@ export const ENVS = {
   ENV: import.meta.env.VITE_ENV,
   SHARE_DESC: 'Spin to win $NOT and more！',
   INITDATA: import.meta.env.VITE_INITDATA,
-  TG_GROUP_LINK: 'https://t.me/signeverythingonchain'
+  TG_SIGN_GROUP_LINK: 'https://t.me/signeverythingonchain',
+  TG_SAFEPAL_LINK: 'https://t.me/SafePalTG'
 };
 
 const schemaList = [

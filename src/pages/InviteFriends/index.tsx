@@ -2,6 +2,7 @@ import { TabBar } from '@/components/Header';
 import { Star } from '@/components/Icons';
 import { ENVS } from '@/constants/config';
 import { useUserInfo } from '@/providers/UserInfoProvider';
+import { getInvitationInfo } from '@/services';
 import { InvitationInfo } from '@/types';
 import { encodeTelegramStartParam } from '@/utils';
 import { UserPlus01 } from '@ethsign/icons';
@@ -9,7 +10,6 @@ import { Button, ScrollArea } from '@ethsign/ui';
 import { initUtils } from '@tma.js/sdk';
 import classNames from 'classnames';
 import { Check, Loader2 } from 'lucide-react';
-import { nanoid } from 'nanoid';
 import { useEffect, useMemo, useState } from 'react';
 
 function ordinalSuffix(n: number): string {
@@ -45,40 +45,10 @@ const InviteFriendsPage: React.FC = () => {
   useEffect(() => {
     const refreshInvitationInfo = async () => {
       setLoading(true);
-      // TODO: 获取当前已邀请的信息
 
-      await new Promise((resolve) => {
-        setTimeout(resolve, 1500);
-      });
+      const invitationInfo = await getInvitationInfo();
 
-      setInvitationInfo({
-        totalInvited: 2,
-        totalPoints: 9000,
-        rule: [
-          { count: 1, points: 100 },
-          { count: 2, points: 300 },
-          { count: 3, points: 500 },
-          { count: 4, points: 1000 },
-          { count: 5, points: 5000 }
-        ],
-        rows: [
-          {
-            id: nanoid(),
-            points: 100,
-            username: 'Harry Potter'
-          },
-          {
-            id: nanoid(),
-            points: 100,
-            username: 'Monkey King'
-          },
-          {
-            id: nanoid(),
-            points: 100,
-            username: 'Spider Man'
-          }
-        ]
-      });
+      setInvitationInfo(invitationInfo);
 
       setLoading(false);
     };
@@ -87,17 +57,17 @@ const InviteFriendsPage: React.FC = () => {
   }, []);
 
   const steps = useMemo(() => {
-    const rule = invitationInfo?.rule;
+    const rule = invitationInfo?.rules;
     if (!rule) return [];
 
-    return rule.map((item, index) => {
+    return rule.map((points, index) => {
       return {
         label: ordinalSuffix(index + 1),
         finished: index < (invitationInfo?.totalInvited ?? 0),
-        points: item.points
+        points: points
       };
     });
-  }, [invitationInfo?.rule, invitationInfo?.totalInvited]);
+  }, [invitationInfo?.rules, invitationInfo?.totalInvited]);
 
   const onInviteButtonClick = () => {
     const utils = initUtils();
@@ -196,8 +166,8 @@ const InviteFriendsPage: React.FC = () => {
               <>
                 <h1 className="font-bold text-2xl">Received {formatNumber(invitationInfo.totalPoints)} points</h1>
                 <div className="space-y-2">
-                  {invitationInfo.rows.map((invitation) => (
-                    <div key={invitation.id} className="flex items-center justify-between">
+                  {invitationInfo.invitedList.map((invitation, index) => (
+                    <div key={invitation.username + index} className="flex items-center justify-between">
                       <div className="flex items-center space-x-4">
                         <img
                           className="size-[35px]"

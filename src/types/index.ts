@@ -92,12 +92,18 @@ export interface ITaskData {
   remainingAvailableTasks: number;
   addressBound: boolean;
   groupJoined: boolean;
+visitBalletCrypto: boolean;
+  visitSafepal: boolean;
+  joinSafePalTgGroup: boolean;
 }
 
 export enum TaskTypeEnum {
   QUIZ = 'quiz',
   JOIN_GROUP = 'join_group',
-  OFFCHAINATTEST = 'offchain_attest'
+  OFFCHAINATTEST = 'offchain_attest',
+  VisitBalletCrypto = 'visit_ballet_crypto',
+  VisitSafepal = 'visit_safepal',
+  JoinSafePalTgGroup = 'join_safe_pal_tg_group'
 }
 
 export interface QuizInfoData {
@@ -176,4 +182,9 @@ export interface InvitationInfo {
     username: string;
     points: number;
   }[];
+}
+
+export enum TaskRewardType {
+  POINTS = 'points',
+  TICKET = 'ticket'
 }

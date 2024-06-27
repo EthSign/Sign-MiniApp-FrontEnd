@@ -1,41 +1,73 @@
-import ticketImg from '@/assets/ticket.png';
+import { TaskRewardType } from '@/types';
 import { Button } from '@ethsign/ui';
-import { forwardRef } from 'react';
+import { forwardRef, useMemo } from 'react';
 import { DrawerRef, TaskDrawer } from './TaskDrawer';
 import { TaskItem } from './TaskItem';
 
 export interface TaskProps {
+  title: string;
+  action?:
+    | {
+        text?: string;
+        loading?: boolean;
+        handler?: () => void;
+      }
+    | (() => void);
+  rewardText?: string;
+  description?: string;
   completed?: boolean;
   ref?: React.MutableRefObject<DrawerRef>;
-  title: string;
-  description: string;
-  scoreText: string;
-  drawerTitle: string;
-  drawerDescription: string;
-  action: {
-    text: string;
-    loading: boolean;
-    handler: () => void;
-  };
+  rewardType?: TaskRewardType;
+  drawerTitle?: string;
+  drawerDescription?: string;
 }
 
 export const Task = forwardRef<DrawerRef, TaskProps>((props, ref) => {
-  const { completed, description, drawerDescription, drawerTitle, scoreText, title, action } = props;
+  const { rewardType, completed, description, drawerDescription, drawerTitle, rewardText, title, action } = props;
+
+  const drawerEnabled = useMemo(() => !!drawerDescription || !!drawerTitle, [drawerDescription, drawerTitle]);
+
+  if (drawerEnabled)
+    return (
+      <TaskDrawer
+        ref={ref}
+        success={completed}
+        title={drawerTitle ?? title}
+        desc={drawerDescription ?? drawerDescription ?? ''}
+        trigger={
+          <TaskItem
+            rewardType={rewardType}
+            completed={completed}
+            title={title}
+            description={description}
+            rewardText={rewardText}
+          />
+        }
+        action={
+          typeof action === 'function' ? (
+            <Button className={'mt-8'} onClick={action}>
+              Confirm
+            </Button>
+          ) : (
+            <Button className={'mt-8'} onClick={action?.handler} loading={action?.loading}>
+              {action?.text}
+            </Button>
+          )
+        }
+      />
+    );
 
   return (
-    <TaskDrawer
-      ref={ref}
-      success={completed}
-      title={drawerTitle ?? title}
-      desc={drawerDescription ?? drawerDescription}
-      trigger={
-        <TaskItem img={ticketImg} success={completed} title={title} description={description} score={scoreText} />
-      }
-      action={
-        <Button className={'mt-8'} onClick={() => action?.handler?.()} loading={action.loading}>
-          {action.text}
-        </Button>
-      }
+    <TaskItem
+      rewardType={rewardType}
+      completed={completed}
+      title={title}
+      description={description ?? ''}
+      rewardText={rewardText}
+      onClick={() => {
+        const handler = typeof action === 'function' ? action : action?.handler;
+        handler?.();
+      }}
     />
   );
 });

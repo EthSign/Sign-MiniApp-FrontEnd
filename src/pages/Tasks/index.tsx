@@ -1,11 +1,11 @@
 import { ENVS } from '@/constants/config.ts';
 import { useUserInfo } from '@/providers/UserInfoProvider.tsx';
-import { checkTask, getQuizInfo, getTask } from '@/services';
-import { TaskTypeEnum } from '@/types';
+import { checkTask as checkTaskRequest, getQuizInfo, getTask } from '@/services';
+import { TaskRewardType, TaskTypeEnum } from '@/types';
 import { initTmaUtils } from '@/utils/common.ts';
 import { Badge } from '@ethsign/ui';
 import { useQuery } from '@tanstack/react-query';
-import { useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Task, TaskProps } from './components/Task';
 import { DrawerRef } from './components/TaskDrawer';
@@ -15,74 +15,124 @@ export default function Tasks() {
   const navigate = useNavigate();
 
   const { isBindingWallet, bindWallet } = useUserInfo();
+  const [isJoiningSignGroup, setIsJoiningSignGroup] = useState(false);
 
-  const { data, refetch } = useQuery({
-    queryKey: ['tasks'],
-    queryFn: getTask
-  });
+  const { data: taskData, refetch } = useQuery({ queryKey: ['tasks'], queryFn: getTask });
+  const { data: quizData } = useQuery({ queryKey: ['quiz-info'], queryFn: getQuizInfo });
 
-  const { data: quizData } = useQuery({
-    queryKey: ['quiz-info'],
-    queryFn: getQuizInfo
-  });
-
-  const [joinLoading, setJoinLoading] = useState(false);
-
-  const walletDrawerRef = useRef<DrawerRef>();
-  const joinTgDrawerRef = useRef<DrawerRef>();
+  const bingWalletDrawerRef = useRef<DrawerRef>();
+  const joinSignGroupDrawerRef = useRef<DrawerRef>();
 
   const handleBindWallet = async () => {
     await bindWallet();
     refetch();
-    walletDrawerRef.current?.close();
+    bingWalletDrawerRef.current?.close();
   };
 
-  const handleJoinGroup = async () => {
+  const joinTelegtamGroup = async (groupUrl: string) => {
     try {
-      setJoinLoading(true);
+      setIsJoiningSignGroup(true);
 
-      const res = await checkTask({ taskType: TaskTypeEnum.JOIN_GROUP });
+      const res = await checkTaskRequest({ taskType: TaskTypeEnum.JOIN_GROUP });
 
       if (res.result) {
         refetch();
-        joinTgDrawerRef.current?.close();
+        joinSignGroupDrawerRef.current?.close();
         return;
       }
+
       const utils = initTmaUtils();
-      utils.openTelegramLink(ENVS.TG_GROUP_LINK);
+
+      utils.openTelegramLink(groupUrl);
     } finally {
-      setJoinLoading(false);
+      setIsJoiningSignGroup(false);
     }
   };
 
-  const oneTimeTasks: TaskProps[] = [
-    {
-      completed: data?.addressBound,
-      title: 'Connect wallet',
-      description: 'Earn 1 free tickets per day',
-      drawerDescription: 'Connect wallet to earn 1 free tickets per day',
-      drawerTitle: 'Connect wallet',
-      scoreText: '1 free ticket/day',
-      action: {
-        handler: handleBindWallet,
-        loading: isBindingWallet,
-        text: 'Connect wallet now'
-      }
-    },
-    {
-      completed: data?.groupJoined,
-      title: 'Join TG group',
-      description: 'Earn 1 free tickets per day',
-      drawerDescription: 'Join our TG channel to keep up to date and earn 1 free tickets per day',
-      drawerTitle: 'Join our TG channel',
-      scoreText: '1 free ticket/day',
-      action: {
-        handler: handleJoinGroup,
-        loading: joinLoading,
-        text: 'Join now'
-      }
+  const checkTask = async (taskType: TaskTypeEnum) => {
+    const res = await checkTaskRequest({ taskType });
+
+    if (res.result) {
+      refetch();
     }
-  ];
+  };
+
+  const oneTimeTasks = useMemo(() => {
+    const tasks: TaskProps[] = [
+      {
+        completed: taskData?.addressBound,
+        title: 'Connect wallet',
+        // description: 'Earn 1 free tickets per day',
+        drawerDescription: 'Connect wallet to earn 1 free tickets per day',
+        drawerTitle: 'Connect wallet',
+        rewardText: '1 free ticket/day',
+        rewardType: TaskRewardType.TICKET,
+        action: {
+          handler: handleBindWallet,
+          loading: isBindingWallet,
+          text: 'Connect wallet now'
+        }
+      },
+      {
+        completed: taskData?.groupJoined,
+        title: 'Join TG group',
+        // description: 'Earn 1 free tickets per day',
+        drawerDescription: 'Join our TG channel to keep up to date and earn 1 free tickets per day',
+        drawerTitle: 'Join our TG channel',
+        rewardText: '1 free ticket/day',
+        rewardType: TaskRewardType.TICKET,
+        action: {
+          handler: () => joinTelegtamGroup(ENVS.TG_SIGN_GROUP_LINK),
+          loading: isJoiningSignGroup,
+          text: 'Join now'
+        }
+      },
+      {
+        completed: taskData?.visitBalletCrypto,
+        title: 'Visit Ballet Cold Storage X',
+        rewardText: '200 pts',
+        rewardType: TaskRewardType.POINTS,
+        action: {
+          handler: async () => {
+            window.open('https://x.com/BalletCrypto/');
+            await checkTask(TaskTypeEnum.VisitBalletCrypto);
+          },
+          text: 'Visit now'
+        }
+      },
+      {
+        completed: taskData?.visitSafepal,
+        title: 'Visit Safepal X',
+        rewardText: '200 pts',
+        rewardType: TaskRewardType.POINTS,
+        action: {
+          handler: async () => {
+            window.open('https://www.twitter.com/isafepal');
+            await checkTask(TaskTypeEnum.VisitSafepal);
+          },
+          loading: isJoiningSignGroup,
+          text: 'Visit now'
+        }
+      },
+      {
+        completed: taskData?.joinSafePalTgGroup,
+        title: 'Join Safepal X TG Group',
+        drawerTitle: 'Join Safepal X TG Group',
+        rewardText: '300 pts',
+        rewardType: TaskRewardType.POINTS,
+        action: {
+          handler: () => joinTelegtamGroup(ENVS.TG_SAFEPAL_LINK),
+          loading: isJoiningSignGroup,
+          text: 'Join now'
+        }
+      }
+    ];
+
+    tasks.sort((a, b) => Number(a.completed) - Number(b.completed));
+
+    return tasks;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [taskData, isBindingWallet, isJoiningSignGroup]);
 
   const dailyTasks = [
     {
@@ -123,7 +173,7 @@ export default function Tasks() {
             extra={task.extra}
             key={index}
             onClick={task.onClick}
-            success={task.completed}
+            completed={task.completed}
           />
         ))}
       </div>

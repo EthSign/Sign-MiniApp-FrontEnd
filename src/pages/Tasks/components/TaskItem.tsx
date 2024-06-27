@@ -1,42 +1,60 @@
 import starImg from '@/assets/StarCoin.png';
+import ticketImg from '@/assets/ticket.png';
 import { CheckSuccess } from '@/components/Icons.tsx';
+import { TaskRewardType } from '@/types';
 import { cn } from '@/utils/tailwind.ts';
 import { ChevronRight } from '@ethsign/icons';
-import { ReactNode } from 'react';
+import { ReactNode, useMemo } from 'react';
 
 export interface TaskItemProps {
   title: string;
-  description: string;
-  score?: number | string;
+  description?: string;
+  rewardText?: string;
   extra?: ReactNode;
-  success?: boolean;
-  img?: string;
+  completed?: boolean;
+  rewardImage?: string;
+  rewardType?: TaskRewardType;
   onClick?: () => void;
 }
 
 export const TaskItem = (props: TaskItemProps) => {
-  const { title, description, score, extra, onClick, success, img } = props;
+  const { title, description, rewardText, extra, completed, rewardImage, rewardType, onClick } = props;
+
+  const imageUrl = useMemo(() => {
+    if (rewardImage) return rewardImage;
+
+    const imageUrls: Record<TaskRewardType, string> = {
+      [TaskRewardType.POINTS]: starImg,
+      [TaskRewardType.TICKET]: ticketImg
+    };
+
+    return imageUrls[rewardType ?? TaskRewardType.POINTS];
+  }, [rewardImage, rewardType]);
 
   return (
     <div
-      onClick={onClick}
+      onClick={() => {
+        if (completed) return;
+        onClick?.();
+      }}
       className={cn(
         'flex items-center justify-between py-3 px-4 rounded-[8px] border border-gray-200 bg-white',
-        success ? 'bg-[#ECF2FF]' : 'bg-white'
+        completed ? 'bg-[#ECF2FF]' : 'bg-white'
       )}
     >
       <div className={'flex items-center gap-4'}>
-        <img src={img || starImg} className={'size-[35px]'} alt="" />
+        <img src={imageUrl} className={'size-[35px]'} alt="" />
         <div>
           <div className={'text-sm font-semibold'}>
-            {title} {score && <span className={'ml-2 font-medium text-xs text-primary'}>+{score}</span>}
+            <span> {title}</span>
+            {rewardText && <div className={'font-medium text-xs text-primary'}>+{rewardText}</div>}
           </div>
           <div className={'mt-1 font-normal text-xs text-gray-600'}>{description}</div>
         </div>
       </div>
       <div className={'flex items-center'}>
         {extra}
-        {success ? <CheckSuccess /> : <ChevronRight color={'#98A2B3'} />}
+        {completed ? <CheckSuccess /> : <ChevronRight color={'#98A2B3'} />}
       </div>
     </div>
   );
