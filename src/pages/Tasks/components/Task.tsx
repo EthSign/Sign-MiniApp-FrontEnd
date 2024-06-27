@@ -16,7 +16,7 @@ export interface TaskProps {
   rewardText?: string;
   description?: string;
   completed?: boolean;
-  ref?: React.MutableRefObject<DrawerRef>;
+  ref?: React.MutableRefObject<DrawerRef | null>;
   rewardType?: TaskRewardType;
   drawerTitle?: string;
   drawerDescription?: string;

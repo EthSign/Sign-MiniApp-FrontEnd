@@ -20,20 +20,21 @@ export default function Tasks() {
   const { data: taskData, refetch } = useQuery({ queryKey: ['tasks'], queryFn: getTask });
   const { data: quizData } = useQuery({ queryKey: ['quiz-info'], queryFn: getQuizInfo });
 
-  const bingWalletDrawerRef = useRef<DrawerRef>();
-  const joinSignGroupDrawerRef = useRef<DrawerRef>();
+  const bindingWalletDrawerRef = useRef<DrawerRef>(null);
+  const joinSignGroupDrawerRef = useRef<DrawerRef>(null);
 
   const handleBindWallet = async () => {
     await bindWallet();
     refetch();
-    bingWalletDrawerRef.current?.close();
+    bindingWalletDrawerRef.current?.close();
   };
 
-  const joinTelegtamGroup = async (groupUrl: string) => {
+  const joinTelegtamGroup = async (props: { groupUrl: string; taskType: TaskTypeEnum }) => {
+    const { groupUrl, taskType } = props;
     try {
       setIsJoiningSignGroup(true);
 
-      const res = await checkTaskRequest({ taskType: TaskTypeEnum.JOIN_GROUP });
+      const res = await checkTaskRequest({ taskType });
 
       if (res.result) {
         refetch();
@@ -62,6 +63,7 @@ export default function Tasks() {
       {
         completed: taskData?.addressBound,
         title: 'Connect wallet',
+        ref: bindingWalletDrawerRef,
         // description: 'Earn 1 free tickets per day',
         drawerDescription: 'Connect wallet to earn 1 free tickets per day',
         drawerTitle: 'Connect wallet',
@@ -76,13 +78,18 @@ export default function Tasks() {
       {
         completed: taskData?.groupJoined,
         title: 'Join TG group',
+        ref: joinSignGroupDrawerRef,
         // description: 'Earn 1 free tickets per day',
         drawerDescription: 'Join our TG channel to keep up to date and earn 1 free tickets per day',
         drawerTitle: 'Join our TG channel',
         rewardText: '1 free ticket/day',
         rewardType: TaskRewardType.TICKET,
         action: {
-          handler: () => joinTelegtamGroup(ENVS.TG_SIGN_GROUP_LINK),
+          handler: () =>
+            joinTelegtamGroup({
+              groupUrl: ENVS.TG_SIGN_GROUP_LINK,
+              taskType: TaskTypeEnum.JOIN_GROUP
+            }),
           loading: isJoiningSignGroup,
           text: 'Join now'
         }
@@ -121,7 +128,11 @@ export default function Tasks() {
         rewardText: '300 pts',
         rewardType: TaskRewardType.POINTS,
         action: {
-          handler: () => joinTelegtamGroup(ENVS.TG_SAFEPAL_LINK),
+          handler: () =>
+            joinTelegtamGroup({
+              groupUrl: ENVS.TG_SAFEPAL_LINK,
+              taskType: TaskTypeEnum.JoinSafePalTgGroup
+            }),
           loading: isJoiningSignGroup,
           text: 'Join now'
         }
