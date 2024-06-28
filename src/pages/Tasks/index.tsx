@@ -11,7 +11,13 @@ import { Task, TaskProps } from './components/Task';
 import { DrawerRef } from './components/TaskDrawer';
 import { TaskItem } from './components/TaskItem';
 
-const tgUtils = initTmaUtils();
+let tgUtils: ReturnType<typeof initTmaUtils>;
+
+try {
+  tgUtils = initTmaUtils();
+} catch (error) {
+  console.error(error);
+}
 
 export default function Tasks() {
   const navigate = useNavigate();
@@ -36,7 +42,11 @@ export default function Tasks() {
     try {
       setIsJoiningSignGroup(true);
 
-      tgUtils.openTelegramLink(groupUrl);
+      if (tgUtils) {
+        tgUtils.openTelegramLink(groupUrl);
+      } else {
+        window.open(groupUrl);
+      }
 
       const res = await checkTaskRequest({ taskType });
 
@@ -118,6 +128,7 @@ export default function Tasks() {
         completed: taskData?.joinSafePalTgGroup,
         title: 'Join Safepal X TG Group',
         drawerTitle: 'Join Safepal X TG Group',
+        drawerDescription: 'Join Safepal’s TG group to earn Signie points',
         rewardText: '300 pts',
         rewardType: TaskRewardType.POINTS,
         action: {
