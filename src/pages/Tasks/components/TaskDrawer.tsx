@@ -14,13 +14,15 @@ export interface TaskDrawerProps {
   title: string;
   desc: string;
   action: ReactNode;
-  success?: boolean;
+  completed?: boolean;
 }
 
 export interface DrawerRef {
   close: () => void;
 }
-export const TaskDrawer = forwardRef<DrawerRef, TaskDrawerProps>(({ trigger, title, desc, action, success }, ref) => {
+export const TaskDrawer = forwardRef<DrawerRef, TaskDrawerProps>((props, ref) => {
+  const { trigger, title, desc, action, completed } = props;
+
   const [open, setOpen] = React.useState(false);
 
   useImperativeHandle(ref, () => {
@@ -51,9 +53,10 @@ export const TaskDrawer = forwardRef<DrawerRef, TaskDrawerProps>(({ trigger, tit
           </div>
         </DrawerContent>
       </Drawer>
+
       <div
         onClick={() => {
-          if (!success) {
+          if (!completed) {
             setOpen(true);
           }
         }}

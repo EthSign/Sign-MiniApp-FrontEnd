@@ -31,7 +31,7 @@ export const Task = forwardRef<DrawerRef, TaskProps>((props, ref) => {
     return (
       <TaskDrawer
         ref={ref}
-        success={completed}
+        completed={completed}
         title={drawerTitle ?? title}
         desc={drawerDescription ?? drawerDescription ?? ''}
         trigger={

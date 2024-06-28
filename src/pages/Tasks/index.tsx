@@ -11,6 +11,8 @@ import { Task, TaskProps } from './components/Task';
 import { DrawerRef } from './components/TaskDrawer';
 import { TaskItem } from './components/TaskItem';
 
+const tgUtils = initTmaUtils();
+
 export default function Tasks() {
   const navigate = useNavigate();
 
@@ -34,6 +36,8 @@ export default function Tasks() {
     try {
       setIsJoiningSignGroup(true);
 
+      tgUtils.openTelegramLink(groupUrl);
+
       const res = await checkTaskRequest({ taskType });
 
       if (res.result) {
@@ -41,10 +45,6 @@ export default function Tasks() {
         joinSignGroupDrawerRef.current?.close();
         return;
       }
-
-      const utils = initTmaUtils();
-
-      utils.openTelegramLink(groupUrl);
     } finally {
       setIsJoiningSignGroup(false);
     }
@@ -99,12 +99,9 @@ export default function Tasks() {
         title: 'Visit Ballet Cold Storage X',
         rewardText: '200 pts',
         rewardType: TaskRewardType.POINTS,
-        action: {
-          handler: async () => {
-            window.open('https://x.com/BalletCrypto/');
-            await checkTask(TaskTypeEnum.VisitBalletCrypto);
-          },
-          text: 'Visit now'
+        action: async () => {
+          window.open('https://x.com/BalletCrypto/');
+          await checkTask(TaskTypeEnum.VisitBalletCrypto);
         }
       },
       {
@@ -112,13 +109,9 @@ export default function Tasks() {
         title: 'Visit Safepal X',
         rewardText: '200 pts',
         rewardType: TaskRewardType.POINTS,
-        action: {
-          handler: async () => {
-            window.open('https://www.twitter.com/isafepal');
-            await checkTask(TaskTypeEnum.VisitSafepal);
-          },
-          loading: isJoiningSignGroup,
-          text: 'Visit now'
+        action: async () => {
+          window.open('https://www.twitter.com/isafepal');
+          await checkTask(TaskTypeEnum.VisitSafepal);
         }
       },
       {
