@@ -13,6 +13,7 @@ import {
   RaffleInfo,
   RaffleResult,
   RewardResponse,
+  SeasonInfo,
   TaskTypeEnum
 } from '@/types';
 import { OffChainRpc } from '@ethsign/sp-sdk';
@@ -143,4 +144,19 @@ export const updateClaimAddress = async (address: string) => {
 
 export const getInvitationInfo = async () => {
   return apiClient.get<InvitationInfo>('/mini/campaigns/invitation/result/today');
+};
+
+export const getSeasonInfo = async () => {
+  return {
+    key: 's1',
+    startTime: 1719559856128,
+    endTime: Date.now() + 20 * 1000,
+    seasonEndNotifyTime: Date.now() + 10 * 1000,
+    name: 'Season 1',
+    seasonReward: {
+      isWinner: false,
+      rank: 100,
+      rewardAllocated: false
+    }
+  } as SeasonInfo;
 };

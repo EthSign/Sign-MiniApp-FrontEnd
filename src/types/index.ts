@@ -184,3 +184,16 @@ export enum TaskRewardType {
   POINTS = 'points',
   TICKET = 'ticket'
 }
+
+export interface SeasonInfo {
+  key: string;
+  name: string;
+  startTime: number;
+  endTime: number;
+  seasonEndNotifyTime: number;
+  seasonReward: {
+    isWinner: boolean;
+    rank: number;
+    rewardAllocated: boolean;
+  };
+}

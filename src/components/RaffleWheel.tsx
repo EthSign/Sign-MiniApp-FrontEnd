@@ -4,6 +4,7 @@ import { raffle } from '@/services';
 import classNames from 'classnames';
 import React, { useMemo, useState } from 'react';
 import WebApp from '@twa-dev/sdk';
+import { CurrentSeasonPeriodModal } from '@/providers/SeasonInfoProvider/CurrentSeasonPeriodModal';
 
 export interface RaffleWheelProps {
   className?: string;
@@ -24,6 +25,8 @@ export const RaffleWheel = React.forwardRef<HTMLDivElement, RaffleWheelProps>((p
   const [isRaffling, setIsRaffling] = useState(false);
 
   const [degree, setDegree] = useState(0);
+
+  const [prizePoolModalVisible, setPrizePoolModalVisible] = useState(false);
 
   const canSpin = useMemo(
     () => !loading && !isSpining && !isRaffling && remainingTimes > 0,
@@ -72,6 +75,13 @@ export const RaffleWheel = React.forwardRef<HTMLDivElement, RaffleWheelProps>((p
         className
       )}
     >
+      <CurrentSeasonPeriodModal
+        open={prizePoolModalVisible}
+        onOpenChange={setPrizePoolModalVisible}
+        showModalFrame
+        triggerClassName="absolute top-0 right-5"
+      />
+
       <div className="absolute inset-0 rounded-full bg-[linear-gradient(-135deg,#FDC347_9%,#FC8682_27%,#FA2CD7_52%,#987CDB_76%,#33D0E0_100%)]" />
 
       <div className="absolute flex size-[86%] items-center justify-center overflow-hidden rounded-full">
