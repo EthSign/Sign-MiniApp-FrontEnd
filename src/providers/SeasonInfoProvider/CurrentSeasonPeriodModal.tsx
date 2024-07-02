@@ -1,10 +1,9 @@
+import { SeasonInfo } from '@/types';
 import { XCircle } from '@ethsign/icons';
 import { Modal } from '@ethsign/ui';
 import classNames from 'classnames';
 import React, { useRef } from 'react';
 import { Transition } from 'react-transition-group';
-import { useSeasonInfo } from '.';
-import { SeasonInfo } from '@/types';
 
 function formatDate(dateOrTimeStamp: Date | number): string {
   const date = new Date(dateOrTimeStamp);
@@ -58,17 +57,16 @@ const ModalContent: React.FC<{ color?: 'black' | 'white'; seasonInfo: SeasonInfo
 interface CurrentSeasonPeriodModalProps {
   open?: boolean;
   /** 是否显示 modal 的边框 */
+  seasonInfo?: SeasonInfo;
   showModalFrame?: boolean;
   triggerClassName?: string;
   onOpenChange?: (open: boolean) => void;
 }
 
 export const CurrentSeasonPeriodModal: React.FC<CurrentSeasonPeriodModalProps> = (props) => {
-  const { open, showModalFrame = false, triggerClassName, onOpenChange } = props;
+  const { open, showModalFrame = false, triggerClassName, seasonInfo, onOpenChange } = props;
 
   const modalContainerRef = useRef<HTMLDivElement>(null);
-
-  const seasonInfo = useSeasonInfo();
 
   if (!seasonInfo) return null;
 

@@ -1,8 +1,8 @@
-import { getSeasonInfo } from '@/services';
+import { addOnDateHandler } from '@/hooks/useClock';
+import { getSeasons } from '@/services';
 import { SeasonInfo } from '@/types';
-import React, { PropsWithChildren, createContext, useContext, useEffect, useState } from 'react';
+import React, { PropsWithChildren, createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { CurrentSeasonPeriodModal } from './CurrentSeasonPeriodModal';
-import { LastSeasonEndedModal } from './LastSeasonEndedModal';
 
 function getStorageFlag(flagName: string) {
   return localStorage.getItem(flagName) === 'true';
@@ -19,59 +19,72 @@ export const useSeasonInfo = () => {
   return seasonInfo;
 };
 
-const SeasonInfoContext = createContext<SeasonInfo | undefined>(undefined);
+const SeasonInfoContext = createContext<{
+  seasons: SeasonInfo[];
+  currentSeason?: SeasonInfo;
+}>({
+  seasons: []
+});
 
 export const SeasonInfoProvider: React.FC<PropsWithChildren> = (props) => {
   const { children } = props;
 
-  const [seasonEndedModalVisible, setSeasonEndedModalVisible] = useState(false);
+  // const [seasonEndedModalVisible, setSeasonEndedModalVisible] = useState(false);
   const [prizePoolModalVisible, setPrizePoolModalVisible] = useState(false);
 
-  const [seasonInfo, setSeasonInfo] = useState<SeasonInfo>();
+  const [seasons, setSeasons] = useState<SeasonInfo[]>([]);
+
+  const currentSeason = useMemo(() => {
+    return seasons?.find((season) => season.isCurrent === true);
+  }, [seasons]);
 
   useEffect(() => {
-    let timer: NodeJS.Timeout;
+    let dispose: (() => void) | null = null;
 
-    const init = async () => {
-      const seasonInfo = await getSeasonInfo();
+    const refreshSeasonData = async () => {
+      const seasons = await getSeasons();
 
-      setSeasonInfo(seasonInfo);
+      setSeasons(seasons);
 
-      const seasonEndedModalShownFlag = 'seasonEndedModalShown_' + seasonInfo.key;
-      const prizePoolModalShownFlag = 'prizePoolModalShown_' + seasonInfo.key;
+      const currentSeason = seasons.find((season) => season.isCurrent);
 
-      timer = setInterval(() => {
-        const now = Date.now();
+      if (currentSeason) {
+        const prizePoolModalShownFlag = 'prizePoolModalShown_' + currentSeason.seasonKey;
 
-        if (now >= seasonInfo.seasonEndNotifyTime && !getStorageFlag(prizePoolModalShownFlag)) {
-          setPrizePoolModalVisible(true);
-          setStorageFlag(prizePoolModalShownFlag);
+        if (currentSeason.popTime && !getStorageFlag(prizePoolModalShownFlag)) {
+          dispose = addOnDateHandler({
+            date: currentSeason.popTime,
+            handler: () => {
+              setPrizePoolModalVisible(true);
+              setStorageFlag(prizePoolModalShownFlag);
+            }
+          });
         }
-
-        if (now >= seasonInfo.endTime && !getStorageFlag(seasonEndedModalShownFlag)) {
-          setSeasonEndedModalVisible(true);
-          setStorageFlag(seasonEndedModalShownFlag);
-        }
-      }, 1000);
+      }
     };
 
-    init();
+    refreshSeasonData();
 
     return () => {
-      if (timer) clearInterval(timer);
+      if (typeof dispose === 'function') dispose();
     };
   }, []);
 
   return (
-    <SeasonInfoContext.Provider value={seasonInfo}>
+    <SeasonInfoContext.Provider value={{ seasons: seasons, currentSeason }}>
       {children}
 
-      <LastSeasonEndedModal
-        seasonInfo={seasonInfo}
+      {/* <LastSeasonEndedModal
+        seasonInfo={seasons}
         open={seasonEndedModalVisible}
         onOpenChange={setSeasonEndedModalVisible}
+      /> */}
+
+      <CurrentSeasonPeriodModal
+        seasonInfo={currentSeason}
+        open={prizePoolModalVisible}
+        onOpenChange={setPrizePoolModalVisible}
       />
-      <CurrentSeasonPeriodModal open={prizePoolModalVisible} onOpenChange={setPrizePoolModalVisible} />
     </SeasonInfoContext.Provider>
   );
 };

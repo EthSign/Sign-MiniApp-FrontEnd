@@ -1,10 +1,12 @@
-import { useLotteryInfo } from '@/providers/LotteryInfoProvider';
 import { Events, eventBus } from '@/eventbus';
-import { raffle } from '@/services';
-import classNames from 'classnames';
-import React, { useMemo, useState } from 'react';
-import WebApp from '@twa-dev/sdk';
+import { addOnDateHandler } from '@/hooks/useClock';
+import { useLotteryInfo } from '@/providers/LotteryInfoProvider';
+import { useSeasonInfo } from '@/providers/SeasonInfoProvider';
 import { CurrentSeasonPeriodModal } from '@/providers/SeasonInfoProvider/CurrentSeasonPeriodModal';
+import { raffle } from '@/services';
+import WebApp from '@twa-dev/sdk';
+import classNames from 'classnames';
+import React, { useEffect, useMemo, useState } from 'react';
 
 export interface RaffleWheelProps {
   className?: string;
@@ -15,18 +17,55 @@ export interface RaffleWheelProps {
 const BASE_DEGREE = 3600;
 const SPIN_DURATION = 5000;
 
-export const RaffleWheel = React.forwardRef<HTMLDivElement, RaffleWheelProps>((props, ref) => {
-  const { loading, prizes, remainingTimes, refresh } = useLotteryInfo();
+export const PrizePoolModal: React.FC = () => {
+  const { currentSeason } = useSeasonInfo();
 
+  const [shouldShowPrizePoolModal, setShouldShowPrizePoolModal] = useState(false);
+  const [prizePoolModalVisible, setPrizePoolModalVisible] = useState(false);
+
+  useEffect(() => {
+    const popTime = currentSeason?.popTime;
+
+    if (!popTime) {
+      setShouldShowPrizePoolModal(false);
+      return;
+    }
+
+    if (Date.now() > popTime) setShouldShowPrizePoolModal(true);
+
+    const dispose = addOnDateHandler({
+      date: popTime,
+      handler: () => {
+        setShouldShowPrizePoolModal(true);
+      }
+    });
+
+    return dispose;
+  }, [currentSeason?.popTime]);
+
+  if (!shouldShowPrizePoolModal) return;
+
+  return (
+    <CurrentSeasonPeriodModal
+      open={prizePoolModalVisible}
+      onOpenChange={setPrizePoolModalVisible}
+      seasonInfo={currentSeason}
+      showModalFrame
+      triggerClassName="absolute top-0 right-5"
+    />
+  );
+};
+
+export const RaffleWheel = React.forwardRef<HTMLDivElement, RaffleWheelProps>((props, ref) => {
   const { className, onResult, onStopped } = props;
+
+  const { loading, prizes, remainingTimes, refresh } = useLotteryInfo();
 
   const [isSpining, setIsSpining] = useState(false);
 
   const [isRaffling, setIsRaffling] = useState(false);
 
   const [degree, setDegree] = useState(0);
-
-  const [prizePoolModalVisible, setPrizePoolModalVisible] = useState(false);
 
   const canSpin = useMemo(
     () => !loading && !isSpining && !isRaffling && remainingTimes > 0,
@@ -75,12 +114,7 @@ export const RaffleWheel = React.forwardRef<HTMLDivElement, RaffleWheelProps>((p
         className
       )}
     >
-      <CurrentSeasonPeriodModal
-        open={prizePoolModalVisible}
-        onOpenChange={setPrizePoolModalVisible}
-        showModalFrame
-        triggerClassName="absolute top-0 right-5"
-      />
+      <PrizePoolModal />
 
       <div className="absolute inset-0 rounded-full bg-[linear-gradient(-135deg,#FDC347_9%,#FC8682_27%,#FA2CD7_52%,#987CDB_76%,#33D0E0_100%)]" />
 

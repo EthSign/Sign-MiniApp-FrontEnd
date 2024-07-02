@@ -1,5 +1,5 @@
 // POST /mini/auth
-import { ApiClient, apiClient } from '@/utils/api-client.ts';
+import { ENVS } from '@/constants/config.ts';
 import {
   IRaffleRecord,
   IRankData,
@@ -16,8 +16,8 @@ import {
   SeasonInfo,
   TaskTypeEnum
 } from '@/types';
+import { ApiClient, apiClient } from '@/utils/api-client.ts';
 import { OffChainRpc } from '@ethsign/sp-sdk';
-import { ENVS } from '@/constants/config.ts';
 
 export const auth = async (data: { webappData: Record<string, any>; referenceCode: string; invitedBy?: string }) => {
   return await apiClient.post('/mini/auth', data);
@@ -146,17 +146,6 @@ export const getInvitationInfo = async () => {
   return apiClient.get<InvitationInfo>('/mini/campaigns/invitation/result/today');
 };
 
-export const getSeasonInfo = async () => {
-  return {
-    key: 's1',
-    startTime: 1719559856128,
-    endTime: Date.now() + 20 * 1000,
-    seasonEndNotifyTime: Date.now() + 10 * 1000,
-    name: 'Season 1',
-    seasonReward: {
-      isWinner: false,
-      rank: 100,
-      rewardAllocated: false
-    }
-  } as SeasonInfo;
+export const getSeasons = async () => {
+  return apiClient.get<SeasonInfo[]>('/mini/season/summary');
 };

@@ -186,14 +186,16 @@ export enum TaskRewardType {
 }
 
 export interface SeasonInfo {
-  key: string;
-  name: string;
+  isCurrent: boolean;
+  result: {
+    score: number;
+    rank: number;
+    hasGain: boolean;
+    rewardStatus: MiniRewardStatus;
+  };
   startTime: number;
   endTime: number;
-  seasonEndNotifyTime: number;
-  seasonReward: {
-    isWinner: boolean;
-    rank: number;
-    rewardAllocated: boolean;
-  };
+  popTime: number;
+  seasonKey: string;
+  name: string;
 }
