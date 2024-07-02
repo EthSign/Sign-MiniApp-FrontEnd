@@ -7,10 +7,10 @@ import { Button, Modal } from '@ethsign/ui';
 import { shortenWalletAddress } from '@ethsign/utils-web';
 import { Loader2 } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
-import { ClaimAddressEditModal } from './comopnents/ClaimAddressEditModal';
-import { ClaimAddressTipModal } from './comopnents/ClaimAddressTipModal';
-import { HowToClaimModal } from './comopnents/HowToClaimModal';
-import { RewardItem } from './comopnents/RewardItem';
+import { ClaimAddressEditModal } from './components/ClaimAddressEditModal';
+import { ClaimAddressTipModal } from './components/ClaimAddressTipModal';
+import { HowToClaimModal } from './components/HowToClaimModal';
+import { RewardItem } from './components/RewardItem';
 import { useNavigate } from 'react-router-dom';
 
 export const NewRewardIssuedModal: React.FC<{ open: boolean; onOpenChange: (visible: boolean) => void }> = (props) => {
@@ -21,13 +21,13 @@ export const NewRewardIssuedModal: React.FC<{ open: boolean; onOpenChange: (visi
   return (
     <Modal
       className="w-[95vw] rounded-[24px] border border-white/20 bg-white p-4 pt-6 sm:w-[410px]"
-      header={<h2 className="text-center font-bold text-xl">Your rewards ha been issues</h2>}
+      header={<h2 className="text-center font-bold text-xl">Your rewards has been issued</h2>}
       footer={false}
       open={open}
       hiddenCloseIcon
       onOpenChange={onOpenChange}
     >
-      <p className="text-center text-sm text-gray-900">Please check Reward's page.</p>
+      <p className="text-center text-sm text-gray-900">Please check 'Rewards' page.</p>
 
       <div className="flex gap-2">
         <Button
