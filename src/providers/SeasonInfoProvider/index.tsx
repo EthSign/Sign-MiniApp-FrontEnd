@@ -1,7 +1,8 @@
 import { addOnDateHandler } from '@/hooks/useClock';
-import { getSeasons } from '@/services';
-import { MiniRewardStatus, SeasonInfo } from '@/types';
+import { getPreviousSeasonInfo } from '@/services';
+import { SeasonInfo, SeasonInfoWithResult } from '@/types';
 import React, { PropsWithChildren, createContext, useContext, useEffect, useMemo, useState } from 'react';
+import { useLotteryInfo } from '../LotteryInfoProvider';
 import { CurrentSeasonPeriodModal } from './CurrentSeasonPeriodModal';
 import { LastSeasonEndedModal } from './LastSeasonEndedModal';
 
@@ -32,33 +33,25 @@ export const SeasonInfoProvider: React.FC<PropsWithChildren> = (props) => {
 
   const [seasonEndedModalVisible, setSeasonEndedModalVisible] = useState(false);
   const [prizePoolModalVisible, setPrizePoolModalVisible] = useState(false);
-
-  const [seasons, setSeasons] = useState<SeasonInfo[]>([]);
+  const { seasonList, refresh: refreshLotteryInfo } = useLotteryInfo();
 
   const currentSeason = useMemo(() => {
-    return seasons?.find((season) => season.isCurrent === true);
-  }, [seasons]);
+    return seasonList?.find((season) => season.isCurrent === true);
+  }, [seasonList]);
 
-  const lastSeason = useMemo(() => {
-    const currentSeasonIndex = seasons.findIndex((season) => season.isCurrent);
-    return seasons[currentSeasonIndex - 1] ?? null;
-  }, [seasons]);
+  const [fullLastSeasonInfo, setFullLastSeasonInfo] = useState<SeasonInfoWithResult>();
 
   useEffect(() => {
     const disposes: (() => void)[] = [];
 
     const refreshSeasonData = async () => {
-      const seasons = await getSeasons();
-
-      setSeasons(seasons);
-
-      const currentSeasonIndex = seasons.findIndex((season) => season.isCurrent);
-      const currentSeason = seasons[currentSeasonIndex];
+      if (!seasonList.length) await refreshLotteryInfo();
 
       if (currentSeason) {
         const prizePoolModalShownFlag = 'prizePoolModalShown_' + currentSeason.seasonKey;
+        const shown = getStorageFlag(prizePoolModalShownFlag);
 
-        if (currentSeason.popTime && !getStorageFlag(prizePoolModalShownFlag)) {
+        if (currentSeason.popTime && !shown) {
           disposes.push(
             addOnDateHandler({
               date: currentSeason.popTime,
@@ -74,23 +67,34 @@ export const SeasonInfoProvider: React.FC<PropsWithChildren> = (props) => {
         disposes.push(
           addOnDateHandler({
             date: currentSeason.endTime,
-            handler: () => {
+            handler: async () => {
+              await refreshLotteryInfo();
               refreshSeasonData();
             }
           })
         );
       }
 
-      const lastSeason = seasons[currentSeasonIndex - 1] ?? null;
+      const currentSeasonIndex = seasonList.findIndex((season) => season.isCurrent === true);
+      const lastSeason = seasonList[currentSeasonIndex - 1] ?? null;
 
       if (lastSeason) {
         const lastSeasonEndedModalShownFlag = 'lastSeasonEndedModalShown_' + lastSeason.seasonKey;
-
         const shown = getStorageFlag(lastSeasonEndedModalShownFlag);
 
-        if (!shown && (!lastSeason.result.hasGain || lastSeason.result.rewardStatus === MiniRewardStatus.Claimed)) {
-          setSeasonEndedModalVisible(true);
-          setStorageFlag(lastSeasonEndedModalShownFlag);
+        if (!shown) {
+          addOnDateHandler({
+            date: lastSeason.allocatedPopTime,
+            handler: async () => {
+              const fullInfo = await getPreviousSeasonInfo();
+
+              if (!fullInfo) return;
+
+              setFullLastSeasonInfo(fullInfo);
+              setSeasonEndedModalVisible(true);
+              setStorageFlag(lastSeasonEndedModalShownFlag);
+            }
+          });
         }
       }
     };
@@ -102,14 +106,15 @@ export const SeasonInfoProvider: React.FC<PropsWithChildren> = (props) => {
         if (typeof disposes === 'function') dispose();
       });
     };
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentSeason, seasonList]);
 
   return (
-    <SeasonInfoContext.Provider value={{ seasons: seasons, currentSeason }}>
+    <SeasonInfoContext.Provider value={{ seasons: seasonList, currentSeason }}>
       {children}
 
       <LastSeasonEndedModal
-        seasonInfo={lastSeason}
+        seasonInfo={fullLastSeasonInfo}
         open={seasonEndedModalVisible}
         onOpenChange={setSeasonEndedModalVisible}
       />

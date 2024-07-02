@@ -1,6 +1,6 @@
 import { Loading } from '@/components/Loading';
 import { getLotteryInfo } from '@/services';
-import { LotteryInfo } from '@/types';
+import { LotteryInfo, SeasonInfo } from '@/types';
 import React, { PropsWithChildren, createContext, useCallback, useContext, useState } from 'react';
 import { useLocalStorage } from 'react-use';
 
@@ -11,6 +11,7 @@ export interface LotteryInfoContextData {
   currentScore: number;
   prizes: LotteryInfo['prizes'];
   currentDayRaffleResult?: LotteryInfo['currentRaffleResult'];
+  seasonList: SeasonInfo[];
   remainingTimes: LotteryInfo['remainingTimes'];
 }
 
@@ -20,6 +21,7 @@ export const DEFAULT_LOTTERY_INFO: LotteryInfoContextData = {
   totalPoint: 0,
   currentScore: 0,
   hasSpinedToday: false,
+  seasonList: [],
   prizes: [],
   remainingTimes: 0
 };
@@ -45,6 +47,7 @@ export const LotteryInfoContext = createContext<
     doNotShowBackToWheelTipModal: false,
     backToWheelButtonClicked: false
   },
+  seasonList: [],
   refresh: async () => {},
   checkNotShowBackToWheelTipModal: () => {},
   setBackToWheelButtonClicked: () => {}
@@ -75,6 +78,7 @@ export const LotteryInfoProvider: React.FC<PropsWithChildren> = (props) => {
       currentScore: response.currentRaffleResult?.currentScore ?? 0,
       hasSpinedToday: response.currentRaffleResult !== null,
       prizes: response.prizes,
+      seasonList: response.seasonList,
       currentDayRaffleResult: response.currentRaffleResult,
       remainingTimes: response.remainingTimes
     });

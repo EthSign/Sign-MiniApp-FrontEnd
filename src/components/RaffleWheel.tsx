@@ -31,7 +31,10 @@ export const PrizePoolModal: React.FC = () => {
       return;
     }
 
-    if (Date.now() > popTime) setShouldShowPrizePoolModal(true);
+    if (Date.now() > popTime) {
+      setShouldShowPrizePoolModal(true);
+      return;
+    }
 
     const dispose = addOnDateHandler({
       date: popTime,

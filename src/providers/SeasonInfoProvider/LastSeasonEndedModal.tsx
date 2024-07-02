@@ -1,11 +1,11 @@
-import { SeasonInfo } from '@/types';
+import { SeasonInfoWithResult } from '@/types';
 import { Button, Modal } from '@ethsign/ui';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export interface LastSeasonEndedModalProps {
   open: boolean;
-  seasonInfo?: SeasonInfo;
+  seasonInfo?: SeasonInfoWithResult;
   onOpenChange: (visible: boolean) => void;
 }
 

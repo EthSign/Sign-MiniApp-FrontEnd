@@ -13,7 +13,7 @@ import {
   RaffleInfo,
   RaffleResult,
   RewardResponse,
-  SeasonInfo,
+  SeasonInfoWithResult,
   TaskTypeEnum
 } from '@/types';
 import { ApiClient, apiClient } from '@/utils/api-client.ts';
@@ -146,6 +146,6 @@ export const getInvitationInfo = async () => {
   return apiClient.get<InvitationInfo>('/mini/campaigns/invitation/result/today');
 };
 
-export const getSeasons = async () => {
-  return apiClient.get<SeasonInfo[]>('/mini/season/summary');
+export const getPreviousSeasonInfo = async () => {
+  return apiClient.get<SeasonInfoWithResult>('/mini/season/previous/summary');
 };

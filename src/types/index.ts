@@ -39,6 +39,7 @@ export interface LotteryInfo {
       };
     };
   };
+  seasonList: SeasonInfo[];
 }
 
 export interface RaffleResult {
@@ -189,18 +190,22 @@ export enum TaskRewardType {
 
 export interface SeasonInfo {
   isCurrent: boolean;
+  startTime: number;
+  endTime: number;
+  popTime: number;
+  allocatedPopTime: number;
+  seasonKey: string;
+  name: string;
+}
+
+export type SeasonInfoWithResult = SeasonInfo & {
   result: {
     score: number;
     rank: number;
     hasGain: boolean;
     rewardStatus: MiniRewardStatus;
   };
-  startTime: number;
-  endTime: number;
-  popTime: number;
-  seasonKey: string;
-  name: string;
-}
+};
 
 export enum CampaignType {
   MysteryDrop = 'mystery_drop',
