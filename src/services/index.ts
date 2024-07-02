@@ -1,10 +1,11 @@
 // POST /mini/auth
-import { ApiClient, apiClient } from '@/utils/api-client.ts';
+import { ENVS } from '@/constants/config.ts';
 import {
   IRaffleRecord,
   IRankData,
   ITaskData,
   IUser,
+  InvitationInfo,
   LotteryInfo,
   MysteryDropInfo,
   MysteryDropRaffleResult,
@@ -12,12 +13,13 @@ import {
   RaffleInfo,
   RaffleResult,
   RewardResponse,
+  SeasonInfoWithResult,
   TaskTypeEnum
 } from '@/types';
+import { ApiClient, apiClient } from '@/utils/api-client.ts';
 import { OffChainRpc } from '@ethsign/sp-sdk';
-import { ENVS } from '@/constants/config.ts';
 
-export const auth = async (data: { webappData: Record<string, any>; referenceCode: string }) => {
+export const auth = async (data: { webappData: Record<string, any>; referenceCode: string; invitedBy?: string }) => {
   return await apiClient.post('/mini/auth', data);
 };
 
@@ -132,4 +134,18 @@ export const mysteryDropRaffle = async (dropId: string) => {
 
 export const getRewardsInfo = async () => {
   return apiClient.get<RewardResponse>('/mini/rewards');
+};
+
+export const updateClaimAddress = async (address: string) => {
+  return apiClient.post('/mini/update-claim-address', {
+    address
+  });
+};
+
+export const getInvitationInfo = async () => {
+  return apiClient.get<InvitationInfo>('/mini/campaigns/invitation/result/today');
+};
+
+export const getPreviousSeasonInfo = async () => {
+  return apiClient.get<SeasonInfoWithResult>('/mini/season/previous/summary');
 };

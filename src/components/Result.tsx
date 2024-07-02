@@ -12,6 +12,7 @@ import classNames from 'classnames';
 import React, { forwardRef, useEffect, useMemo, useState } from 'react';
 import { LotteryRulesModal } from './RulesModal';
 import { getLevelInfo, isExpired } from '@/utils/lottery.ts';
+import { encodeTelegramStartParam } from '@/utils';
 
 export const Result = forwardRef<HTMLDivElement, { className: string }>((props, ref) => {
   const { className } = props;
@@ -79,15 +80,16 @@ export const ResultCard = React.forwardRef<
   const handleInvite = () => {
     const utils = initUtils();
     const desc = ENVS.SHARE_DESC;
+
     const inviteData = {
       raffleId: data?.raffleId,
       inviteUser: user?.username || 'SIGN user'
     };
-    console.log(inviteData, 'data');
+
+    const startParam = encodeTelegramStartParam(inviteData);
+
     utils.openTelegramLink(
-      `https://t.me/share/url?url=${ENVS.TG_APP_LINK}?startapp=${encodeURIComponent(
-        window.btoa(JSON.stringify(inviteData))
-      )}&text=${encodeURIComponent(desc)}`
+      `https://t.me/share/url?url=${ENVS.TG_APP_LINK}?startapp=${startParam}&text=${encodeURIComponent(desc)}`
     );
   };
 

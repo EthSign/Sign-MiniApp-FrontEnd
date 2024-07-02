@@ -1,33 +1,48 @@
 import { Events, eventBus } from '@/eventbus';
+import { useUserInfo } from '@/providers/UserInfoProvider';
 import { getRewardsInfo } from '@/services';
-import { RewardItem } from '@/types';
-import { Button, Modal } from '@ethsign/ui';
+import { MiniRewardStatus, RewardInfo } from '@/types';
+import { Edit02, InfoCircle } from '@ethsign/icons';
+import { Button } from '@ethsign/ui';
+import { shortenWalletAddress } from '@ethsign/utils-web';
 import { Loader2 } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
-
-function formatDate(dateString: number | string): string {
-  const date = new Date(dateString);
-
-  const options: Intl.DateTimeFormatOptions = {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  };
-  return date.toLocaleDateString('en-US', options);
-}
+import { ClaimAddressEditModal } from './components/ClaimAddressEditModal';
+import { ClaimAddressTipModal } from './components/ClaimAddressTipModal';
+import { HowToClaimModal } from './components/HowToClaimModal';
+import { RewardItem } from './components/RewardItem';
+import { NewRewardIssuedModal } from './components/NewRewardIssuedModal';
 
 export const Rewards: React.FC = () => {
-  const [rewards, setRewards] = useState<RewardItem[]>([]);
+  const { user } = useUserInfo();
+
+  const [rewards, setRewards] = useState<RewardInfo[]>([]);
 
   const [loading, setLoading] = useState(false);
 
   const [claimTipModalVisible, setClaimTipModalVisible] = useState(false);
+  const [claimAddressEditModalVisible, setClaimAddressEditModalVisible] = useState(false);
+  const [claimAddressTipModalVisible, setClaimAddressTipModalVisible] = useState(false);
+  const [newRewardIssuedModalVisible, setNewRewardIssuedModalVisible] = useState(false);
 
   useEffect(() => {
-    const fetchRewards = async () => {
+    const refreshRewards = async () => {
       try {
         setLoading(true);
         const response = await getRewardsInfo();
+
+        // 检查是否有已经发放的奖品
+        const notNotifiedRewards = response.rows.filter((reward) => {
+          return reward.status === MiniRewardStatus.Claimed && !checkNewRewardModalShown(reward.id);
+        });
+
+        console.log(notNotifiedRewards);
+
+        if (notNotifiedRewards.length) {
+          setNewRewardIssuedModalVisible(true);
+          setNewRewardsModalShownFlag(notNotifiedRewards.map((reward) => reward.id));
+        }
+
         setRewards(response.rows);
       } catch (error) {
         console.error(error);
@@ -37,17 +52,48 @@ export const Rewards: React.FC = () => {
       }
     };
 
-    fetchRewards();
+    refreshRewards();
 
-    eventBus.on(Events.mysteryDropGrabbed, fetchRewards);
+    eventBus.on(Events.mysteryDropGrabbed, refreshRewards);
 
     return () => {
-      eventBus.off(Events.mysteryDropGrabbed, fetchRewards);
+      eventBus.off(Events.mysteryDropGrabbed, refreshRewards);
     };
   }, []);
 
   return (
     <div className="relative">
+      <div className="mb-2 flex min-h-20 items-center justify-between overflow-hidden rounded-[8px] bg-[url(https://sign-public-cdn.s3.us-east-1.amazonaws.com/Signie/Card_240626034540.webp)] bg-cover bg-center bg-no-repeat p-4">
+        <div>
+          <div className="flex items-center gap-1 font-medium text-sm text-white">
+            <span>My wallet address</span>
+            <InfoCircle
+              size={18}
+              color="white"
+              onClick={() => {
+                setClaimAddressTipModalVisible(true);
+              }}
+            />
+          </div>
+
+          <div className="mt-1">
+            <span className="text-sm font-semibold text-white">
+              {user?.claimWalletAddress ? shortenWalletAddress(user.claimWalletAddress, 'normal') : 'No Wallet Address'}
+            </span>
+          </div>
+        </div>
+
+        <Button
+          className="bg-white text-xs hover:bg-white focus:bg-white active:bg-white"
+          onClick={() => {
+            setClaimAddressEditModalVisible(true);
+          }}
+        >
+          <span className="mr-2 text-sm text-[#0052FF]">Edit</span>
+          <Edit02 size={16} color="#0052FF" />
+        </Button>
+      </div>
+
       <h2 className="flex items-center justify-between font-bold text-xl text-white">
         <span>My Rewards</span>
 
@@ -70,21 +116,7 @@ export const Rewards: React.FC = () => {
       {!loading && rewards.length > 0 && (
         <div className="mt-2 space-y-2">
           {rewards.map((reward) => (
-            <div className="flex items-center gap-4 rounded-[8px] border bg-white px-4 py-3" key={reward.id}>
-              <img className="size-8 object-contain" src={reward.image} alt="" />
-
-              <div className="space-y-1">
-                <div className="flex items-center">
-                  <span className="font-bold text-sm text-[#101828]">
-                    {reward.type === 'token' ? `${reward.amount} ${reward.name}` : reward.name}
-                  </span>
-
-                  <div className="ml-2 h-[18px] rounded-full bg-secondary px-2 text-xs text-primary">Mystery Drop</div>
-                </div>
-
-                <div className="font-medium text-xs text-[#475467]">{formatDate(reward.rewardAt)}</div>
-              </div>
-            </div>
+            <RewardItem key={reward.id} reward={reward} />
           ))}
         </div>
       )}
@@ -111,29 +143,38 @@ export const Rewards: React.FC = () => {
         </div>
       )}
 
-      <Modal
-        className="w-[95vw] rounded-[24px] border border-white/20 bg-white p-4 pt-6 sm:w-[410px]"
-        header={<h2 className="text-center font-bold text-[25px]">How to claim?</h2>}
-        open={claimTipModalVisible}
-        onOpenChange={setClaimTipModalVisible}
-        footer={false}
-      >
-        <p className="text-sm text-gray-900">
-          We will issue rewards to you at fixed times and notify you to provide wallet address.
-        </p>
+      <HowToClaimModal open={claimTipModalVisible} onOpenChange={setClaimTipModalVisible} />
 
-        <Button
-          variant="primary"
-          className="w-full"
-          onClick={() => {
-            setClaimTipModalVisible(false);
-          }}
-        >
-          OK
-        </Button>
-      </Modal>
+      <ClaimAddressEditModal open={claimAddressEditModalVisible} onOpenChange={setClaimAddressEditModalVisible} />
+
+      <ClaimAddressTipModal open={claimAddressTipModalVisible} onOpenChange={setClaimAddressTipModalVisible} />
+
+      <NewRewardIssuedModal open={newRewardIssuedModalVisible} onOpenChange={setNewRewardIssuedModalVisible} />
     </div>
   );
 };
+
+const NEW_REWARDS_MODAL_SHOWN_FLAG = 'newRewardsShown';
+
+function setNewRewardsModalShownFlag(rewardIds: string[]) {
+  try {
+    const currentIds: string[] = JSON.parse(localStorage.getItem(NEW_REWARDS_MODAL_SHOWN_FLAG) ?? '[]') ?? [];
+
+    localStorage.setItem(NEW_REWARDS_MODAL_SHOWN_FLAG, JSON.stringify([...currentIds, ...rewardIds]));
+  } catch (error) {
+    localStorage.setItem(NEW_REWARDS_MODAL_SHOWN_FLAG, JSON.stringify(rewardIds));
+    console.error(error);
+  }
+}
+
+function checkNewRewardModalShown(rewardId: string) {
+  try {
+    const rewardIds: string[] = JSON.parse(localStorage.getItem(NEW_REWARDS_MODAL_SHOWN_FLAG) ?? '[]') ?? [];
+    return rewardIds.includes(rewardId);
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+}
 
 export default Rewards;

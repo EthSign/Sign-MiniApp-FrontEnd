@@ -5,7 +5,8 @@ export const ENVS = {
   ENV: import.meta.env.VITE_ENV,
   SHARE_DESC: 'Spin to win $NOT and more！',
   INITDATA: import.meta.env.VITE_INITDATA,
-  TG_GROUP_LINK: 'https://t.me/signeverythingonchain'
+  TG_SIGN_GROUP_LINK: 'https://t.me/signeverythingonchain',
+  TG_SAFEPAL_LINK: 'https://t.me/SafePalTG'
 };
 
 const schemaList = [
@@ -45,14 +46,14 @@ export const tonSp = {
   dev: {
     spAddress: 'kQBbxPGNadGSWnVLDyDy0VqGVGHoI9fzXBED5sh3Vd3oadW5',
     schemaAddress: 'kQCcQmtTwkOktZCbrv8r8gTDCcebzdCNKiOBMxprpo9wRiWq',
-    offchainSchemaId: 'SPS_rMgPlWRqFNUStPeJm2YGT', // testnet:SPS_dh0JMcaQCZ2DPKzD0JFF0
+    offchainSchemaId: 'SPS_65hQUkw_Z7YOTzVUbpgR5', // testnet:SPS_dh0JMcaQCZ2DPKzD0JFF0
     offchainSchemaConfig: [
       {
-        id: 'SPS_6B4MBx-3Tf__rmtwcQZhI',
+        id: 'SPS_-YGGvG50m2UF2LXfugnoi',
         schema: schemaList[0]
       },
       {
-        id: 'SPS_Rz_mgddeO5vNBKmmu267Z',
+        id: 'SPS_yPRJxquxxMd1Ajbbqef3l',
         schema: schemaList[1]
       }
     ]

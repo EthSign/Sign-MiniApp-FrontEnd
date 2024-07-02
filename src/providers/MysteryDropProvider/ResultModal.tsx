@@ -29,7 +29,7 @@ export const ResultModal: React.FC<{
 
     const title = grabbed ? `You got ${content}!` : 'All gifts have been grabbed';
 
-    const description = grabbed ? 'The rewards can be calimed in the Rewards page.' : 'Come and try next time!';
+    const description = grabbed ? 'The rewards can be claimed in the Rewards page.' : 'Come and try next time!';
 
     return {
       title,

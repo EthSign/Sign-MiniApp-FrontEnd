@@ -4,6 +4,7 @@ import { useDebug } from '@/hooks/useDebug.tsx';
 import { UserInfoProvider, useUserInfo } from '@/providers/UserInfoProvider';
 import { useEffect, useRef } from 'react';
 import { MysteryDropProvider } from './providers/MysteryDropProvider';
+import { SeasonInfoProvider } from './providers/SeasonInfoProvider';
 
 const TGAPP = () => {
   const isTg = isTelegramApp();
@@ -25,7 +26,9 @@ const TGAPP = () => {
   return (
     <UserInfoProvider>
       <MysteryDropProvider>
-        <App />
+        <SeasonInfoProvider>
+          <App />
+        </SeasonInfoProvider>
       </MysteryDropProvider>
     </UserInfoProvider>
   );

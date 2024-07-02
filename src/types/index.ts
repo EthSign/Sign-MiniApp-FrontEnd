@@ -4,6 +4,7 @@ export interface IUser {
   walletAddress: string;
   code?: string;
   inviteUser?: string;
+  claimWalletAddress: string;
 }
 
 export interface LotteryInfo {
@@ -38,6 +39,7 @@ export interface LotteryInfo {
       };
     };
   };
+  seasonList: SeasonInfo[];
 }
 
 export interface RaffleResult {
@@ -91,12 +93,18 @@ export interface ITaskData {
   remainingAvailableTasks: number;
   addressBound: boolean;
   groupJoined: boolean;
+  visitBalletCrypto: boolean;
+  visitSafepal: boolean;
+  joinSafePalTgGroup: boolean;
 }
 
 export enum TaskTypeEnum {
   QUIZ = 'quiz',
-  JOINGOUP = 'join_group',
-  OFFCHAINATTEST = 'offchain_attest'
+  JOIN_GROUP = 'join_group',
+  OFFCHAINATTEST = 'offchain_attest',
+  VisitBalletCrypto = 'visit_ballet_crypto',
+  VisitSafepal = 'visit_safepal',
+  JoinSafePalTgGroup = 'join_safe_pal_tg_group'
 }
 
 export interface QuizInfoData {
@@ -147,11 +155,12 @@ export enum MiniRewardStatus {
   Claimed = 'claimed'
 }
 
-export interface RewardItem {
+export interface RewardInfo {
   id: string;
   status: MiniRewardStatus;
   amount: number;
   rewardAt: string;
+  campaignType: CampaignType;
   // 目前只有 token
   type: 'token';
   name: string;
@@ -160,5 +169,45 @@ export interface RewardItem {
 
 export interface RewardResponse {
   total: number;
-  rows: RewardItem[];
+  rows: RewardInfo[];
+}
+
+export interface InvitationInfo {
+  totalInvited: number;
+  totalPoints: number;
+  rules: number[];
+  invitedList: {
+    userId: string;
+    username: string;
+    points: number;
+  }[];
+}
+
+export enum TaskRewardType {
+  POINTS = 'points',
+  TICKET = 'ticket'
+}
+
+export interface SeasonInfo {
+  isCurrent: boolean;
+  startTime: number;
+  endTime: number;
+  popTime: number;
+  allocatedPopTime: number;
+  seasonKey: string;
+  name: string;
+}
+
+export type SeasonInfoWithResult = SeasonInfo & {
+  result: {
+    score: number;
+    rank: number;
+    hasGain: boolean;
+    rewardStatus: MiniRewardStatus;
+  };
+};
+
+export enum CampaignType {
+  MysteryDrop = 'mystery_drop',
+  Competition = 'competition'
 }
