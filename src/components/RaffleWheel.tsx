@@ -51,7 +51,7 @@ export const PrizePoolModal: React.FC = () => {
       onOpenChange={setPrizePoolModalVisible}
       seasonInfo={currentSeason}
       showModalFrame
-      triggerClassName="absolute top-0 right-5"
+      triggerClassName="absolute top-0 right-5 z-20"
     />
   );
 };
