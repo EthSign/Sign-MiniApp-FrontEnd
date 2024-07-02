@@ -56,7 +56,7 @@ export const LastSeasonEndedModal: React.FC<LastSeasonEndedModalProps> = (props)
           <>
             Your rank in {titleCase(seasonInfo.name)} is{' '}
             <span className="text-[#0052FF]">{seasonInfo.result?.rank}</span>, We are looking forward to see you on the
-            leaderboard in Season 2!
+            leaderboard in {titleCase(seasonInfo.name)}!
           </>
         )}
       </p>
