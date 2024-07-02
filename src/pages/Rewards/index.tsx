@@ -1,9 +1,9 @@
 import { Events, eventBus } from '@/eventbus';
 import { useUserInfo } from '@/providers/UserInfoProvider';
 import { getRewardsInfo } from '@/services';
-import { RewardInfo } from '@/types';
+import { MiniRewardStatus, RewardInfo } from '@/types';
 import { Edit02, InfoCircle } from '@ethsign/icons';
-import { Button } from '@ethsign/ui';
+import { Button, Modal } from '@ethsign/ui';
 import { shortenWalletAddress } from '@ethsign/utils-web';
 import { Loader2 } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
@@ -11,6 +11,48 @@ import { ClaimAddressEditModal } from './comopnents/ClaimAddressEditModal';
 import { ClaimAddressTipModal } from './comopnents/ClaimAddressTipModal';
 import { HowToClaimModal } from './comopnents/HowToClaimModal';
 import { RewardItem } from './comopnents/RewardItem';
+import { useNavigate } from 'react-router-dom';
+
+export const NewRewardIssuedModal: React.FC<{ open: boolean; onOpenChange: (visible: boolean) => void }> = (props) => {
+  const { open, onOpenChange } = props;
+
+  const navigate = useNavigate();
+
+  return (
+    <Modal
+      className="w-[95vw] rounded-[24px] border border-white/20 bg-white p-4 pt-6 sm:w-[410px]"
+      header={<h2 className="text-center font-bold text-xl">Your rewards ha been issues</h2>}
+      footer={false}
+      open={open}
+      hiddenCloseIcon
+      onOpenChange={onOpenChange}
+    >
+      <p className="text-center text-sm text-gray-900">Please check Reward's page.</p>
+
+      <div className="flex gap-2">
+        <Button
+          variant="outline"
+          className="flex-1"
+          onClick={() => {
+            onOpenChange?.(false);
+          }}
+        >
+          Cancel
+        </Button>
+        <Button
+          variant="primary"
+          className="flex-1"
+          onClick={() => {
+            navigate('/rewards');
+            onOpenChange?.(false);
+          }}
+        >
+          Check Now
+        </Button>
+      </div>
+    </Modal>
+  );
+};
 
 export const Rewards: React.FC = () => {
   const { user } = useUserInfo();
@@ -22,12 +64,26 @@ export const Rewards: React.FC = () => {
   const [claimTipModalVisible, setClaimTipModalVisible] = useState(false);
   const [claimAddressEditModalVisible, setClaimAddressEditModalVisible] = useState(false);
   const [claimAddressTipModalVisible, setClaimAddressTipModalVisible] = useState(false);
+  const [newRewardIssuedModalVisible, setNewRewardIssuedModalVisible] = useState(false);
 
   useEffect(() => {
-    const fetchRewards = async () => {
+    const refreshRewards = async () => {
       try {
         setLoading(true);
         const response = await getRewardsInfo();
+
+        // 检查是否有已经发放的奖品
+        const notNotifiedRewards = response.rows.filter((reward) => {
+          return reward.status === MiniRewardStatus.Claimed && !checkNewRewardModalShown(reward.id);
+        });
+
+        console.log(notNotifiedRewards);
+
+        if (notNotifiedRewards.length) {
+          setNewRewardIssuedModalVisible(true);
+          setNewRewardsModalShownFlag(notNotifiedRewards.map((reward) => reward.id));
+        }
+
         setRewards(response.rows);
       } catch (error) {
         console.error(error);
@@ -37,12 +93,12 @@ export const Rewards: React.FC = () => {
       }
     };
 
-    fetchRewards();
+    refreshRewards();
 
-    eventBus.on(Events.mysteryDropGrabbed, fetchRewards);
+    eventBus.on(Events.mysteryDropGrabbed, refreshRewards);
 
     return () => {
-      eventBus.off(Events.mysteryDropGrabbed, fetchRewards);
+      eventBus.off(Events.mysteryDropGrabbed, refreshRewards);
     };
   }, []);
 
@@ -133,8 +189,33 @@ export const Rewards: React.FC = () => {
       <ClaimAddressEditModal open={claimAddressEditModalVisible} onOpenChange={setClaimAddressEditModalVisible} />
 
       <ClaimAddressTipModal open={claimAddressTipModalVisible} onOpenChange={setClaimAddressTipModalVisible} />
+
+      <NewRewardIssuedModal open={newRewardIssuedModalVisible} onOpenChange={setNewRewardIssuedModalVisible} />
     </div>
   );
 };
+
+const NEW_REWARDS_MODAL_SHOWN_FLAG = 'newRewardsShown';
+
+function setNewRewardsModalShownFlag(rewardIds: string[]) {
+  try {
+    const currentIds: string[] = JSON.parse(localStorage.getItem(NEW_REWARDS_MODAL_SHOWN_FLAG) ?? '[]') ?? [];
+
+    localStorage.setItem(NEW_REWARDS_MODAL_SHOWN_FLAG, JSON.stringify([...currentIds, ...rewardIds]));
+  } catch (error) {
+    localStorage.setItem(NEW_REWARDS_MODAL_SHOWN_FLAG, JSON.stringify(rewardIds));
+    console.error(error);
+  }
+}
+
+function checkNewRewardModalShown(rewardId: string) {
+  try {
+    const rewardIds: string[] = JSON.parse(localStorage.getItem(NEW_REWARDS_MODAL_SHOWN_FLAG) ?? '[]') ?? [];
+    return rewardIds.includes(rewardId);
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+}
 
 export default Rewards;
