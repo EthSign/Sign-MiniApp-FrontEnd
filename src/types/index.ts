@@ -176,6 +176,7 @@ export interface InvitationInfo {
   totalPoints: number;
   rules: number[];
   invitedList: {
+    userId: string;
     username: string;
     points: number;
   }[];

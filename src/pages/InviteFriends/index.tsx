@@ -26,7 +26,6 @@ function ordinalSuffix(n: number): string {
     return n + 'th';
   }
 
-  // 其他情况，根据数字的最后一位决定后缀
   switch (n % 10) {
     case 1:
       return n + 'st';
@@ -188,7 +187,7 @@ const InviteFriendsPage: React.FC = () => {
                           alt=""
                         />
 
-                        <span className="font-bold text-xs">{invitation.username}</span>
+                        <span className="font-bold text-xs">{invitation.username ?? invitation.userId}</span>
                       </div>
 
                       <div className="flex items-center gap-1 text-[#FEC84B]">
