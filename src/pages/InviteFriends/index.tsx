@@ -12,6 +12,14 @@ import classNames from 'classnames';
 import { Check, Loader2 } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 
+let utils: ReturnType<typeof initUtils>;
+
+try {
+  utils = initUtils();
+} catch (error) {
+  console.error(error);
+}
+
 function ordinalSuffix(n: number): string {
   // 处理特殊情况，比如 11, 12, 13 这些数字
   if (n % 100 >= 11 && n % 100 <= 13) {
@@ -70,7 +78,9 @@ const InviteFriendsPage: React.FC = () => {
   }, [invitationInfo?.rules, invitationInfo?.totalInvited]);
 
   const onInviteButtonClick = () => {
-    const utils = initUtils();
+    if (invitationInfo && invitationInfo.totalInvited >= invitationInfo.rules.length) {
+      return;
+    }
 
     const inviteData = {
       invitedBy: user?.userId
@@ -84,7 +94,11 @@ const InviteFriendsPage: React.FC = () => {
       description
     )}`;
 
-    utils.openTelegramLink(url);
+    if (utils) {
+      utils.openTelegramLink(url);
+    } else {
+      window.open(url);
+    }
   };
 
   return (
@@ -109,9 +123,8 @@ const InviteFriendsPage: React.FC = () => {
             ) : (
               <div className="flex min-h-20 justify-between gap-2">
                 {steps.map((step, index) => (
-                  <div className="text-center">
+                  <div className="text-center" key={index}>
                     <div
-                      key={index}
                       className={classNames(
                         'flex flex-1 flex-col items-center justify-center min-w-[50px] min-h-[56px] pt-[6px] pb-2 rounded-[12px] border',
                         step.finished
