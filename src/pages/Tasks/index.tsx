@@ -123,24 +123,24 @@ export default function Tasks() {
           window.open('https://www.twitter.com/isafepal');
           await checkTask(TaskTypeEnum.VisitSafepal);
         }
-      },
-      {
-        completed: taskData?.joinSafePalTgGroup,
-        title: 'Join Safepal X TG Group',
-        drawerTitle: 'Join Safepal X TG Group',
-        drawerDescription: 'Join Safepal’s TG group to earn Signie points',
-        rewardText: '300 pts',
-        rewardType: TaskRewardType.POINTS,
-        action: {
-          handler: () =>
-            joinTelegtamGroup({
-              groupUrl: ENVS.TG_SAFEPAL_LINK,
-              taskType: TaskTypeEnum.JoinSafePalTgGroup
-            }),
-          loading: isJoiningSignGroup,
-          text: 'Join now'
-        }
       }
+      // {
+      //   completed: taskData?.joinSafePalTgGroup,
+      //   title: 'Join Safepal X TG Group',
+      //   drawerTitle: 'Join Safepal X TG Group',
+      //   drawerDescription: 'Join Safepal’s TG group to earn Signie points',
+      //   rewardText: '300 pts',
+      //   rewardType: TaskRewardType.POINTS,
+      //   action: {
+      //     handler: () =>
+      //       joinTelegtamGroup({
+      //         groupUrl: ENVS.TG_SAFEPAL_LINK,
+      //         taskType: TaskTypeEnum.JoinSafePalTgGroup
+      //       }),
+      //     loading: isJoiningSignGroup,
+      //     text: 'Join now'
+      //   }
+      // }
     ];
 
     tasks.sort((a, b) => Number(a.completed) - Number(b.completed));
