@@ -159,6 +159,7 @@ export interface RewardInfo {
   status: MiniRewardStatus;
   amount: number;
   rewardAt: string;
+  campaignType: CampaignType;
   // 目前只有 token
   type: 'token';
   name: string;
@@ -198,4 +199,9 @@ export interface SeasonInfo {
   popTime: number;
   seasonKey: string;
   name: string;
+}
+
+export enum CampaignType {
+  MysteryDrop = 'mystery_drop',
+  Competition = 'competition'
 }

@@ -1,10 +1,15 @@
-import { MiniRewardStatus, type RewardInfo } from '@/types';
+import { CampaignType, MiniRewardStatus, type RewardInfo } from '@/types';
 import classNames from 'classnames';
 import React, { useMemo } from 'react';
 
 interface RewardItemProps {
   reward: RewardInfo;
 }
+
+const CAMPAIGN_TYPE_LABEL_MAP: Record<CampaignType, string> = {
+  [CampaignType.Competition]: 'Competition',
+  [CampaignType.MysteryDrop]: 'Mystery Drop'
+};
 
 function formatDate(dateString: number | string): string {
   const date = new Date(dateString);
@@ -43,7 +48,7 @@ export const RewardItem: React.FC<RewardItemProps> = (props) => {
                 '!bg-gray-50 !text-gray-700': claimed
               })}
             >
-              Mystery Drop
+              {CAMPAIGN_TYPE_LABEL_MAP[reward.campaignType as CampaignType] ?? reward.type}
             </div>
           </div>
 
