@@ -61,7 +61,7 @@ export const UserInfoProvider = ({ children }: { children: ReactNode }) => {
         const decodedStartParam = decodeTelegramStartParam(authData.start_param);
 
         return {
-          raffleId: decodedStartParam.raffleId,
+          raffleId: decodedStartParam?.raffleId,
           inviteUser: decodedStartParam?.inviteUser,
           invitedBy: decodedStartParam?.invitedBy
         };

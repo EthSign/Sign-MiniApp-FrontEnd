@@ -3,7 +3,7 @@ import { useUserInfo } from '@/providers/UserInfoProvider';
 import { getRewardsInfo } from '@/services';
 import { MiniRewardStatus, RewardInfo } from '@/types';
 import { Edit02, InfoCircle } from '@ethsign/icons';
-import { Button, Modal } from '@ethsign/ui';
+import { Button } from '@ethsign/ui';
 import { shortenWalletAddress } from '@ethsign/utils-web';
 import { Loader2 } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
@@ -11,48 +11,7 @@ import { ClaimAddressEditModal } from './components/ClaimAddressEditModal';
 import { ClaimAddressTipModal } from './components/ClaimAddressTipModal';
 import { HowToClaimModal } from './components/HowToClaimModal';
 import { RewardItem } from './components/RewardItem';
-import { useNavigate } from 'react-router-dom';
-
-export const NewRewardIssuedModal: React.FC<{ open: boolean; onOpenChange: (visible: boolean) => void }> = (props) => {
-  const { open, onOpenChange } = props;
-
-  const navigate = useNavigate();
-
-  return (
-    <Modal
-      className="w-[95vw] rounded-[24px] border border-white/20 bg-white p-4 pt-6 sm:w-[410px]"
-      header={<h2 className="text-center font-bold text-xl">Your rewards has been issued</h2>}
-      footer={false}
-      open={open}
-      hiddenCloseIcon
-      onOpenChange={onOpenChange}
-    >
-      <p className="text-center text-sm text-gray-900">Please check 'Rewards' page.</p>
-
-      <div className="flex gap-2">
-        <Button
-          variant="outline"
-          className="flex-1"
-          onClick={() => {
-            onOpenChange?.(false);
-          }}
-        >
-          Cancel
-        </Button>
-        <Button
-          variant="primary"
-          className="flex-1"
-          onClick={() => {
-            navigate('/rewards');
-            onOpenChange?.(false);
-          }}
-        >
-          Check Now
-        </Button>
-      </div>
-    </Modal>
-  );
-};
+import { NewRewardIssuedModal } from './components/NewRewardIssuedModal';
 
 export const Rewards: React.FC = () => {
   const { user } = useUserInfo();
