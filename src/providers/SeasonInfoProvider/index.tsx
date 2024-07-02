@@ -1,8 +1,9 @@
 import { addOnDateHandler } from '@/hooks/useClock';
 import { getSeasons } from '@/services';
-import { SeasonInfo } from '@/types';
+import { MiniRewardStatus, SeasonInfo } from '@/types';
 import React, { PropsWithChildren, createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { CurrentSeasonPeriodModal } from './CurrentSeasonPeriodModal';
+import { LastSeasonEndedModal } from './LastSeasonEndedModal';
 
 function getStorageFlag(flagName: string) {
   return localStorage.getItem(flagName) === 'true';
@@ -29,7 +30,7 @@ const SeasonInfoContext = createContext<{
 export const SeasonInfoProvider: React.FC<PropsWithChildren> = (props) => {
   const { children } = props;
 
-  // const [seasonEndedModalVisible, setSeasonEndedModalVisible] = useState(false);
+  const [seasonEndedModalVisible, setSeasonEndedModalVisible] = useState(false);
   const [prizePoolModalVisible, setPrizePoolModalVisible] = useState(false);
 
   const [seasons, setSeasons] = useState<SeasonInfo[]>([]);
@@ -38,27 +39,58 @@ export const SeasonInfoProvider: React.FC<PropsWithChildren> = (props) => {
     return seasons?.find((season) => season.isCurrent === true);
   }, [seasons]);
 
+  const lastSeason = useMemo(() => {
+    const currentSeasonIndex = seasons.findIndex((season) => season.isCurrent);
+    return seasons[currentSeasonIndex - 1] ?? null;
+  }, [seasons]);
+
   useEffect(() => {
-    let dispose: (() => void) | null = null;
+    const disposes: (() => void)[] = [];
 
     const refreshSeasonData = async () => {
       const seasons = await getSeasons();
 
       setSeasons(seasons);
 
-      const currentSeason = seasons.find((season) => season.isCurrent);
+      const currentSeasonIndex = seasons.findIndex((season) => season.isCurrent);
+      const currentSeason = seasons[currentSeasonIndex];
 
       if (currentSeason) {
         const prizePoolModalShownFlag = 'prizePoolModalShown_' + currentSeason.seasonKey;
 
         if (currentSeason.popTime && !getStorageFlag(prizePoolModalShownFlag)) {
-          dispose = addOnDateHandler({
-            date: currentSeason.popTime,
+          disposes.push(
+            addOnDateHandler({
+              date: currentSeason.popTime,
+              handler: () => {
+                setPrizePoolModalVisible(true);
+                setStorageFlag(prizePoolModalShownFlag);
+              }
+            })
+          );
+        }
+
+        // 当前赛季结束之后刷新赛季信息
+        disposes.push(
+          addOnDateHandler({
+            date: currentSeason.endTime,
             handler: () => {
-              setPrizePoolModalVisible(true);
-              setStorageFlag(prizePoolModalShownFlag);
+              refreshSeasonData();
             }
-          });
+          })
+        );
+      }
+
+      const lastSeason = seasons[currentSeasonIndex - 1] ?? null;
+
+      if (lastSeason) {
+        const lastSeasonEndedModalShownFlag = 'lastSeasonEndedModalShown_' + lastSeason.seasonKey;
+
+        const shown = getStorageFlag(lastSeasonEndedModalShownFlag);
+
+        if (!shown && (!lastSeason.result.hasGain || lastSeason.result.rewardStatus === MiniRewardStatus.Claimed)) {
+          setSeasonEndedModalVisible(true);
+          setStorageFlag(lastSeasonEndedModalShownFlag);
         }
       }
     };
@@ -66,7 +98,9 @@ export const SeasonInfoProvider: React.FC<PropsWithChildren> = (props) => {
     refreshSeasonData();
 
     return () => {
-      if (typeof dispose === 'function') dispose();
+      disposes.forEach((dispose) => {
+        if (typeof disposes === 'function') dispose();
+      });
     };
   }, []);
 
@@ -74,11 +108,11 @@ export const SeasonInfoProvider: React.FC<PropsWithChildren> = (props) => {
     <SeasonInfoContext.Provider value={{ seasons: seasons, currentSeason }}>
       {children}
 
-      {/* <LastSeasonEndedModal
-        seasonInfo={seasons}
+      <LastSeasonEndedModal
+        seasonInfo={lastSeason}
         open={seasonEndedModalVisible}
         onOpenChange={setSeasonEndedModalVisible}
-      /> */}
+      />
 
       <CurrentSeasonPeriodModal
         seasonInfo={currentSeason}

@@ -38,7 +38,7 @@ export const LastSeasonEndedModal: React.FC<LastSeasonEndedModalProps> = (props)
       footer={false}
     >
       <div className="flex justify-center">
-        <img className="size-[140px]" src={IMAGES[seasonInfo.seasonReward?.isWinner ? 'winner' : 'notWinner']} alt="" />
+        <img className="size-[140px]" src={IMAGES[seasonInfo.result?.hasGain ? 'winner' : 'notWinner']} alt="" />
       </div>
 
       <h1 className="text-center font-bold text-xl text-[#1C1C1C]">
@@ -46,17 +46,17 @@ export const LastSeasonEndedModal: React.FC<LastSeasonEndedModalProps> = (props)
       </h1>
 
       <p className="text-center text-sm text-[#475467]">
-        {seasonInfo.seasonReward?.isWinner ? (
+        {seasonInfo.result?.hasGain ? (
           <>
             Your rank in {titleCase(seasonInfo.name)} is{' '}
-            <span className="text-[#0052FF]">{seasonInfo.seasonReward?.rank}</span>. Go to Competition page to claim
-            your rewards.
+            <span className="text-[#0052FF]">{seasonInfo.result?.rank}</span>. Go to Competition page to claim your
+            rewards.
           </>
         ) : (
           <>
             Your rank in {titleCase(seasonInfo.name)} is{' '}
-            <span className="text-[#0052FF]">{seasonInfo.seasonReward?.rank}</span>, We are looking forward to see you
-            on the leaderboard in Season 2!
+            <span className="text-[#0052FF]">{seasonInfo.result?.rank}</span>, We are looking forward to see you on the
+            leaderboard in Season 2!
           </>
         )}
       </p>
