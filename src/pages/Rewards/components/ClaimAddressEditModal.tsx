@@ -1,9 +1,18 @@
 import { useUserInfo } from '@/providers/UserInfoProvider';
 import { updateClaimAddress } from '@/services';
-import { Button, Modal, Textarea } from '@ethsign/ui';
-import { shortenWalletAddress } from '@ethsign/utils-web';
-import React, { useState } from 'react';
+import { Button, Modal, Textarea, toast } from '@ethsign/ui';
+import React, { useEffect, useState } from 'react';
 import { ClaimAddressConfirmModal } from './ClaimAddressConfirmModal';
+import { Address as TonAddress } from '@ton/core';
+
+function isTonAddress(address: string) {
+  try {
+    TonAddress.parse(address);
+    return true;
+  } catch (error) {
+    return false;
+  }
+}
 
 export interface ClaimAddressEditModalVisible {
   open: boolean;
@@ -24,6 +33,18 @@ export const ClaimAddressEditModal: React.FC<ClaimAddressEditModalVisible> = (pr
   const confirmUpdateAddress = async () => {
     if (!claimAddress) return;
 
+    if (!isTonAddress(claimAddress)) {
+      toast({
+        title: 'Error',
+        description: 'Please enter a TON wallet address.',
+        variant: 'error'
+      });
+
+      setIsSaving(false);
+      setClaimAddressConfirmModalVisible(false);
+      return;
+    }
+
     try {
       setIsSaving(true);
 
@@ -39,6 +60,12 @@ export const ClaimAddressEditModal: React.FC<ClaimAddressEditModalVisible> = (pr
     }
   };
 
+  useEffect(() => {
+    if (open) {
+      setCalimAddress(user?.claimWalletAddress);
+    }
+  }, [open, user?.claimWalletAddress]);
+
   return (
     <>
       <Modal
@@ -52,15 +79,16 @@ export const ClaimAddressEditModal: React.FC<ClaimAddressEditModalVisible> = (pr
         {user?.claimWalletAddress && (
           <div className="space-y-[6px] overflow-hidden">
             <div className="font-medium text-sm">Current wallet address</div>
-            <div className="rounded-[8px] bg-[#F2F4F7] px-3 py-4 text-sm text-[#101828]">
-              {shortenWalletAddress(user.claimWalletAddress, 'normal')}
+            <div className="w-full overflow-hidden text-wrap break-all rounded-[8px] bg-[#F2F4F7] px-3 py-4 text-sm text-[#101828]">
+              {user.claimWalletAddress}
             </div>
           </div>
         )}
 
         <div className="space-y-[6px] overflow-hidden">
-          <div className="font-medium text-sm">New wallet address</div>
+          <div className="font-medium text-sm">New wallet address (TON Address)</div>
           <Textarea
+            autoFocus
             disabled={isSaving}
             className="border-[#D0D5DD] focus:border-primary/20 "
             placeholder="Enter wallet address manually"
