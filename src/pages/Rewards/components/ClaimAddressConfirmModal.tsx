@@ -15,7 +15,7 @@ export const ClaimAddressConfirmModal: React.FC<ClaimAddressConfirmModalProps> =
   return (
     <Modal
       hiddenCloseIcon
-      maskClosable={!loading}
+      maskClosable={false}
       className="w-[95vw] rounded-[24px] border border-white/20 bg-white p-4 pt-6 sm:w-[410px]"
       header={<h2 className="text-center font-bold text-xl">Are you sure you want to change the address?</h2>}
       open={open}
