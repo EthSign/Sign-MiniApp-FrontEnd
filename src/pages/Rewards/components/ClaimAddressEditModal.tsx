@@ -1,6 +1,6 @@
 import { useUserInfo } from '@/providers/UserInfoProvider';
 import { updateClaimAddress } from '@/services';
-import { Button, Input, Modal } from '@ethsign/ui';
+import { Button, Modal, Textarea } from '@ethsign/ui';
 import { shortenWalletAddress } from '@ethsign/utils-web';
 import React, { useState } from 'react';
 import { ClaimAddressConfirmModal } from './ClaimAddressConfirmModal';
@@ -42,7 +42,7 @@ export const ClaimAddressEditModal: React.FC<ClaimAddressEditModalVisible> = (pr
   return (
     <>
       <Modal
-        maskClosable={!isSaving}
+        maskClosable={false}
         className="w-[95vw] rounded-[24px] border border-white/20 bg-white p-4 pt-6 sm:w-[410px]"
         header={<h1 className="text-left text-xl font-semibold">Change Wallet Address</h1>}
         footer={false}
@@ -60,7 +60,7 @@ export const ClaimAddressEditModal: React.FC<ClaimAddressEditModalVisible> = (pr
 
         <div className="space-y-[6px] overflow-hidden">
           <div className="font-medium text-sm">New wallet address</div>
-          <Input
+          <Textarea
             disabled={isSaving}
             className="border-[#D0D5DD] focus:border-primary/20 "
             placeholder="Enter wallet address manually"
