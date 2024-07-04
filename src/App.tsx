@@ -1,21 +1,24 @@
-import { Outlet, useNavigate } from 'react-router-dom';
-import { initTelegramApp, isTelegramApp } from '@/utils/common.ts';
-import { useDebug } from '@/hooks/useDebug.tsx';
+import { useErudaDebugger } from '@/hooks/useDebug.tsx';
 import { UserInfoProvider, useUserInfo } from '@/providers/UserInfoProvider';
+import { initTelegramApp } from './utils/telegram';
+import { isTelegramApp } from './utils/telegram';
 import { useEffect, useRef } from 'react';
+import { Outlet, useNavigate } from 'react-router-dom';
 import { MysteryDropProvider } from './providers/MysteryDropProvider';
 import { SeasonInfoProvider } from './providers/SeasonInfoProvider';
 
 const TGAPP = () => {
-  const isTg = isTelegramApp();
-  const { debug } = useDebug();
-  console.log(debug, 'debug');
+  const isInTelegram = isTelegramApp();
+
+  const { debug } = useErudaDebugger();
 
   useEffect(() => {
-    initTelegramApp();
+    const dispose = initTelegramApp();
+
+    return dispose;
   }, []);
 
-  if (!isTg && !debug) {
+  if (!isInTelegram && !debug) {
     return (
       <div className="flex h-screen w-screen items-center justify-center bg-[linear-gradient(114deg,rgba(0,178,255,0.52)_0.81%,#9997FF_65.22%),linear-gradient(114deg,#00B2FF_0.81%,#9997FF_65.22%)] text-white">
         <h1>Please open in Telegram</h1>
@@ -37,8 +40,9 @@ const TGAPP = () => {
 function App() {
   const { user } = useUserInfo();
 
-  const redirected = useRef(false);
   const navigate = useNavigate();
+
+  const redirected = useRef(false);
 
   useEffect(() => {
     if (!redirected.current && user?.code) {

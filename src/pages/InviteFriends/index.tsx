@@ -4,7 +4,8 @@ import { ENVS } from '@/constants/config';
 import { useUserInfo } from '@/providers/UserInfoProvider';
 import { getInvitationInfo } from '@/services';
 import { InvitationInfo } from '@/types';
-import { encodeTelegramStartParam } from '@/utils';
+import { formatNumber, ordinalSuffix } from '@/utils/common';
+import { encodeTelegramStartParam } from '@/utils/telegram';
 import { UserPlus01 } from '@ethsign/icons';
 import { Button, ScrollArea } from '@ethsign/ui';
 import { initUtils } from '@tma.js/sdk';
@@ -18,28 +19,6 @@ try {
   utils = initUtils();
 } catch (error) {
   console.error(error);
-}
-
-function ordinalSuffix(n: number): string {
-  // 处理特殊情况，比如 11, 12, 13 这些数字
-  if (n % 100 >= 11 && n % 100 <= 13) {
-    return n + 'th';
-  }
-
-  switch (n % 10) {
-    case 1:
-      return n + 'st';
-    case 2:
-      return n + 'nd';
-    case 3:
-      return n + 'rd';
-    default:
-      return n + 'th';
-  }
-}
-
-function formatNumber(value: number): string {
-  return value.toLocaleString('en-US');
 }
 
 const InviteFriendsPage: React.FC = () => {

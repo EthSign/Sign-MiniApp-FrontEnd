@@ -2,11 +2,10 @@
 import { Loading } from '@/components/Loading';
 import { auth, getMyInfo } from '@/services';
 import { IUser } from '@/types';
-import { getTMAInitData } from '@/utils/common.ts';
+import { decodeTelegramStartParam, getTMAInitData } from '@/utils/telegram';
 import { useQuery } from '@tanstack/react-query';
 import { ReactNode, createContext, useContext, useEffect, useMemo } from 'react';
 import { useWalletBind } from '../hooks/useWalletBind';
-import { decodeTelegramStartParam } from '@/utils';
 
 interface UserInfoContextProps {
   user?: IUser;

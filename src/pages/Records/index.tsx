@@ -8,7 +8,8 @@ import { formatDate, getUTCTimeByDate } from '@/utils/common.ts';
 import { Drawer, DrawerContent, DrawerTrigger } from '@/components/Drawer.tsx';
 import { ResultCard } from '@/components/Result.tsx';
 import { useLotteryInfo } from '@/providers/LotteryInfoProvider.tsx';
-import { getLevelInfo, isExpired } from '@/utils/lottery.ts';
+import { getLevelInfo } from '@/utils/lottery.ts';
+import { isExpired } from '@/utils/common';
 import { cn } from '@/utils/tailwind.ts';
 import { Loading } from '@/components/Loading.tsx';
 

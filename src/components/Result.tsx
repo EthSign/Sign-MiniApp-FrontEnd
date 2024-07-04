@@ -11,8 +11,9 @@ import { initUtils } from '@tma.js/sdk';
 import classNames from 'classnames';
 import React, { forwardRef, useEffect, useMemo, useState } from 'react';
 import { LotteryRulesModal } from './RulesModal';
-import { getLevelInfo, isExpired } from '@/utils/lottery.ts';
-import { encodeTelegramStartParam } from '@/utils';
+import { getLevelInfo } from '@/utils/lottery.ts';
+import { isExpired } from '@/utils/common';
+import { encodeTelegramStartParam } from '@/utils/telegram';
 
 export const Result = forwardRef<HTMLDivElement, { className: string }>((props, ref) => {
   const { className } = props;

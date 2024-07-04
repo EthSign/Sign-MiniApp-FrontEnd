@@ -1,29 +1,29 @@
-import { ReactNode, useEffect } from 'react';
-import { proxy } from 'valtio';
+import { hashSha256 } from '@ethsign/utils-web';
+import { TonConnectUI, TonProofItemReplySuccess, Wallet, toUserFriendlyAddress } from '@tonconnect/ui';
 import {
   TonConnectUIProvider,
-  useTonConnectUI,
-  useTonWallet,
-  useTonConnectModal,
+  TonConnectUIProviderProps,
   WalletInfoRemote,
-  TonConnectUIProviderProps
+  useTonConnectModal,
+  useTonConnectUI,
+  useTonWallet
 } from '@tonconnect/ui-react';
+import { EventEmitter } from 'events';
+import { PropsWithChildren, useEffect } from 'react';
+import { Cell } from 'ton-core';
+import { proxy } from 'valtio';
 import { WalletBase } from '../../WalletBase.ts';
 import { ISignResult } from '../../types.ts';
 import { getCustomNaNoId } from '../../utils';
-import { hashSha256 } from '@ethsign/utils-web';
-import { TonConnectUI, TonProofItemReplySuccess, toUserFriendlyAddress, Wallet } from '@tonconnect/ui';
 import { openLinkInTelegram } from '../../utils/telegram.ts';
-import { EventEmitter } from 'events';
-import { Cell } from 'ton-core';
 
 const TelegramWalletName = 'telegram-wallet';
 
-interface TonStoreType {
+export interface TonStoreType {
   account: ReturnType<typeof useTonWallet> | null;
   connectModal: ReturnType<typeof useTonConnectModal> | undefined;
   walletClient: ReturnType<typeof useTonConnectUI>[0] | undefined;
-  config: TonConnectUIProviderProps | undefined;
+  config: Omit<TonConnectUIProviderProps, 'children'> | undefined;
   counter: number;
 }
 
@@ -194,7 +194,11 @@ export const TonConnector = () => {
   return null;
 };
 
-export const TonProvider = ({ children, config }: { children: ReactNode; config: TonConnectUIProviderProps }) => {
+export const TonProvider: React.FC<
+  PropsWithChildren<{
+    config: Omit<TonConnectUIProviderProps, 'children'>;
+  }>
+> = ({ children, config }) => {
   tonStore.config = config;
 
   return (

@@ -1,3 +1,11 @@
+export interface ITMAInitData {
+  user: string;
+  query_id: string;
+  hash: string;
+  auth_date: string;
+  start_param?: string; //code
+}
+
 export interface IUser {
   userId: string;
   username: string;
