@@ -110,7 +110,7 @@ const InviteFriendsPage: React.FC = () => {
             <h1 className="font-bold text-2xl">Invite Friends</h1>
 
             <p className="mt-2 font-medium text-sm text-[#667085]">
-              Get bonuses together with your friends who sign up Sign Protocol
+              Get bonuses by inviting new friends to play together
             </p>
           </div>
 

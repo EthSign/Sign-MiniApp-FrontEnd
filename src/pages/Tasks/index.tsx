@@ -172,7 +172,7 @@ export default function Tasks() {
         navigate('/invite-friends');
       },
       title: 'Invite friends',
-      description: 'Receive bonus by inviting friends'
+      description: 'Receive bonuses by inviting new friends'
     }
   ];
 
