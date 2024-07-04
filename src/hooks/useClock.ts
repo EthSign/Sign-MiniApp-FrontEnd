@@ -35,12 +35,18 @@ function removeHandler(handler: Handler) {
   }
 }
 
-export function addOnDateHandler(props: { date: Date | number; handler: Handler }) {
-  const { date, handler } = props;
+export function addOnDateHandler(props: { date: Date | number; handler: Handler; executeInstantly?: boolean }) {
+  const { date, executeInstantly = false, handler } = props;
 
   const targetTime = new Date(date).getTime();
 
-  if (Date.now() > targetTime) return () => {};
+  if (Date.now() > targetTime) {
+    if (executeInstantly) {
+      handler(Date.now());
+    }
+
+    return () => {};
+  }
 
   const innerHandler: Handler = (now) => {
     if (now >= targetTime) {

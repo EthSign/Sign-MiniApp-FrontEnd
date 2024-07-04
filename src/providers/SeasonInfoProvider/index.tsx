@@ -45,16 +45,22 @@ export const SeasonInfoProvider: React.FC<PropsWithChildren> = (props) => {
     const disposes: (() => void)[] = [];
 
     const refreshSeasonData = async () => {
-      if (!seasonList.length) await refreshLotteryInfo();
+      if (!seasonList.length) {
+        await refreshLotteryInfo();
+        return;
+      }
 
       if (currentSeason) {
-        const prizePoolModalShownFlag = 'prizePoolModalShown_' + currentSeason.seasonKey;
+        const { popTime, endTime, seasonKey } = currentSeason;
+
+        const prizePoolModalShownFlag = 'prizePoolModalShown_' + seasonKey;
         const shown = getStorageFlag(prizePoolModalShownFlag);
 
-        if (currentSeason.popTime && !shown) {
+        if (popTime && !shown) {
           disposes.push(
             addOnDateHandler({
               date: currentSeason.popTime,
+              executeInstantly: true,
               handler: () => {
                 setPrizePoolModalVisible(true);
                 setStorageFlag(prizePoolModalShownFlag);
@@ -66,7 +72,7 @@ export const SeasonInfoProvider: React.FC<PropsWithChildren> = (props) => {
         // 当前赛季结束之后刷新赛季信息
         disposes.push(
           addOnDateHandler({
-            date: currentSeason.endTime,
+            date: endTime,
             handler: async () => {
               await refreshLotteryInfo();
               refreshSeasonData();
@@ -79,21 +85,26 @@ export const SeasonInfoProvider: React.FC<PropsWithChildren> = (props) => {
       const lastSeason = seasonList[currentSeasonIndex - 1] ?? null;
 
       if (lastSeason) {
-        const lastSeasonEndedModalShownFlag = 'lastSeasonEndedModalShown_' + lastSeason.seasonKey;
+        const { allocatedPopTime, seasonKey } = lastSeason;
+
+        const lastSeasonEndedModalShownFlag = 'lastSeasonEndedModalShown_' + seasonKey;
         const shown = getStorageFlag(lastSeasonEndedModalShownFlag);
 
-        if (!shown) {
+        if (allocatedPopTime && !shown) {
+          const handler = async () => {
+            const fullInfo = await getPreviousSeasonInfo();
+
+            if (!fullInfo) return;
+
+            setFullLastSeasonInfo(fullInfo);
+            setSeasonEndedModalVisible(true);
+            setStorageFlag(lastSeasonEndedModalShownFlag);
+          };
+
           addOnDateHandler({
-            date: lastSeason.allocatedPopTime,
-            handler: async () => {
-              const fullInfo = await getPreviousSeasonInfo();
-
-              if (!fullInfo) return;
-
-              setFullLastSeasonInfo(fullInfo);
-              setSeasonEndedModalVisible(true);
-              setStorageFlag(lastSeasonEndedModalShownFlag);
-            }
+            date: allocatedPopTime,
+            executeInstantly: true,
+            handler
           });
         }
       }
