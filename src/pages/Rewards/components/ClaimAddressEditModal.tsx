@@ -24,7 +24,7 @@ export const ClaimAddressEditModal: React.FC<ClaimAddressEditModalVisible> = (pr
 
   const { open, onOpenChange } = props;
 
-  const [claimAddress, setCalimAddress] = useState(user?.claimWalletAddress);
+  const [claimAddress, setClaimAddress] = useState(user?.claimWalletAddress);
 
   const [isSaving, setIsSaving] = useState(false);
 
@@ -62,7 +62,7 @@ export const ClaimAddressEditModal: React.FC<ClaimAddressEditModalVisible> = (pr
 
   useEffect(() => {
     if (open) {
-      setCalimAddress(user?.claimWalletAddress);
+      setClaimAddress(user?.claimWalletAddress);
     }
   }, [open, user?.claimWalletAddress]);
 
@@ -94,7 +94,7 @@ export const ClaimAddressEditModal: React.FC<ClaimAddressEditModalVisible> = (pr
             placeholder="Enter wallet address manually"
             value={claimAddress}
             onChange={(e) => {
-              setCalimAddress(e.target.value);
+              setClaimAddress(e.target.value);
             }}
           />
         </div>
@@ -114,6 +114,7 @@ export const ClaimAddressEditModal: React.FC<ClaimAddressEditModalVisible> = (pr
             onClick={() => {
               setClaimAddressConfirmModalVisible(true);
             }}
+            disabled={!claimAddress?.length}
             loading={isSaving}
           >
             Save
