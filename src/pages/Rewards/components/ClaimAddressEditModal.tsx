@@ -80,15 +80,6 @@ export const ClaimAddressEditModal: React.FC<ClaimAddressEditModalVisible> = (pr
         open={open}
         onOpenChange={onOpenChange}
       >
-        {user?.claimWalletAddress && (
-          <div className="space-y-[6px] overflow-hidden">
-            <div className="font-medium text-sm">Current wallet address</div>
-            <div className="w-full overflow-hidden text-wrap break-all rounded-[8px] bg-[#F2F4F7] px-3 py-4 text-sm text-[#101828]">
-              {user.claimWalletAddress}
-            </div>
-          </div>
-        )}
-
         <div className="space-y-[6px] overflow-hidden">
           <div className="font-medium text-sm">New wallet address (TON Address)</div>
           <Textarea
@@ -102,6 +93,15 @@ export const ClaimAddressEditModal: React.FC<ClaimAddressEditModalVisible> = (pr
             }}
           />
         </div>
+
+        {user?.claimWalletAddress && (
+          <div className="space-y-[6px] overflow-hidden">
+            <div className="font-medium text-sm">Current wallet address</div>
+            <div className="w-full overflow-hidden text-wrap break-all rounded-[8px] bg-[#F2F4F7] px-3 py-4 text-sm text-[#101828]">
+              {user.claimWalletAddress}
+            </div>
+          </div>
+        )}
 
         <div className="flex gap-2">
           <Button
