@@ -1,9 +1,9 @@
 import { useUserInfo } from '@/providers/UserInfoProvider';
 import { updateClaimAddress } from '@/services';
 import { Button, Modal, Textarea, toast } from '@ethsign/ui';
-import React, { useEffect, useState } from 'react';
-import { ClaimAddressConfirmModal } from './ClaimAddressConfirmModal';
 import { Address as TonAddress } from '@ton/core';
+import React, { useState } from 'react';
+import { ClaimAddressConfirmModal } from './ClaimAddressConfirmModal';
 
 function isTonAddress(address: string) {
   try {
@@ -58,17 +58,17 @@ export const ClaimAddressEditModal: React.FC<ClaimAddressEditModalVisible> = (pr
       fetchUser();
 
       onOpenChange?.(false);
+
+      toast({
+        title: 'TON wallet address updated',
+        variant: 'success',
+        duration: 2000
+      });
     } finally {
       setIsSaving(false);
       setClaimAddressConfirmModalVisible(false);
     }
   };
-
-  useEffect(() => {
-    if (open) {
-      setClaimAddress(user?.claimWalletAddress);
-    }
-  }, [open, user?.claimWalletAddress]);
 
   return (
     <>
