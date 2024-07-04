@@ -2,7 +2,7 @@ import { useUserInfo } from '@/providers/UserInfoProvider';
 import { updateClaimAddress } from '@/services';
 import { Button, Modal, Textarea, toast } from '@ethsign/ui';
 import { Address as TonAddress } from '@ton/core';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ClaimAddressConfirmModal } from './ClaimAddressConfirmModal';
 
 function isTonAddress(address: string) {
@@ -69,6 +69,12 @@ export const ClaimAddressEditModal: React.FC<ClaimAddressEditModalVisible> = (pr
       setClaimAddressConfirmModalVisible(false);
     }
   };
+
+  useEffect(() => {
+    if (open) {
+      setClaimAddress(user?.claimWalletAddress);
+    }
+  }, [open, user?.claimWalletAddress]);
 
   return (
     <>
