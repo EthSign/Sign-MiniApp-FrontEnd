@@ -1,4 +1,4 @@
-import { TabBar } from '@/components/Header';
+import { Tabbar } from '@/components/Header';
 import { Star } from '@/components/Icons';
 import { ENVS } from '@/constants/config';
 import { useUserInfo } from '@/providers/UserInfoProvider';
@@ -102,7 +102,7 @@ const InviteFriendsPage: React.FC = () => {
 
   return (
     <div className="flex h-full flex-col">
-      <TabBar title={'Invite Friends'} />
+      <Tabbar title={'Invite Friends'} />
 
       <ScrollArea className="h-[calc(100vh-48px)] bg-white">
         <div className="flex-1 space-y-4 bg-white px-6 pt-8">

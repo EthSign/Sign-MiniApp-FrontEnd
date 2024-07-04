@@ -1,4 +1,4 @@
-import { TabBar } from '@/components/Header.tsx';
+import { Tabbar } from '@/components/Header.tsx';
 import { Button, Label, Modal, RadioGroup, RadioGroupItem, toast } from '@ethsign/ui';
 import chestImg from '@/assets/Chest.png';
 import { useEffect, useState } from 'react';
@@ -63,20 +63,20 @@ export default function Quizzes() {
 
   return (
     <div>
-      <TabBar title={'Quizzes for fun'} />
+      <Tabbar title={'Quizzes for fun'} />
       <Spin loading={isLoading || isRefetching}>
-        <div className={'bg-white py-8 px-6 h-[calc(100vh-48px)] relative'}>
-          <div className={'bg-[#ECF2FF] rounded-[12px] py-2.5 px-5'}>
+        <div className={'relative h-[calc(100vh-48px)] bg-white px-6 py-8'}>
+          <div className={'rounded-[12px] bg-[#ECF2FF] px-5 py-2.5'}>
             Signie points earned:
-            <span className={'text-md font-bold text-primary ml-2'}>{data?.pointsByQuiz} points</span>
+            <span className={'ml-2 font-bold text-md text-primary'}>{data?.pointsByQuiz} points</span>
           </div>
 
           <div className={'mt-8 px-6'}>
-            <div className={'text-sm font-normal text-gray-500'}>
+            <div className={'font-normal text-sm text-gray-500'}>
               {(data?.committedQuizzes || 0) + 1}/{data?.dailyMaximum || 0}
             </div>
-            <div className={'text-md font-semibold mt-2 flex-1'}>{data?.currentQuiz?.title}</div>
-            <div className={'pt-4 space-y-2'}>
+            <div className={'mt-2 flex-1 text-md font-semibold'}>{data?.currentQuiz?.title}</div>
+            <div className={'space-y-2 pt-4'}>
               <RadioGroup
                 value={answer}
                 onValueChange={(v) => {
@@ -98,7 +98,7 @@ export default function Quizzes() {
                           : ''
                       )}
                     >
-                      <Label htmlFor={option.value} className={'flex justify-between items-center gap-2 w-full'}>
+                      <Label htmlFor={option.value} className={'flex w-full items-center justify-between gap-2'}>
                         <div
                           className={cn(
                             'flex-1',
@@ -116,11 +116,11 @@ export default function Quizzes() {
                         <div className={'flex-[0_0_20px]'}>
                           {result?.length ? (
                             result.includes(option.value) ? (
-                              <div className={'size-4 rounded-full flex justify-center items-center bg-white'}>
+                              <div className={'flex size-4 items-center justify-center rounded-full bg-white'}>
                                 <Check />
                               </div>
                             ) : !isRight ? (
-                              <div className={'size-4 rounded-full flex justify-center items-center bg-white'}>
+                              <div className={'flex size-4 items-center justify-center rounded-full bg-white'}>
                                 <X className={'text-red-500'} size={10} />
                               </div>
                             ) : (
@@ -146,7 +146,7 @@ export default function Quizzes() {
             </div>
           </div>
 
-          <div className={'flex justify-between gap-2 absolute bottom-8 left-6 right-6'}>
+          <div className={'absolute inset-x-6 bottom-8 flex justify-between gap-2'}>
             <Button
               variant={'outline'}
               className={'flex-1'}
@@ -172,11 +172,11 @@ export default function Quizzes() {
         className={'w-[359px] rounded-[24px]'}
       >
         <div>
-          <img src={chestImg} className={'w-[55px] mx-auto'} alt="" />
+          <img src={chestImg} className={'mx-auto w-[55px]'} alt="" />
         </div>
-        <div className={'text-center mt-4'}>
-          <div className={'text-xl font-semibold text-black-100'}>You won {data?.pointsByQuiz} pts</div>
-          <div className={'text-md font-normal text-gray-600 mt-2'}>Come and take the quiz tomorrow</div>
+        <div className={'mt-4 text-center'}>
+          <div className={'text-xl font-semibold text-black'}>You won {data?.pointsByQuiz} pts</div>
+          <div className={'mt-2 font-normal text-md text-gray-600'}>Come and take the quiz tomorrow</div>
         </div>
         <Button
           className={'text-primary'}
@@ -210,11 +210,11 @@ export default function Quizzes() {
         }}
       >
         <div>
-          <img src={chestImg} className={'w-[55px] mx-auto'} alt="" />
+          <img src={chestImg} className={'mx-auto w-[55px]'} alt="" />
         </div>
-        <div className={'text-center mt-4'}>
-          <div className={'text-xl font-semibold text-black-100'}>Are you sure to quit?</div>
-          <div className={'text-md font-normal text-gray-600 mt-2'}>
+        <div className={'mt-4 text-center'}>
+          <div className={'text-xl font-semibold text-black'}>Are you sure to quit?</div>
+          <div className={'mt-2 font-normal text-md text-gray-600'}>
             You’ve won {data?.pointsByQuiz} pt, but you can always come back at anytime
           </div>
         </div>
