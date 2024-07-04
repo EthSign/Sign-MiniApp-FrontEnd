@@ -30,20 +30,24 @@ export const ClaimAddressEditModal: React.FC<ClaimAddressEditModalVisible> = (pr
 
   const [claimAddressConfirmModalVisible, setClaimAddressConfirmModalVisible] = useState(false);
 
-  const confirmUpdateAddress = async () => {
+  const onSaveButtonClick = () => {
     if (!claimAddress) return;
 
     if (!isTonAddress(claimAddress)) {
       toast({
         title: 'Error',
         description: 'Please enter a TON wallet address.',
-        variant: 'error'
+        variant: 'error',
+        duration: 2000
       });
-
-      setIsSaving(false);
-      setClaimAddressConfirmModalVisible(false);
       return;
     }
+
+    setClaimAddressConfirmModalVisible(true);
+  };
+
+  const confirmUpdateAddress = async () => {
+    if (!claimAddress) return;
 
     try {
       setIsSaving(true);
@@ -109,14 +113,7 @@ export const ClaimAddressEditModal: React.FC<ClaimAddressEditModalVisible> = (pr
           >
             Cancel
           </Button>
-          <Button
-            className="flex-1"
-            onClick={() => {
-              setClaimAddressConfirmModalVisible(true);
-            }}
-            disabled={!claimAddress?.length}
-            loading={isSaving}
-          >
+          <Button className="flex-1" onClick={onSaveButtonClick} disabled={!claimAddress?.length} loading={isSaving}>
             Save
           </Button>
         </div>
