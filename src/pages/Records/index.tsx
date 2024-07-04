@@ -1,4 +1,4 @@
-import { TabBar } from '@/components/Header.tsx';
+import { Tabbar } from '@/components/Header.tsx';
 import rocketImg from '@/assets/rocket.png';
 import { Badge, DatePicker, Progress, ScrollArea } from '@ethsign/ui';
 import { useQuery } from '@tanstack/react-query';
@@ -39,14 +39,14 @@ const InviteModal = ({ data }: { data: any }) => {
                 {isCompleted ? 'Completed' : 'In Progress'}
               </Badge>
             </div>
-            <div className={'text-xs font-normal'}>{formatDate(data.raffleAt)}</div>
+            <div className={'font-normal text-xs'}>{formatDate(data.raffleAt)}</div>
             <Progress
               value={levelInfo.progress}
               className={
                 'mt-2.5 bg-[#EAECF0] [&>div]:rounded-full [&>div]:bg-[linear-gradient(90deg,#C7D9FF_0%,#0052FF_100%)]'
               }
             />
-            <div className={'flex justify-between items-center mt-2 text-[12px]'}>
+            <div className={'mt-2 flex items-center justify-between text-[12px]'}>
               <div>Current: {levelInfo?.currentScore} pts</div>
               <div>{levelInfo?.nextScore ? `Next Level: ${levelInfo?.nextScore} pts` : 'Max'}</div>
             </div>
@@ -72,15 +72,15 @@ export default function RecordsPage() {
   console.log(data);
   return (
     <div>
-      <TabBar title={'Boost Records'} />
-      <ScrollArea className={'py-8 px-6 bg-white h-[calc(100vh-48px)]'}>
+      <Tabbar title={'Boost Records'} />
+      <ScrollArea className={'h-[calc(100vh-48px)] bg-white px-6 py-8'}>
         <div className={''}>
-          <div className={'flex justify-between items-center'}>
-            <div className={'text-md font-bold'}>Boost Records</div>
+          <div className={'flex items-center justify-between'}>
+            <div className={'font-bold text-md'}>Boost Records</div>
             <DatePicker
               autoHidden
               calendarProps={{
-                footer: <div className={'text-xs text-[#667085] px-2'}>Time Zone: UTC+0</div>
+                footer: <div className={'px-2 text-xs text-[#667085]'}>Time Zone: UTC+0</div>
               }}
               className={'flex-[0_0_150px] text-xs'}
               value={new Date(date)}
@@ -95,7 +95,7 @@ export default function RecordsPage() {
             {isLoading && <Loading />}
             {data?.rows?.map((item, index) => {
               return (
-                <div className={'border border-gray-200 rounded-[8px] py-2 px-4 mt-4'} key={index}>
+                <div className={'mt-4 rounded-[8px] border border-gray-200 px-4 py-2'} key={index}>
                   <InviteModal data={item} />
                 </div>
               );
@@ -103,14 +103,14 @@ export default function RecordsPage() {
             {data && data?.rows?.length === 0 && (
               <div
                 className={
-                  'text-center rounded-[8px] mt-6 py-8 px-4 border border-gray-200 flex flex-col justify-center items-center'
+                  'mt-6 flex flex-col items-center justify-center rounded-[8px] border border-gray-200 px-4 py-8 text-center'
                 }
               >
-                <div className={'bg-[#ECF2FF] rounded-full w-12 h-12 flex justify-center items-center'}>
+                <div className={'flex size-12 items-center justify-center rounded-full bg-[#ECF2FF]'}>
                   <img src={rocketImg} alt="" className={'w-[30px]'} />
                 </div>
-                <div className={'text-black text-sm font-medium mt-4'}>No Boost Records</div>
-                <div className={'text-xs text-[#667085] font-normal'}>
+                <div className={'mt-4 font-medium text-sm text-black'}>No Boost Records</div>
+                <div className={'font-normal text-xs text-[#667085]'}>
                   There are no boost records. Spin the wheel to start boosting.
                 </div>
               </div>

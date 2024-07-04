@@ -6,7 +6,7 @@ import { Edit02, InfoCircle } from '@ethsign/icons';
 import { Button } from '@ethsign/ui';
 import { shortenWalletAddress } from '@ethsign/utils-web';
 import { Loader2 } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { ClaimAddressEditModal } from './components/ClaimAddressEditModal';
 import { ClaimAddressTipModal } from './components/ClaimAddressTipModal';
 import { HowToClaimModal } from './components/HowToClaimModal';
@@ -14,7 +14,7 @@ import { RewardItem } from './components/RewardItem';
 import { NewRewardIssuedModal } from './components/NewRewardIssuedModal';
 
 export const Rewards: React.FC = () => {
-  const { user } = useUserInfo();
+  const { user, isBindingWallet, bindWallet } = useUserInfo();
 
   const [rewards, setRewards] = useState<RewardInfo[]>([]);
 
@@ -24,6 +24,11 @@ export const Rewards: React.FC = () => {
   const [claimAddressEditModalVisible, setClaimAddressEditModalVisible] = useState(false);
   const [claimAddressTipModalVisible, setClaimAddressTipModalVisible] = useState(false);
   const [newRewardIssuedModalVisible, setNewRewardIssuedModalVisible] = useState(false);
+
+  // 既没有绑定钱包，也没有设置 claim address
+  const noAddressBound = useMemo(() => {
+    return !user?.claimWalletAddress && !user?.walletAddress;
+  }, [user?.claimWalletAddress, user?.walletAddress]);
 
   useEffect(() => {
     const refreshRewards = async () => {
@@ -35,8 +40,6 @@ export const Rewards: React.FC = () => {
         const notNotifiedRewards = response.rows.filter((reward) => {
           return reward.status === MiniRewardStatus.Claimed && !checkNewRewardModalShown(reward.id);
         });
-
-        console.log(notNotifiedRewards);
 
         if (notNotifiedRewards.length) {
           setNewRewardIssuedModalVisible(true);
@@ -85,12 +88,23 @@ export const Rewards: React.FC = () => {
 
         <Button
           className="bg-white text-xs hover:bg-white focus:bg-white active:bg-white"
+          loading={isBindingWallet}
           onClick={() => {
-            setClaimAddressEditModalVisible(true);
+            if (noAddressBound) {
+              bindWallet();
+            } else {
+              setClaimAddressEditModalVisible(true);
+            }
           }}
         >
-          <span className="mr-2 text-sm text-[#0052FF]">Edit</span>
-          <Edit02 size={16} color="#0052FF" />
+          {noAddressBound ? (
+            <span className="text-sm text-[#0052FF]">Connect</span>
+          ) : (
+            <>
+              <span className="mr-2 text-sm text-[#0052FF]">Edit</span>
+              <Edit02 size={16} color="#0052FF" />
+            </>
+          )}
         </Button>
       </div>
 

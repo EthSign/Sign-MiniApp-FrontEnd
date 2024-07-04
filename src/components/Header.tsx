@@ -7,13 +7,21 @@ import { ArrowLeft } from 'lucide-react';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-export const TabBar = ({ title }: { title: string }) => {
+export interface TabbarProps {
+  title: string;
+  backUrl?: string;
+}
+
+export const Tabbar: React.FC<TabbarProps> = (props) => {
+  const { title, backUrl } = props;
+
   const navigate = useNavigate();
+
   const backHome = () => {
-    navigate('/lucky-wheel', {
-      replace: true
-    });
+    if (!backUrl) navigate(-1);
+    else navigate(backUrl, { replace: true });
   };
+
   return (
     <div className="relative flex items-center justify-center px-4 py-3">
       <div

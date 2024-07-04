@@ -14,7 +14,7 @@ import { useConnection } from '@/utils/ton-sp/hooks/useConnection.ts';
 import { DataLocation } from '@/utils/ton-sp/utils';
 import { offChainSchema } from '@/constants/config';
 import { useQuery } from '@tanstack/react-query';
-import { TabBar } from '@/components/Header';
+import { Tabbar } from '@/components/Header';
 
 export const AboutModal = () => {
   return (
@@ -28,8 +28,8 @@ export const AboutModal = () => {
       }
     >
       <div className="text-center">
-        <h1 className={'font-semibold text-[21px]'}>What are attestations?</h1>
-        <div className={'mt-3 text-md text-gray-600 font-normal'}>
+        <h1 className={'text-[21px] font-semibold'}>What are attestations?</h1>
+        <div className={'mt-3 font-normal text-md text-gray-600'}>
           An attestation is the act of confirming and certifying the validity of a claim or assertion, such as a
           statement, event, or even a legal document. This provides support for an assessor (a.k.a. verifier) to be able
           to confidently accept or reject a given claim that they are presented with.
@@ -194,9 +194,9 @@ export default function AttestPage() {
 
   return (
     <div>
-      <TabBar title={'Sign Event'} />
+      <Tabbar title={'Sign Event'} />
 
-      <div className={'p-6 space-y-4 h-[calc(100vh-48px)] bg-white'}>
+      <div className={'h-[calc(100vh-48px)] space-y-4 bg-white p-6'}>
         {/*<div className="rounded-[6px] border border-gray-200 bg-white p-3">*/}
         {/*  <h1 className={'text-center text-md font-bold text-gray-900'}>*/}
         {/*    Sign any event on Sign Protocol to earn Sign points*/}

@@ -53,9 +53,6 @@ const routerConfig: RouteObject[] = [
             }
           }
         ]
-        // loader: () => {
-        //   return redirect('/lucky-wheel');
-        // }
       },
       {
         path: '/attest',
@@ -75,13 +72,6 @@ const routerConfig: RouteObject[] = [
         path: '/schema',
         async lazy() {
           const Page = await import('@/pages/CreateSchema');
-          return { Component: Page.default };
-        }
-      },
-      {
-        path: '/invite',
-        async lazy() {
-          const Page = await import('@/pages/Invite');
           return { Component: Page.default };
         }
       },

@@ -1,4 +1,4 @@
-import { TabBar } from '@/components/Header.tsx';
+import { Tabbar } from '@/components/Header.tsx';
 import ticketImg from '@/assets/ticket.png';
 import { Badge, Modal } from '@ethsign/ui';
 import { ReactNode, useState } from 'react';
@@ -83,10 +83,10 @@ export default function Tickets() {
   };
   return (
     <div>
-      <TabBar title={'Earn Tickets'} />
-      <div className={'py-10 px-6 bg-white h-[calc(100vh-48px)]'}>
-        <div className={'flex justify-between items-center'}>
-          <div className={'text-xl font-bold text-gray-900'}>Earn Tickets</div>
+      <Tabbar title={'Earn Tickets'} />
+      <div className={'h-[calc(100vh-48px)] bg-white px-6 py-10'}>
+        <div className={'flex items-center justify-between'}>
+          <div className={'font-bold text-xl text-gray-900'}>Earn Tickets</div>
         </div>
         <div className="mt-6 space-y-6">
           <TicketDrawer
@@ -104,7 +104,7 @@ export default function Tickets() {
                 <img src={ticketImg} className={'w-[46px]'} alt="" />
                 <div className={'flex flex-col'}>
                   <div className={'text-sm font-semibold text-gray-900'}>Sign event offchain</div>
-                  <div className={'text-xs font-normal text-gray-600 mt-1'}>
+                  <div className={'mt-1 font-normal text-xs text-gray-600'}>
                     Get 1 ticket for every offchain attestation you make
                   </div>
                 </div>
@@ -115,7 +115,7 @@ export default function Tickets() {
             }
           >
             <div className={'w-full'}>
-              <div className={'flex items-center justify-center text-sm font-normal gap-2 mt-4'}>
+              <div className={'mt-4 flex items-center justify-center gap-2 font-normal text-sm'}>
                 <img src={ticketImg} className={'w-6'} />
                 <div>Earn points for each offchain signing</div>
               </div>
@@ -144,11 +144,11 @@ export default function Tickets() {
         className={'w-[359px] rounded-[24px]'}
       >
         <div>
-          <img src={ticketImg} className={'w-[80px] mx-auto'} alt="" />
+          <img src={ticketImg} className={'mx-auto w-[80px]'} alt="" />
         </div>
-        <div className={'text-center mt-4'}>
-          <div className={'text-xl font-semibold text-black-100'}>1 Ticket Received</div>
-          <div className={'text-md font-normal text-gray-600 mt-2'}>
+        <div className={'mt-4 text-center'}>
+          <div className={'text-xl font-semibold text-black'}>1 Ticket Received</div>
+          <div className={'mt-2 font-normal text-md text-gray-600'}>
             Spin the wheel with your tickets and earn Signie points
           </div>
         </div>

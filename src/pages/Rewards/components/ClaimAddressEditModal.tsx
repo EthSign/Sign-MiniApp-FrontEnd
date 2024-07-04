@@ -1,9 +1,9 @@
 import { useUserInfo } from '@/providers/UserInfoProvider';
 import { updateClaimAddress } from '@/services';
 import { Button, Modal, Textarea, toast } from '@ethsign/ui';
+import { Address as TonAddress } from '@ton/core';
 import React, { useEffect, useState } from 'react';
 import { ClaimAddressConfirmModal } from './ClaimAddressConfirmModal';
-import { Address as TonAddress } from '@ton/core';
 
 function isTonAddress(address: string) {
   try {
@@ -58,6 +58,12 @@ export const ClaimAddressEditModal: React.FC<ClaimAddressEditModalVisible> = (pr
       fetchUser();
 
       onOpenChange?.(false);
+
+      toast({
+        title: 'TON wallet address updated',
+        variant: 'success',
+        duration: 2000
+      });
     } finally {
       setIsSaving(false);
       setClaimAddressConfirmModalVisible(false);
@@ -80,15 +86,6 @@ export const ClaimAddressEditModal: React.FC<ClaimAddressEditModalVisible> = (pr
         open={open}
         onOpenChange={onOpenChange}
       >
-        {user?.claimWalletAddress && (
-          <div className="space-y-[6px] overflow-hidden">
-            <div className="font-medium text-sm">Current wallet address</div>
-            <div className="w-full overflow-hidden text-wrap break-all rounded-[8px] bg-[#F2F4F7] px-3 py-4 text-sm text-[#101828]">
-              {user.claimWalletAddress}
-            </div>
-          </div>
-        )}
-
         <div className="space-y-[6px] overflow-hidden">
           <div className="font-medium text-sm">New wallet address (TON Address)</div>
           <Textarea
@@ -102,6 +99,15 @@ export const ClaimAddressEditModal: React.FC<ClaimAddressEditModalVisible> = (pr
             }}
           />
         </div>
+
+        {user?.claimWalletAddress && (
+          <div className="space-y-[6px] overflow-hidden">
+            <div className="font-medium text-sm">Current wallet address</div>
+            <div className="w-full overflow-hidden text-wrap break-all rounded-[8px] bg-[#F2F4F7] px-3 py-4 text-sm text-[#101828]">
+              {user.claimWalletAddress}
+            </div>
+          </div>
+        )}
 
         <div className="flex gap-2">
           <Button
