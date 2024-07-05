@@ -70,7 +70,6 @@ export default function RecordsPage() {
     queryFn: () => getRaffles(date)
   });
 
-  console.log(data);
   return (
     <div>
       <Tabbar title={'Boost Records'} />

@@ -2,9 +2,10 @@
 import { Loading } from '@/components/Loading';
 import { auth, getMyInfo } from '@/services';
 import { IUser } from '@/types';
+import { debugLog } from '@/utils';
 import { decodeTelegramStartParam, getTMAInitData } from '@/utils/telegram';
 import { useQuery } from '@tanstack/react-query';
-import { ReactNode, createContext, useContext, useEffect, useMemo } from 'react';
+import React, { PropsWithChildren, createContext, useContext, useEffect, useMemo } from 'react';
 import { useWalletBind } from '../hooks/useWalletBind';
 
 interface UserInfoContextProps {
@@ -45,19 +46,23 @@ export const useFetchUser = () => {
   };
 };
 
-export const UserInfoProvider = ({ children }: { children: ReactNode }) => {
-  const { user, fetchUser, isLoading } = useFetchUser();
+export const UserInfoProvider: React.FC<PropsWithChildren> = (props) => {
+  const { children } = props;
 
-  const authData = getTMAInitData();
+  const { user, isLoading, fetchUser } = useFetchUser();
+
+  const tgInitData = getTMAInitData();
 
   const { bindWallet, isBindingWallet } = useWalletBind({
     onBindSuccess: fetchUser
   });
 
   const startParam = useMemo(() => {
+    const startParam = tgInitData?.parsed?.start_param;
+
     try {
-      if (authData?.start_param) {
-        const decodedStartParam = decodeTelegramStartParam(authData.start_param);
+      if (startParam) {
+        const decodedStartParam = decodeTelegramStartParam(startParam);
 
         return {
           raffleId: decodedStartParam?.raffleId,
@@ -70,22 +75,24 @@ export const UserInfoProvider = ({ children }: { children: ReactNode }) => {
       console.error(e);
       return null;
     }
-  }, [authData]);
+  }, [tgInitData]);
 
-  const handleAuth = async () => {
-    if (authData) {
-      await auth({
-        webappData: authData,
-        referenceCode: startParam?.raffleId || '',
-        invitedBy: startParam?.invitedBy
-      });
+  const login = async () => {
+    if (!tgInitData?.parsed) return;
 
-      fetchUser();
-    }
+    await auth({
+      webappData: tgInitData.parsed,
+      referenceCode: startParam?.raffleId || '',
+      invitedBy: startParam?.invitedBy
+    });
+
+    fetchUser();
   };
 
   useEffect(() => {
-    handleAuth();
+    debugLog(`initData raw: ` + tgInitData?.raw);
+
+    login();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

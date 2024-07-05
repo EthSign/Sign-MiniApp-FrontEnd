@@ -108,8 +108,6 @@ export class TonWallet extends WalletBase {
         [wallet.name, wallet.appName].includes(authType)
       ) as WalletInfoRemote;
 
-      console.log(wallets, currentWallet, 'ww');
-
       const link = tonConnectUI.connector.connect(
         {
           bridgeUrl: currentWallet.bridgeUrl,
@@ -178,8 +176,6 @@ export const TonConnector = () => {
   const wallet = useTonWallet();
   const [tonConnectUI] = useTonConnectUI();
   const connectModal = useTonConnectModal();
-
-  console.log(wallet, 'ww');
 
   tonStore.connectModal = connectModal;
   tonStore.walletClient = tonConnectUI;

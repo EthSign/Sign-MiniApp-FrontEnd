@@ -1,3 +1,4 @@
+import { ENVS } from '@/constants/config';
 import dayjs from 'dayjs';
 import { customAlphabet } from 'nanoid';
 import queryString from 'query-string';
@@ -81,4 +82,20 @@ export function ordinalSuffix(n: number): string {
 /** 将数字转换位常用的货币格式，如 10,000 */
 export function formatNumber(value: number): string {
   return value.toLocaleString('en-US');
+}
+
+export const isDevelopmentEnv = () => ENVS.ENV === 'dev';
+
+export function debugLog(message?: string) {
+  if (!isDevelopmentEnv()) return;
+
+  let innerMessage = '[debug] ';
+
+  if (typeof message !== 'string') {
+    innerMessage += JSON.stringify(message);
+  } else {
+    innerMessage += message;
+  }
+
+  console.debug(innerMessage);
 }

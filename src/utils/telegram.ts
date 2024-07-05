@@ -3,14 +3,17 @@ import { ITMAInitData } from '@/types';
 import WebApp from '@twa-dev/sdk';
 import { parseQuery } from './common';
 
-export const getTMAInitData = (): ITMAInitData | null => {
+export const getTMAInitData = (): { raw: string; parsed: ITMAInitData } | null => {
   const initDataRaw = isTelegramApp() ? WebApp.initData : ENVS.INITDATA; // user=...&query_id=...&...
 
   if (!initDataRaw) return null;
 
   const initData = parseQuery(initDataRaw) as ITMAInitData;
 
-  return initData;
+  return {
+    raw: initDataRaw,
+    parsed: initData
+  };
 };
 
 export const isTelegramApp = (): boolean => {

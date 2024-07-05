@@ -55,7 +55,6 @@ export default function AttestPage() {
     queryKey: ['raffle', raffleId],
     queryFn: () => getRaffleInfo(raffleId!)
   });
-  console.log(data, 'data');
 
   const isExpired = data?.expandExpirationAt && data.expandExpirationAt < Date.now();
 
