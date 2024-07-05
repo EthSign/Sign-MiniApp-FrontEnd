@@ -8,18 +8,10 @@ import { formatNumber, ordinalSuffix } from '@/utils/common';
 import { encodeTelegramStartParam } from '@/utils/telegram';
 import { UserPlus01 } from '@ethsign/icons';
 import { Button, ScrollArea } from '@ethsign/ui';
-import { initUtils } from '@tma.js/sdk';
+import WebApp from '@twa-dev/sdk';
 import classNames from 'classnames';
 import { Check, Loader2 } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
-
-let utils: ReturnType<typeof initUtils>;
-
-try {
-  utils = initUtils();
-} catch (error) {
-  console.error(error);
-}
 
 const InviteFriendsPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
@@ -72,8 +64,8 @@ const InviteFriendsPage: React.FC = () => {
       description
     )}`;
 
-    if (utils) {
-      utils.openTelegramLink(url);
+    if (WebApp) {
+      WebApp.openTelegramLink(url);
     } else {
       window.open(url);
     }

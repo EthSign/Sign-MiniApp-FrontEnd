@@ -2,22 +2,14 @@ import { ENVS } from '@/constants/config.ts';
 import { useUserInfo } from '@/providers/UserInfoProvider.tsx';
 import { checkTask as checkTaskRequest, getQuizInfo, getTask } from '@/services';
 import { TaskRewardType, TaskTypeEnum } from '@/types';
-import { initTmaUtils } from '@/utils/common.ts';
 import { Badge } from '@ethsign/ui';
 import { useQuery } from '@tanstack/react-query';
+import WebApp from '@twa-dev/sdk';
 import { useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Task, TaskProps } from './components/Task';
 import { DrawerRef } from './components/TaskDrawer';
 import { TaskItem } from './components/TaskItem';
-
-let tgUtils: ReturnType<typeof initTmaUtils>;
-
-try {
-  tgUtils = initTmaUtils();
-} catch (error) {
-  console.error(error);
-}
 
 export default function Tasks() {
   const navigate = useNavigate();
@@ -42,8 +34,8 @@ export default function Tasks() {
     try {
       setIsJoiningSignGroup(true);
 
-      if (tgUtils) {
-        tgUtils.openTelegramLink(groupUrl);
+      if (WebApp) {
+        WebApp.openTelegramLink(groupUrl);
       } else {
         window.open(groupUrl);
       }
