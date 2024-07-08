@@ -16,6 +16,26 @@ export const formatDate = (time: number) => {
   return dayjs(time).format('MMMM DD, YYYY');
 };
 
+export function formatDateTime(
+  dateOrTimeStamp: Date | number,
+  config: {
+    year: boolean;
+  } = { year: true }
+): string {
+  const date = new Date(dateOrTimeStamp);
+  const hours = date.getUTCHours().toString().padStart(2, '0');
+  const minutes = date.getUTCMinutes().toString().padStart(2, '0');
+
+  const month = date.toLocaleString('en-US', { month: 'long', timeZone: 'UTC' });
+  const day = date.getUTCDate();
+  const year = date.getUTCFullYear();
+
+  const timeZone = 'UTC+0';
+
+  // 返回格式化后的字符串
+  return `${hours}:${minutes}, ${month} ${ordinalSuffix(day)} ${config.year ? year + ' ' : ''}(${timeZone})`;
+}
+
 export function getUTCTimeByDate(date: Date) {
   const utcYear = date.getFullYear();
   const utcMonth = date.getMonth();

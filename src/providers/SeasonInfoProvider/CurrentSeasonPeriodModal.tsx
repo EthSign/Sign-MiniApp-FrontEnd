@@ -1,24 +1,10 @@
 import { SeasonInfo } from '@/types';
+import { formatDateTime } from '@/utils/common';
 import { XCircle } from '@ethsign/icons';
 import { Modal } from '@ethsign/ui';
 import classNames from 'classnames';
 import React, { useRef } from 'react';
 import { Transition } from 'react-transition-group';
-
-function formatDate(dateOrTimeStamp: Date | number): string {
-  const date = new Date(dateOrTimeStamp);
-  const hours = date.getUTCHours().toString().padStart(2, '0');
-  const minutes = date.getUTCMinutes().toString().padStart(2, '0');
-
-  const month = date.toLocaleString('en-US', { month: 'long', timeZone: 'UTC' });
-  const day = date.getUTCDate();
-  const year = date.getUTCFullYear();
-
-  const timeZone = 'UTC+0';
-
-  // 返回格式化后的字符串
-  return `${hours}:${minutes}, ${month} ${day}th ${year} (${timeZone})`;
-}
 
 const ModalContent: React.FC<{ color?: 'black' | 'white'; seasonInfo: SeasonInfo }> = (props) => {
   const { seasonInfo, color = 'white' } = props;
@@ -45,7 +31,7 @@ const ModalContent: React.FC<{ color?: 'black' | 'white'; seasonInfo: SeasonInfo
             'text-[#475467] text-sm': color === 'black'
           })}
         >
-          {seasonInfo.name} will be ended at {formatDate(seasonInfo.endTime)}
+          {seasonInfo.name} will be ended at {formatDateTime(seasonInfo.endTime)}
           <br />
           Let's start boosting your Signie points! The higher you rank, the more you win!
         </p>
