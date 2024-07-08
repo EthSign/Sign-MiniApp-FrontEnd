@@ -196,7 +196,7 @@ export const MysteryDropProvider: React.FC<PropsWithChildren> = (props) => {
 
   return (
     <MysteryDropContext.Provider value={{ notifyBarVisible }}>
-      <NotificationBar open={notifyBarVisible} startTime={timeframe[0]} onOpenChange={setNotifyBarVisible} />
+      <NotificationBar open={notifyBarVisible} targetTime={timeframe[0]} onOpenChange={setNotifyBarVisible} />
 
       <NotificationModal
         startTime={nextDropInfo?.noticeStartTime}
