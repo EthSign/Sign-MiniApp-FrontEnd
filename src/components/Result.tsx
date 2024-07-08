@@ -1,4 +1,4 @@
-import { CountDown } from '@/components/Countdown.tsx';
+import { Countdown } from '@/components/Countdown.tsx';
 import { ENVS } from '@/constants/config.ts';
 import { BackToWheelModal } from '@/pages/LuckyWheel/components/BackWheelModal';
 import { useConfetti } from '@/providers/ConfettiProvider';
@@ -138,7 +138,7 @@ export const ResultCard = React.forwardRef<
             </h1>
             {dueDate && (
               <div className="flex justify-center">
-                <CountDown
+                <Countdown
                   targetDate={dueDate}
                   onFinish={() => {
                     setTimesUp(true);

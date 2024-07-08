@@ -1,11 +1,11 @@
 import { useErudaDebugger } from '@/hooks/useDebug.tsx';
 import { UserInfoProvider, useUserInfo } from '@/providers/UserInfoProvider';
-import { initTelegramApp } from './utils/telegram';
-import { isTelegramApp } from './utils/telegram';
 import { useEffect, useRef } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { MysteryDropProvider } from './providers/MysteryDropProvider';
+import { NotificationProvider } from './providers/NotificationProvider';
 import { SeasonInfoProvider } from './providers/SeasonInfoProvider';
+import { initTelegramApp, isTelegramApp } from './utils/telegram';
 
 const TGAPP = () => {
   const isInTelegram = isTelegramApp();
@@ -27,13 +27,15 @@ const TGAPP = () => {
   }
 
   return (
-    <UserInfoProvider>
-      <MysteryDropProvider>
-        <SeasonInfoProvider>
-          <App />
-        </SeasonInfoProvider>
-      </MysteryDropProvider>
-    </UserInfoProvider>
+    <NotificationProvider>
+      <UserInfoProvider>
+        <MysteryDropProvider>
+          <SeasonInfoProvider>
+            <App />
+          </SeasonInfoProvider>
+        </MysteryDropProvider>
+      </UserInfoProvider>
+    </NotificationProvider>
   );
 };
 
