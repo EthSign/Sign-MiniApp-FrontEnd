@@ -7,11 +7,11 @@ import { Button } from '@ethsign/ui';
 import { shortenWalletAddress } from '@ethsign/utils-web';
 import { Loader2 } from 'lucide-react';
 import React, { useEffect, useMemo, useState } from 'react';
-import { CarouselMessages } from './components/CarouselMessages';
 import { ClaimAddressEditModal } from './components/ClaimAddressEditModal';
 import { ClaimAddressTipModal } from './components/ClaimAddressTipModal';
 import { HowToClaimModal } from './components/HowToClaimModal';
 import { NewRewardIssuedModal } from './components/NewRewardIssuedModal';
+import { RewardAnnouncement } from './components/RewardAnnouncement';
 import { RewardItem } from './components/RewardItem';
 
 export const Rewards: React.FC = () => {
@@ -67,7 +67,7 @@ export const Rewards: React.FC = () => {
 
   return (
     <div className="relative">
-      <CarouselMessages className="mb-2" />
+      <RewardAnnouncement className="mb-3" />
 
       <div className="mb-2 flex min-h-20 items-center justify-between overflow-hidden rounded-[8px] bg-[url(https://sign-public-cdn.s3.us-east-1.amazonaws.com/Signie/Card_240626034540.webp)] bg-cover bg-center bg-no-repeat p-4">
         <div>

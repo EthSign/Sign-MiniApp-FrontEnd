@@ -219,3 +219,13 @@ export enum CampaignType {
   MysteryDrop = 'mystery_drop',
   Competition = 'competition'
 }
+
+export interface RewardAnnouncement {
+  status: string;
+  amount: number;
+  campaignType: CampaignType;
+  rewardAt: number;
+  username: string;
+  type: string;
+  name: string;
+}

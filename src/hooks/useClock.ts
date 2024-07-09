@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
 export type Handler = (now: number) => void;
 
@@ -62,14 +62,34 @@ export function addOnDateHandler(props: { date: Date | number; handler: Handler;
   };
 }
 
-export const useClock = (handler: Handler) => {
+export const useClock = (handler: Handler, config?: { interval: number }) => {
+  const count = useRef(0);
+
+  const innerHandler = useCallback(
+    (now: number) => {
+      if (config?.interval) {
+        const maxCount = Math.floor(config.interval / 1000);
+
+        if (count.current === maxCount || count.current === 0) {
+          handler(now);
+          count.current = 1;
+        } else {
+          count.current++;
+        }
+      } else {
+        handler(now);
+      }
+    },
+    [config?.interval, handler]
+  );
+
   useEffect(() => {
-    addHandler(handler);
+    addHandler(innerHandler);
 
     return () => {
-      removeHandler(handler);
+      removeHandler(innerHandler);
     };
-  }, [handler]);
+  }, [innerHandler]);
 };
 
 /** 在指定的时刻执行 handler */
