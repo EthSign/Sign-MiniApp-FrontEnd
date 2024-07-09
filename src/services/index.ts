@@ -155,5 +155,5 @@ export const getRewardsAnnouncement = async () => {
   return apiClient.get<{
     rows: RewardAnnouncement[];
     total: number;
-  }>('/api/mini/rewards/announcement');
+  }>('/mini/rewards/announcement');
 };

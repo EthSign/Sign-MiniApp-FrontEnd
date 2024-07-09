@@ -169,8 +169,7 @@ export interface RewardInfo {
   amount: number;
   rewardAt: string;
   campaignType: CampaignType;
-  // 目前只有 token
-  type: 'token';
+  type: 'token' | 'physical';
   name: string;
   image: string;
 }

@@ -48,3 +48,8 @@ export function encodeTelegramStartParam(param: unknown) {
 export function decodeTelegramStartParam(encodedParam: string) {
   return JSON.parse(window.atob(decodeURIComponent(encodedParam)));
 }
+
+export function joinSignProtocolTGGroup() {
+  const groupUrl = 'https://t.me/signprotocol';
+  WebApp.openTelegramLink(groupUrl);
+}
