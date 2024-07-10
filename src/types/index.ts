@@ -227,6 +227,6 @@ export interface RewardAnnouncement {
   campaignType: CampaignType;
   rewardAt: number;
   username: string;
-  type: string;
+  type: 'physical' | 'token';
   name: string;
 }
