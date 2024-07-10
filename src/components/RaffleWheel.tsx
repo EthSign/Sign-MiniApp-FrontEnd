@@ -7,6 +7,7 @@ import { raffle } from '@/services';
 import WebApp from '@twa-dev/sdk';
 import classNames from 'classnames';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { PrizeCover, PrizeCoverVariant } from './PrizeCover';
 
 export interface RaffleWheelProps {
   className?: string;
@@ -165,15 +166,7 @@ export const RaffleWheel = React.forwardRef<HTMLDivElement, RaffleWheelProps>((p
                 {prize.type === 'point' ? (
                   <span className="[text-shadow:2px_2px_0px_black]">{prize.value}</span>
                 ) : (
-                  <div>
-                    <img
-                      className={classNames('h-[41px] translate-x-[10px] object-contain object-right', {
-                        '!h-[32px] translate-x-[-7px]': prize.image?.endsWith?.('prize-safepal-large_240709072617.webp')
-                      })}
-                      src={prize.image}
-                      alt=""
-                    />
-                  </div>
+                  <PrizeCover prizeId={prize.id} variant={PrizeCoverVariant.Wheel} />
                 )}
               </div>
             ))}

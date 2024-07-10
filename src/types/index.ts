@@ -19,6 +19,7 @@ export interface LotteryInfo {
   prizes: {
     id: string;
     type: string;
+    name: string;
     value: number;
     image: string;
   }[];
@@ -165,6 +166,7 @@ export enum MiniRewardStatus {
 
 export interface RewardInfo {
   id: string;
+  prizeId: string;
   status: MiniRewardStatus;
   amount: number;
   rewardAt: string;

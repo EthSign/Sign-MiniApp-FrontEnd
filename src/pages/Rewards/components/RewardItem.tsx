@@ -1,3 +1,4 @@
+import { PrizeCover } from '@/components/PrizeCover';
 import { CampaignType, MiniRewardStatus, type RewardInfo } from '@/types';
 import { joinSignProtocolTGGroup } from '@/utils';
 import { Button } from '@ethsign/ui';
@@ -37,7 +38,11 @@ export const RewardItem: React.FC<RewardItemProps> = (props) => {
       key={reward.id}
     >
       <div className="flex flex-1 items-center gap-4">
-        <img className="size-8 object-contain" src={reward.image} alt="" />
+        {reward.prizeId ? (
+          <PrizeCover prizeId={reward.prizeId} />
+        ) : (
+          <img className="size-8 object-contain" src={reward.image} alt="" />
+        )}
 
         <div className="space-y-1">
           <div className="flex items-center">
