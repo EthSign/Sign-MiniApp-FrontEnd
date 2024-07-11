@@ -134,7 +134,7 @@ export default function Tasks() {
       //   }
       // }
       {
-        completed: false,
+        completed: taskData?.visitTriangleIncubator,
         title: "Discover Sign's Journey in Triangle",
         rewardText: '500 pts',
         rewardType: TaskRewardType.POINTS,
