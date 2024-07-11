@@ -102,7 +102,7 @@ export default function Tasks() {
         rewardText: '200 pts',
         rewardType: TaskRewardType.POINTS,
         action: async () => {
-          window.open('https://x.com/BalletCrypto/');
+          WebApp.openLink('https://x.com/BalletCrypto/');
           await checkTask(TaskTypeEnum.VisitBalletCrypto);
         }
       },
@@ -112,10 +112,10 @@ export default function Tasks() {
         rewardText: '200 pts',
         rewardType: TaskRewardType.POINTS,
         action: async () => {
-          window.open('https://www.twitter.com/isafepal');
+          WebApp.openLink('https://www.twitter.com/isafepal');
           await checkTask(TaskTypeEnum.VisitSafepal);
         }
-      }
+      },
       // {
       //   completed: taskData?.joinSafePalTgGroup,
       //   title: 'Join Safepal X TG Group',
@@ -133,6 +133,16 @@ export default function Tasks() {
       //     text: 'Join now'
       //   }
       // }
+      {
+        completed: false,
+        title: "Discover Sign's Journey in Triangle",
+        rewardText: '500 pts',
+        rewardType: TaskRewardType.POINTS,
+        action: async () => {
+          WebApp.openLink('https://x.com/ethsign/status/1811102961302671669');
+          await checkTask(TaskTypeEnum.VisitTriangle);
+        }
+      }
     ];
 
     tasks.sort((a, b) => Number(a.completed) - Number(b.completed));
