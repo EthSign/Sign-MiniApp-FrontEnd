@@ -26,7 +26,7 @@ export const LuckyWheel: React.FC = () => {
   const showWheel = useMemo(() => {
     if (currentPrizeId) {
       const currentPrize = getPrizeById(currentPrizeId);
-      if (currentPrize?.type === 'physical') return true;
+      if (currentPrize?.type !== 'point') return true;
     }
     if (backToWheelButtonClicked) return true;
     return !hasSpinedToday;
@@ -67,7 +67,9 @@ export const LuckyWheel: React.FC = () => {
                   }
 
                   await refresh();
-                  setBackToWheelButtonClicked(false);
+                  if (prize?.type === 'point') {
+                    setBackToWheelButtonClicked(false);
+                  }
                 }}
               />
             )}
