@@ -1,4 +1,4 @@
-import { MiniCountDown } from '@/components/Countdown';
+import { MiniCountdown } from '@/components/Countdown';
 import { X } from '@ethsign/icons';
 import classNames from 'classnames';
 import React, { useMemo, useRef } from 'react';
@@ -7,11 +7,12 @@ import { Transition } from 'react-transition-group';
 
 interface NotificationBarProps {
   open: boolean;
-  startTime?: Date;
+  targetTime?: Date;
   onOpenChange?: (visible: boolean) => void;
 }
+
 export const NotificationBar: React.FC<NotificationBarProps> = (props) => {
-  const { open, startTime, onOpenChange } = props;
+  const { open, targetTime, onOpenChange } = props;
 
   const notificationRef = useRef<HTMLDivElement>(null);
 
@@ -51,10 +52,10 @@ export const NotificationBar: React.FC<NotificationBarProps> = (props) => {
               Stay tuned and enjoy the gift!
             </div>
 
-            {startTime && (
-              <MiniCountDown
+            {targetTime && (
+              <MiniCountdown
                 className="mr-1"
-                targetDate={startTime}
+                targetDate={targetTime}
                 onFinish={() => {
                   onOpenChange?.(false);
                 }}

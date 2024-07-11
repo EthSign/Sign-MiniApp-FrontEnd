@@ -1,4 +1,4 @@
-import { useMysteryDropContext } from '@/providers/MysteryDropProvider';
+import { useNotification } from '@/providers/NotificationProvider';
 import { useUserInfo } from '@/providers/UserInfoProvider';
 import { Button } from '@ethsign/ui';
 import { shortenWalletAddress } from '@ethsign/utils-web';
@@ -39,7 +39,7 @@ export const Tabbar: React.FC<TabbarProps> = (props) => {
 export const Header: React.FC = () => {
   const { user, bindWallet, isBindingWallet } = useUserInfo();
 
-  const { notifyBarVisible } = useMysteryDropContext();
+  const { notifyBarVisible } = useNotification();
 
   return (
     <div className="h-[72px]">

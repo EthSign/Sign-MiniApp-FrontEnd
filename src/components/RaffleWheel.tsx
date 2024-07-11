@@ -6,12 +6,13 @@ import { CurrentSeasonPeriodModal } from '@/providers/SeasonInfoProvider/Current
 import { raffle } from '@/services';
 import WebApp from '@twa-dev/sdk';
 import classNames from 'classnames';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { PrizeCover, PrizeCoverVariant } from './PrizeCover';
 
 export interface RaffleWheelProps {
   className?: string;
   onResult?: () => void;
-  onStopped?: () => void;
+  onStopped?: (prizeId: string) => void;
 }
 
 const BASE_DEGREE = 3600;
@@ -70,6 +71,8 @@ export const RaffleWheel = React.forwardRef<HTMLDivElement, RaffleWheelProps>((p
 
   const [degree, setDegree] = useState(0);
 
+  const currentPrizeId = useRef<string>();
+
   const canSpin = useMemo(
     () => !loading && !isSpining && !isRaffling && remainingTimes > 0,
     [isRaffling, isSpining, loading, remainingTimes]
@@ -89,6 +92,8 @@ export const RaffleWheel = React.forwardRef<HTMLDivElement, RaffleWheelProps>((p
       refresh();
       throw error;
     });
+
+    currentPrizeId.current = raffleResult.prizeId;
 
     eventBus.emit(Events.raffleResultReceived);
 
@@ -140,7 +145,7 @@ export const RaffleWheel = React.forwardRef<HTMLDivElement, RaffleWheelProps>((p
             }
           )}
           onTransitionEnd={() => {
-            onStopped?.();
+            onStopped?.(currentPrizeId.current!);
             setIsSpining(false);
             setDegree(degree - BASE_DEGREE);
           }}
@@ -161,9 +166,7 @@ export const RaffleWheel = React.forwardRef<HTMLDivElement, RaffleWheelProps>((p
                 {prize.type === 'point' ? (
                   <span className="[text-shadow:2px_2px_0px_black]">{prize.value}</span>
                 ) : (
-                  <div>
-                    <img className="h-[41px] translate-x-[10px] object-contain object-right" src={prize.image} alt="" />
-                  </div>
+                  <PrizeCover prizeId={prize.id} variant={PrizeCoverVariant.Wheel} />
                 )}
               </div>
             ))}

@@ -1,8 +1,10 @@
 import { addOnDateHandler } from '@/hooks/useClock';
 import { getPreviousSeasonInfo } from '@/services';
 import { SeasonInfo, SeasonInfoWithResult } from '@/types';
-import React, { PropsWithChildren, createContext, useContext, useEffect, useMemo, useState } from 'react';
+import { formatDateTime } from '@/utils';
+import React, { PropsWithChildren, createContext, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { useLotteryInfo } from '../LotteryInfoProvider';
+import { useNotification } from '../NotificationProvider';
 import { CurrentSeasonPeriodModal } from './CurrentSeasonPeriodModal';
 import { LastSeasonEndedModal } from './LastSeasonEndedModal';
 
@@ -31,9 +33,14 @@ const SeasonInfoContext = createContext<{
 export const SeasonInfoProvider: React.FC<PropsWithChildren> = (props) => {
   const { children } = props;
 
+  const { seasonList, refresh: refreshLotteryInfo } = useLotteryInfo();
+
+  const { addCountdownNotification } = useNotification();
+
+  const countdownNotificationShown = useRef(false);
+
   const [seasonEndedModalVisible, setSeasonEndedModalVisible] = useState(false);
   const [prizePoolModalVisible, setPrizePoolModalVisible] = useState(false);
-  const { seasonList, refresh: refreshLotteryInfo } = useLotteryInfo();
 
   const currentSeason = useMemo(() => {
     return seasonList?.find((season) => season.isCurrent === true);
@@ -54,19 +61,35 @@ export const SeasonInfoProvider: React.FC<PropsWithChildren> = (props) => {
         const { popTime, endTime, seasonKey } = currentSeason;
 
         const prizePoolModalShownFlag = 'prizePoolModalShown_' + seasonKey;
-        const shown = getStorageFlag(prizePoolModalShownFlag);
+        const modalShown = getStorageFlag(prizePoolModalShownFlag);
 
-        if (popTime && !shown) {
-          disposes.push(
-            addOnDateHandler({
-              date: currentSeason.popTime,
-              executeInstantly: true,
-              handler: () => {
-                setPrizePoolModalVisible(true);
-                setStorageFlag(prizePoolModalShownFlag);
-              }
-            })
-          );
+        if (popTime) {
+          if (!countdownNotificationShown.current) {
+            addCountdownNotification({
+              date: endTime,
+              title: (
+                <>
+                  Allocate rewards at <br />
+                  {formatDateTime(endTime, { year: false })}
+                </>
+              )
+            });
+
+            countdownNotificationShown.current = true;
+          }
+
+          if (!modalShown) {
+            disposes.push(
+              addOnDateHandler({
+                date: currentSeason.popTime,
+                executeInstantly: true,
+                handler: () => {
+                  setPrizePoolModalVisible(true);
+                  setStorageFlag(prizePoolModalShownFlag);
+                }
+              })
+            );
+          }
         }
 
         // 当前赛季结束之后刷新赛季信息

@@ -2,22 +2,14 @@ import { ENVS } from '@/constants/config.ts';
 import { useUserInfo } from '@/providers/UserInfoProvider.tsx';
 import { checkTask as checkTaskRequest, getQuizInfo, getTask } from '@/services';
 import { TaskRewardType, TaskTypeEnum } from '@/types';
-import { initTmaUtils } from '@/utils/common.ts';
 import { Badge } from '@ethsign/ui';
 import { useQuery } from '@tanstack/react-query';
+import WebApp from '@twa-dev/sdk';
 import { useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Task, TaskProps } from './components/Task';
 import { DrawerRef } from './components/TaskDrawer';
 import { TaskItem } from './components/TaskItem';
-
-let tgUtils: ReturnType<typeof initTmaUtils>;
-
-try {
-  tgUtils = initTmaUtils();
-} catch (error) {
-  console.error(error);
-}
 
 export default function Tasks() {
   const navigate = useNavigate();
@@ -42,8 +34,8 @@ export default function Tasks() {
     try {
       setIsJoiningSignGroup(true);
 
-      if (tgUtils) {
-        tgUtils.openTelegramLink(groupUrl);
+      if (WebApp) {
+        WebApp.openTelegramLink(groupUrl);
       } else {
         window.open(groupUrl);
       }
@@ -110,7 +102,7 @@ export default function Tasks() {
         rewardText: '200 pts',
         rewardType: TaskRewardType.POINTS,
         action: async () => {
-          window.open('https://x.com/BalletCrypto/');
+          WebApp.openLink('https://x.com/BalletCrypto/');
           await checkTask(TaskTypeEnum.VisitBalletCrypto);
         }
       },
@@ -120,10 +112,10 @@ export default function Tasks() {
         rewardText: '200 pts',
         rewardType: TaskRewardType.POINTS,
         action: async () => {
-          window.open('https://www.twitter.com/isafepal');
+          WebApp.openLink('https://www.twitter.com/isafepal');
           await checkTask(TaskTypeEnum.VisitSafepal);
         }
-      }
+      },
       // {
       //   completed: taskData?.joinSafePalTgGroup,
       //   title: 'Join Safepal X TG Group',
@@ -141,6 +133,16 @@ export default function Tasks() {
       //     text: 'Join now'
       //   }
       // }
+      {
+        completed: taskData?.visitTriangleIncubator,
+        title: "Discover Sign's Journey in Triangle",
+        rewardText: '500 pts',
+        rewardType: TaskRewardType.POINTS,
+        action: async () => {
+          WebApp.openLink('https://x.com/ethsign/status/1811102961302671669');
+          await checkTask(TaskTypeEnum.VisitTriangle);
+        }
+      }
     ];
 
     tasks.sort((a, b) => Number(a.completed) - Number(b.completed));

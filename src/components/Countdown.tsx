@@ -1,19 +1,33 @@
+import { useClock } from '@/hooks/useClock';
 import classNames from 'classnames';
-import { createRef, useEffect, useMemo, useRef, useState } from 'react';
+import { createRef, useMemo, useRef, useState } from 'react';
 import { Transition, TransitionGroup } from 'react-transition-group';
 
-export interface CountDownProps {
+export type CountdownUnit = 'DYS' | 'HRS' | 'MIN' | 'SEC';
+
+export interface CountdownProps {
   targetDate: Date;
   className?: string;
+  units?: CountdownUnit[];
   onFinish?: () => void;
 }
 
 function formatCountdownTime(milliseconds: number) {
-  const hours = Math.floor(milliseconds / (1000 * 60 * 60));
-  const minutes = Math.floor((milliseconds % (1000 * 60 * 60)) / (1000 * 60));
-  const seconds = Math.floor((milliseconds % (1000 * 60)) / 1000);
+  if (milliseconds <= 0) {
+    return { days: 0, hours: 0, minutes: 0, seconds: 0 };
+  }
 
-  return { hours, minutes, seconds };
+  const SEC = 1000;
+  const MIN = SEC * 60;
+  const HOUR = MIN * 60;
+  const DAY = HOUR * 24;
+
+  const days = Math.floor(milliseconds / DAY);
+  const hours = Math.floor((milliseconds % DAY) / HOUR);
+  const minutes = Math.floor((milliseconds % HOUR) / MIN);
+  const seconds = Math.ceil((milliseconds % MIN) / SEC);
+
+  return { days, hours, minutes, seconds };
 }
 
 function padZero(num: number, length: number = 2): string {
@@ -31,7 +45,7 @@ function padZero(num: number, length: number = 2): string {
 const splitDigits = (time: number) => (time < 10 ? ['0', time.toString()] : time.toString().split(''));
 
 // eslint-disable-next-line react-refresh/only-export-components
-export const useCountDown = (props: { targetDate: Date; onFinish?: () => void }) => {
+export const useCountdown = (props: { targetDate: Date; onFinish?: () => void }) => {
   const { targetDate, onFinish } = props;
 
   const [now, setNow] = useState(Date.now());
@@ -41,43 +55,27 @@ export const useCountDown = (props: { targetDate: Date; onFinish?: () => void })
   const remain = useMemo(() => {
     const ms = targetDate.getTime() - now;
 
-    if (ms <= 0) {
-      return { hours: 0, minutes: 0, seconds: 0 };
-    }
-
     return formatCountdownTime(ms);
   }, [now, targetDate]);
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setNow(Date.now());
-    }, 1000);
+  useClock((now) => {
+    setNow(now);
 
-    return () => {
-      if (timer) {
-        clearInterval(timer);
-      }
-    };
-  }, [onFinish, targetDate]);
+    const ms = targetDate.getTime() - now;
 
-  useEffect(() => {
-    const ms = targetDate.getTime() - Date.now();
-
-    if (ms <= 0) {
-      if (!finished.current) {
-        onFinish?.();
-        finished.current = true;
-      }
+    if (ms <= 0 && !finished.current) {
+      onFinish?.();
+      finished.current = true;
     }
-  }, [onFinish, targetDate, now]);
+  });
 
   return remain;
 };
 
-export const CountDown: React.FC<CountDownProps> = (props) => {
+export const Countdown: React.FC<CountdownProps> = (props) => {
   const { targetDate, className, onFinish } = props;
 
-  const { hours, minutes, seconds } = useCountDown({
+  const { hours, minutes, seconds } = useCountdown({
     targetDate,
     onFinish
   });
@@ -140,23 +138,26 @@ export const CountDown: React.FC<CountDownProps> = (props) => {
   );
 };
 
-/** 1 小时内的倒计时 */
-export const MiniCountDown: React.FC<CountDownProps> = (props) => {
-  const { targetDate, className, onFinish } = props;
+export const MiniCountdown: React.FC<CountdownProps> = (props) => {
+  const { targetDate, className, units = ['DYS', 'HRS', 'MIN', 'SEC'], onFinish } = props;
 
-  const timeRemains = useCountDown({
+  const timeRemains = useCountdown({
     targetDate,
     onFinish
   });
 
   const cells = useMemo(() => {
-    const { minutes, seconds } = timeRemains;
+    const { days, hours, minutes, seconds } = timeRemains;
 
-    return [
-      { label: 'MIN', value: padZero(minutes, 2) },
-      { label: 'SEC', value: padZero(seconds, 2) }
-    ];
-  }, [timeRemains]);
+    const unitMap: Record<CountdownUnit, { label: string; value: string }> = {
+      DYS: { label: 'DYS', value: padZero(days, 2) },
+      HRS: { label: 'HRS', value: padZero(hours, 2) },
+      MIN: { label: 'MIN', value: padZero(minutes, 2) },
+      SEC: { label: 'SEC', value: padZero(seconds, 2) }
+    };
+
+    return units.map((unit) => unitMap[unit]);
+  }, [timeRemains, units]);
 
   return (
     <div className={classNames('flex gap-2', className)}>

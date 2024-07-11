@@ -1,3 +1,11 @@
+export interface ITMAInitData {
+  user: string;
+  query_id: string;
+  hash: string;
+  auth_date: string;
+  start_param?: string; //code
+}
+
 export interface IUser {
   userId: string;
   username: string;
@@ -11,6 +19,7 @@ export interface LotteryInfo {
   prizes: {
     id: string;
     type: string;
+    name: string;
     value: number;
     image: string;
   }[];
@@ -96,6 +105,7 @@ export interface ITaskData {
   visitBalletCrypto: boolean;
   visitSafepal: boolean;
   joinSafePalTgGroup: boolean;
+  visitTriangleIncubator: boolean;
 }
 
 export enum TaskTypeEnum {
@@ -104,7 +114,8 @@ export enum TaskTypeEnum {
   OFFCHAINATTEST = 'offchain_attest',
   VisitBalletCrypto = 'visit_ballet_crypto',
   VisitSafepal = 'visit_safepal',
-  JoinSafePalTgGroup = 'join_safe_pal_tg_group'
+  JoinSafePalTgGroup = 'join_safe_pal_tg_group',
+  VisitTriangle = 'visit_triangle_incubator'
 }
 
 export interface QuizInfoData {
@@ -157,12 +168,12 @@ export enum MiniRewardStatus {
 
 export interface RewardInfo {
   id: string;
+  prizeId: string;
   status: MiniRewardStatus;
   amount: number;
   rewardAt: string;
   campaignType: CampaignType;
-  // 目前只有 token
-  type: 'token';
+  type: 'token' | 'physical';
   name: string;
   image: string;
 }
@@ -210,4 +221,14 @@ export type SeasonInfoWithResult = SeasonInfo & {
 export enum CampaignType {
   MysteryDrop = 'mystery_drop',
   Competition = 'competition'
+}
+
+export interface RewardAnnouncement {
+  status: string;
+  amount: number;
+  campaignType: CampaignType;
+  rewardAt: number;
+  username: string;
+  type: 'physical' | 'token';
+  name: string;
 }

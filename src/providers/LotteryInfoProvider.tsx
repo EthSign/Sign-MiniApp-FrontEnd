@@ -1,7 +1,7 @@
 import { Loading } from '@/components/Loading';
 import { getLotteryInfo } from '@/services';
 import { LotteryInfo, SeasonInfo } from '@/types';
-import React, { PropsWithChildren, createContext, useCallback, useContext, useState } from 'react';
+import React, { PropsWithChildren, createContext, useCallback, useContext, useMemo, useState } from 'react';
 import { useLocalStorage } from 'react-use';
 
 export interface LotteryInfoContextData {
@@ -35,6 +35,7 @@ export const LotteryInfoContext = createContext<
     refresh: (props?: { showLoading?: boolean }) => Promise<void>;
     checkNotShowBackToWheelTipModal: () => void;
     setBackToWheelButtonClicked: (value: boolean) => void;
+    getPrizeById: (id: string) => LotteryInfo['prizes'][number] | null;
   }
 >({
   loading: true,
@@ -50,7 +51,8 @@ export const LotteryInfoContext = createContext<
   seasonList: [],
   refresh: async () => {},
   checkNotShowBackToWheelTipModal: () => {},
-  setBackToWheelButtonClicked: () => {}
+  setBackToWheelButtonClicked: () => {},
+  getPrizeById: () => null
 });
 
 export const LotteryInfoProvider: React.FC<PropsWithChildren> = (props) => {
@@ -84,6 +86,15 @@ export const LotteryInfoProvider: React.FC<PropsWithChildren> = (props) => {
     });
   }, []);
 
+  const prizeMap = useMemo(() => {
+    const map: Record<string, LotteryInfo['prizes'][number]> = lotteryInfo.prizes.reduce((acc, cur) => {
+      acc[cur.id] = cur;
+      return acc;
+    }, {} as typeof map);
+
+    return map;
+  }, [lotteryInfo.prizes]);
+
   const refresh = useCallback(
     async (props: { showLoading?: boolean } = { showLoading: false }) => {
       const { showLoading } = props;
@@ -103,6 +114,8 @@ export const LotteryInfoProvider: React.FC<PropsWithChildren> = (props) => {
     setDoNotShowBackToWheelTipModal(true);
   }, [setDoNotShowBackToWheelTipModal]);
 
+  const getPrizeById = useCallback((prizeId: string) => prizeMap[prizeId], [prizeMap]);
+
   return (
     <LotteryInfoContext.Provider
       value={{
@@ -113,7 +126,8 @@ export const LotteryInfoProvider: React.FC<PropsWithChildren> = (props) => {
         },
         refresh,
         checkNotShowBackToWheelTipModal,
-        setBackToWheelButtonClicked
+        setBackToWheelButtonClicked,
+        getPrizeById
       }}
     >
       {children}

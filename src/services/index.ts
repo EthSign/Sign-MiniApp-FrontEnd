@@ -12,6 +12,7 @@ import {
   QuizInfoData,
   RaffleInfo,
   RaffleResult,
+  RewardAnnouncement,
   RewardResponse,
   SeasonInfoWithResult,
   TaskTypeEnum
@@ -148,4 +149,11 @@ export const getInvitationInfo = async () => {
 
 export const getPreviousSeasonInfo = async () => {
   return apiClient.get<SeasonInfoWithResult>('/mini/season/previous/summary');
+};
+
+export const getRewardsAnnouncement = async () => {
+  return apiClient.get<{
+    rows: RewardAnnouncement[];
+    total: number;
+  }>('/mini/rewards/announcement');
 };

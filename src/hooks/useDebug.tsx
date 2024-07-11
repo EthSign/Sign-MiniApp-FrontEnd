@@ -1,17 +1,25 @@
+import { useEffect, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { useEffect } from 'react';
-import eruda from 'eruda';
 import { useLocalStorage } from 'react-use';
 
-export const useDebug = () => {
+export const useErudaDebugger = () => {
   const [searchParams] = useSearchParams();
   const isDebug = searchParams.get('debug');
+
   const isLocalDebug = window.location.href.includes('localhost');
   const [debug] = useLocalStorage('debug', isDebug || isLocalDebug);
 
+  const erudaInitialized = useRef(false);
+
   useEffect(() => {
-    if (debug) {
+    const initEruda = async () => {
+      const eruda = await import('eruda').then((module) => module.default);
       eruda.init();
+    };
+
+    if (debug && !erudaInitialized.current) {
+      erudaInitialized.current = true;
+      initEruda();
     }
   }, [debug]);
 

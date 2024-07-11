@@ -1,5 +1,5 @@
 import { bindWallet } from '@/services';
-import { getCustomNaNoId } from '@/utils/common.ts';
+import { getCustomNanoId } from '@/utils/common.ts';
 import { useTonConnectUI, useTonWallet } from '@tonconnect/ui-react';
 import { useRef, useState } from 'react';
 import { WalletFactory } from '@/core/WalletFactory.tsx';
@@ -18,7 +18,7 @@ export const useWalletBind = (props: { onBindSuccess?: () => void }) => {
   const fullMessage = {
     statement: 'Welcome to Sign Mini APP',
     issuedAt: new Date().toISOString(),
-    nonce: getCustomNaNoId()
+    nonce: getCustomNanoId()
   };
 
   const originMsg = JSON.stringify(fullMessage, null, '  ');

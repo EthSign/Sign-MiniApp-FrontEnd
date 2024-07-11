@@ -25,8 +25,6 @@ export default function Quizzes() {
   const [isFinish, setIsFinish] = useState(false);
   const [result, setResult] = useState<string[]>([]);
 
-  console.log(data);
-
   const isRight = result.includes(answer);
 
   const handleSubmit = async () => {

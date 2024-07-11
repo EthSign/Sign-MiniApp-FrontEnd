@@ -23,12 +23,3 @@ export const getLevelInfo = (data?: LotteryInfo['currentRaffleResult']) => {
 
   return { progress, remainSteps, currentScore, nextScore, hasNextLevel, nextLevel, currentLevel, reachedMax };
 };
-
-export const isExpired = (date?: number) => {
-  if (!date) return false;
-
-  const now = new Date().getTime();
-  const expire = new Date(date).getTime();
-
-  return expire - now <= 0;
-};

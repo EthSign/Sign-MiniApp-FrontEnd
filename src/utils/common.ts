@@ -1,78 +1,40 @@
-import queryString from 'query-string';
-import { customAlphabet } from 'nanoid';
+import { ENVS } from '@/constants/config';
 import dayjs from 'dayjs';
-import { ENVS } from '@/constants/config.ts';
-import { initUtils } from '@tma.js/sdk';
-
-export const stringifyQueryString = (obj: Record<string, any>): string => {
-  return queryString.stringify(obj, { skipNull: true, skipEmptyString: true });
-};
+import { customAlphabet } from 'nanoid';
+import queryString from 'query-string';
 
 export const parseQuery = (params: string): Record<string, any> => {
   return queryString.parse(params);
 };
 
-// safeParseJSON
-export const safeParseJSON = (str: string): any => {
-  try {
-    return JSON.parse(str);
-  } catch (error) {
-    return null;
-  }
-};
-
-interface ITMAInitData {
-  user: string;
-  query_id: string;
-  hash: string;
-  auth_date: string;
-  start_param?: string; //code
-}
-
-export const getTMAInitData = (): ITMAInitData | null => {
-  const initDataRaw = window.Telegram.WebApp?.initData || ENVS.INITDATA; // user=...&query_id=...&...
-  console.log(window.Telegram.WebApp?.initData, 'initDataRaw');
-
-  if (!initDataRaw) return null;
-  const initData = parseQuery(initDataRaw) as ITMAInitData;
-  console.log(initData);
-  return initData;
-};
-
-export const isTelegramApp = (): boolean => {
-  return !!window.TelegramWebviewProxy;
-};
-
-export const initTmaUtils = () => {
-  const utils = initUtils();
-  return utils;
-};
-
-export const getCustomNaNoId = (): string => {
+export const getCustomNanoId = (): string => {
   const nanoid = customAlphabet('1234567890abcdefghijklmnopqrstuvwxyz', 10);
   return nanoid();
-};
-
-export const initTelegramApp = (): void => {
-  if (isTelegramApp()) {
-    const WebApp = window.Telegram.WebApp;
-    console.log('info', WebApp.version);
-    // WebApp.expand();
-    WebApp.enableClosingConfirmation();
-    WebApp.onEvent('viewportChanged', () => {
-      window.Telegram.WebApp.expand();
-    });
-
-    WebApp.expand();
-    // window.addEventListener('touchmove', (e) => e.preventDefault(), { passive: false });
-    // window.scrollTo(0, 100);
-    // WebApp.ready();
-  }
 };
 
 export const formatDate = (time: number) => {
   return dayjs(time).format('MMMM DD, YYYY');
 };
+
+export function formatDateTime(
+  dateOrTimeStamp: Date | number,
+  config: {
+    year: boolean;
+  } = { year: true }
+): string {
+  const date = new Date(dateOrTimeStamp);
+  const hours = date.getUTCHours().toString().padStart(2, '0');
+  const minutes = date.getUTCMinutes().toString().padStart(2, '0');
+
+  const month = date.toLocaleString('en-US', { month: 'long', timeZone: 'UTC' });
+  const day = date.getUTCDate();
+  const year = date.getUTCFullYear();
+
+  const timeZone = 'UTC+0';
+
+  // 返回格式化后的字符串
+  return `${hours}:${minutes}, ${month} ${ordinalSuffix(day)} ${config.year ? year + ' ' : ''}(${timeZone})`;
+}
 
 export function getUTCTimeByDate(date: Date) {
   const utcYear = date.getFullYear();
@@ -96,24 +58,6 @@ export function validateValues(dataSchema: any[], values: Record<string, any>) {
         message: `Missing field: ${field.name}`
       };
     }
-
-    // // 根据定义的类型进行校验
-    // switch (field.type) {
-    //   case 'string':
-    //     if (typeof values[field.name] !== 'string') {
-    //       return {
-    //         success: false,
-    //         message: `Invalid type for field ${field.name}, expected string`
-    //       };
-    //     }
-    //     break;
-    //     // 如果有其他类型，可以在这里添加更多的case
-    //   default:
-    //     return {
-    //       success: false,
-    //       message: `Unsupported field type: ${field.type}`
-    //     };
-    // }
   }
 
   // 如果所有字段都通过验证，返回成功
@@ -126,3 +70,63 @@ export function validateValues(dataSchema: any[], values: Record<string, any>) {
 export const sleep = (ms: number) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
+
+export const isExpired = (date?: number) => {
+  if (!date) return false;
+
+  const now = new Date().getTime();
+  const expire = new Date(date).getTime();
+
+  return expire - now <= 0;
+};
+
+/** 将数字转换为序数词 */
+export function ordinalSuffix(n: number): string {
+  // 处理特殊情况，比如 11, 12, 13 这些数字
+  if (n % 100 >= 11 && n % 100 <= 13) {
+    return n + 'th';
+  }
+
+  switch (n % 10) {
+    case 1:
+      return n + 'st';
+    case 2:
+      return n + 'nd';
+    case 3:
+      return n + 'rd';
+    default:
+      return n + 'th';
+  }
+}
+
+/** 将数字转换位常用的货币格式，如 10,000 */
+export function formatNumber(value: number): string {
+  return value.toLocaleString('en-US');
+}
+
+export const isDevelopmentEnv = () => ENVS.ENV === 'dev';
+
+export function debugLog(message?: string) {
+  if (!isDevelopmentEnv()) return;
+
+  let innerMessage = '[debug] ';
+
+  if (typeof message !== 'string') {
+    innerMessage += JSON.stringify(message);
+  } else {
+    innerMessage += message;
+  }
+
+  console.debug(innerMessage);
+}
+
+export function shuffle<T>(array: T[]): T[] {
+  const shuffledArray = array.slice();
+
+  for (let i = shuffledArray.length - 1; i > 0; i--) {
+    const randomIndex = Math.floor(Math.random() * (i + 1));
+    [shuffledArray[i], shuffledArray[randomIndex]] = [shuffledArray[randomIndex], shuffledArray[i]];
+  }
+
+  return shuffledArray;
+}

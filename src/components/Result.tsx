@@ -1,18 +1,19 @@
-import { CountDown } from '@/components/Countdown.tsx';
+import { Countdown } from '@/components/Countdown.tsx';
 import { ENVS } from '@/constants/config.ts';
 import { BackToWheelModal } from '@/pages/LuckyWheel/components/BackWheelModal';
 import { useConfetti } from '@/providers/ConfettiProvider';
 import { useLotteryInfo } from '@/providers/LotteryInfoProvider';
 import { useUserInfo } from '@/providers/UserInfoProvider.tsx';
 import { LotteryInfo } from '@/types';
+import { isExpired } from '@/utils/common';
+import { getLevelInfo } from '@/utils/lottery.ts';
+import { encodeTelegramStartParam } from '@/utils/telegram';
 import { ChevronLeft, Send01 } from '@ethsign/icons';
 import { Button, Progress } from '@ethsign/ui';
-import { initUtils } from '@tma.js/sdk';
+import WebApp from '@twa-dev/sdk';
 import classNames from 'classnames';
 import React, { forwardRef, useEffect, useMemo, useState } from 'react';
 import { LotteryRulesModal } from './RulesModal';
-import { getLevelInfo, isExpired } from '@/utils/lottery.ts';
-import { encodeTelegramStartParam } from '@/utils';
 
 export const Result = forwardRef<HTMLDivElement, { className: string }>((props, ref) => {
   const { className } = props;
@@ -78,7 +79,6 @@ export const ResultCard = React.forwardRef<
   }, [confetti, reachedMax]);
 
   const handleInvite = () => {
-    const utils = initUtils();
     const desc = ENVS.SHARE_DESC;
 
     const inviteData = {
@@ -88,9 +88,15 @@ export const ResultCard = React.forwardRef<
 
     const startParam = encodeTelegramStartParam(inviteData);
 
-    utils.openTelegramLink(
-      `https://t.me/share/url?url=${ENVS.TG_APP_LINK}?startapp=${startParam}&text=${encodeURIComponent(desc)}`
-    );
+    const inviteLink = `https://t.me/share/url?url=${ENVS.TG_APP_LINK}?startapp=${startParam}&text=${encodeURIComponent(
+      desc
+    )}`;
+
+    if (WebApp) {
+      WebApp.openTelegramLink(inviteLink);
+    } else {
+      window.open(inviteLink);
+    }
   };
 
   if (!data) return null;
@@ -132,7 +138,7 @@ export const ResultCard = React.forwardRef<
             </h1>
             {dueDate && (
               <div className="flex justify-center">
-                <CountDown
+                <Countdown
                   targetDate={dueDate}
                   onFinish={() => {
                     setTimesUp(true);
