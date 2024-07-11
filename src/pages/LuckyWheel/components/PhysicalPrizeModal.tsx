@@ -13,9 +13,9 @@ export interface PhysicalPrizeModalProps {
 export const PhysicalPrizeModal: React.FC<PhysicalPrizeModalProps> = (props) => {
   const { prizeId, open, onOpenChange } = props;
 
-  const { prizes } = useLotteryInfo();
+  const { getPrizeById } = useLotteryInfo();
 
-  const prize = useMemo(() => prizes.find((prize) => prize.id === prizeId), [prizeId, prizes]);
+  const prize = useMemo(() => getPrizeById(prizeId), [getPrizeById, prizeId]);
 
   if (!prize) return null;
 

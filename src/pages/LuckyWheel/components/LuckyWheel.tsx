@@ -10,8 +10,8 @@ import { PhysicalPrizeModal } from './PhysicalPrizeModal';
 export const LuckyWheel: React.FC = () => {
   const {
     hasSpinedToday,
-    prizes,
     flags: { backToWheelButtonClicked },
+    getPrizeById,
     refresh,
     setBackToWheelButtonClicked
   } = useLotteryInfo();
@@ -19,14 +19,19 @@ export const LuckyWheel: React.FC = () => {
   const resultRef = useRef<HTMLDivElement>(null);
   const wheelRef = useRef<HTMLDivElement>(null);
 
-  const showWheel = useMemo(() => {
-    if (backToWheelButtonClicked) return true;
-    return !hasSpinedToday;
-  }, [backToWheelButtonClicked, hasSpinedToday]);
-
   const [currentPrizeId, setCurrentPrizeId] = useState<string>();
 
   const [physicalPrizeModalVisible, setPhysicalPrizeModalVisible] = useState(false);
+
+  const showWheel = useMemo(() => {
+    if (currentPrizeId) {
+      const currentPrize = getPrizeById(currentPrizeId);
+      if (currentPrize?.type === 'physical') return true;
+    }
+    if (backToWheelButtonClicked) return true;
+    return !hasSpinedToday;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [backToWheelButtonClicked, hasSpinedToday, currentPrizeId]);
 
   return (
     <>
@@ -56,7 +61,7 @@ export const LuckyWheel: React.FC = () => {
                 onStopped={async (prizeId) => {
                   setCurrentPrizeId(prizeId);
 
-                  const prize = prizes.find((item) => item.id === prizeId);
+                  const prize = getPrizeById(prizeId);
                   if (prize?.type === 'physical') {
                     setPhysicalPrizeModalVisible(true);
                   }
