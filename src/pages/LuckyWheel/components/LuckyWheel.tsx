@@ -10,6 +10,7 @@ import { PhysicalPrizeModal } from './PhysicalPrizeModal';
 export const LuckyWheel: React.FC = () => {
   const {
     hasSpinedToday,
+    prizes,
     flags: { backToWheelButtonClicked },
     refresh,
     setBackToWheelButtonClicked
@@ -24,6 +25,8 @@ export const LuckyWheel: React.FC = () => {
   }, [backToWheelButtonClicked, hasSpinedToday]);
 
   const [currentPrizeId, setCurrentPrizeId] = useState<string>();
+
+  const [physicalPrizeModalVisible, setPhysicalPrizeModalVisible] = useState(false);
 
   return (
     <>
@@ -53,6 +56,11 @@ export const LuckyWheel: React.FC = () => {
                 onStopped={async (prizeId) => {
                   setCurrentPrizeId(prizeId);
 
+                  const prize = prizes.find((item) => item.id === prizeId);
+                  if (prize?.type === 'physical') {
+                    setPhysicalPrizeModalVisible(true);
+                  }
+
                   await refresh();
                   setBackToWheelButtonClicked(false);
                 }}
@@ -62,7 +70,11 @@ export const LuckyWheel: React.FC = () => {
         </div>
       </Card>
 
-      <PhysicalPrizeModal prizeId={currentPrizeId!} />
+      <PhysicalPrizeModal
+        open={physicalPrizeModalVisible}
+        onOpenChange={setPhysicalPrizeModalVisible}
+        prizeId={currentPrizeId!}
+      />
     </>
   );
 };

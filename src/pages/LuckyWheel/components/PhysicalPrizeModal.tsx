@@ -2,34 +2,27 @@ import { PrizeCover, PrizeCoverVariant } from '@/components/PrizeCover';
 import { useLotteryInfo } from '@/providers/LotteryInfoProvider';
 import { joinSignProtocolTGGroup } from '@/utils';
 import { Button, Modal } from '@ethsign/ui';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 
-export const PhysicalPrizeModal: React.FC<{
+export interface PhysicalPrizeModalProps {
+  open: boolean;
   prizeId: string;
-}> = (props) => {
-  const { prizeId } = props;
+  onOpenChange: (visible: boolean) => void;
+}
 
-  const [visible, setVisible] = useState(false);
+export const PhysicalPrizeModal: React.FC<PhysicalPrizeModalProps> = (props) => {
+  const { prizeId, open, onOpenChange } = props;
 
   const { prizes } = useLotteryInfo();
 
-  const prize = useMemo(() => {
-    return prizes.find((item) => item.id === prizeId);
-  }, [prizeId, prizes]);
-
-  useEffect(() => {
-    if (prize && !visible && prize.type === 'physical') {
-      setVisible(true);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [prize]);
+  const prize = useMemo(() => prizes.find((prize) => prize.id === prizeId), [prizeId, prizes]);
 
   if (!prize) return null;
 
   return (
     <Modal
-      open={visible}
-      onOpenChange={setVisible}
+      open={open}
+      onOpenChange={onOpenChange}
       className="w-[95vw] rounded-[24px] border border-white/20 bg-white p-4 pt-6 sm:w-[410px]"
       footer={false}
     >
