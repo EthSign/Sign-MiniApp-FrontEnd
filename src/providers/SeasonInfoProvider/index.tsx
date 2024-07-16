@@ -65,17 +65,24 @@ export const SeasonInfoProvider: React.FC<PropsWithChildren> = (props) => {
 
         if (popTime) {
           if (!countdownNotificationShown.current) {
-            addCountdownNotification({
-              date: endTime,
-              title: (
-                <>
-                  Allocate rewards at <br />
-                  {formatDateTime(endTime, { year: false })}
-                </>
-              )
-            });
-
-            countdownNotificationShown.current = true;
+            disposes.push(
+              addOnDateHandler({
+                date: popTime,
+                executeInstantly: true,
+                handler: () => {
+                  addCountdownNotification({
+                    date: endTime,
+                    title: (
+                      <>
+                        Allocate rewards at <br />
+                        {formatDateTime(endTime, { year: false })}
+                      </>
+                    )
+                  });
+                  countdownNotificationShown.current = true;
+                }
+              })
+            );
           }
 
           if (!modalShown) {
