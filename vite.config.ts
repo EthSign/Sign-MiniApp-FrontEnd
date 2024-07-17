@@ -33,8 +33,8 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        // target: 'http://43.198.156.58:3025/api',
-        target: 'http://localhost:3025/api',
+        target: 'http://3.89.178.45:3025/api',
+        // target: 'http://localhost:3025/api',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '')
       }
