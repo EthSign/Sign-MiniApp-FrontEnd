@@ -10,7 +10,7 @@ export const getCustomNaNoId = (): string => {
 
 export function prepareSignMessage({ chainId, address, statement }: { address: string; chainId: number | string; statement?: string }): ISignInMessage {
     return {
-        statement: statement || 'Welcome to EthSign',
+        statement: statement || 'Welcome to Signie',
         chainId: chainId,
         address: address,
         issuedAt: new Date().toISOString(),

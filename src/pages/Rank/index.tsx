@@ -1,15 +1,53 @@
-import React from 'react';
+import React, { useEffect, useState, useRef, LegacyRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { getRank } from '@/services';
+import { getRank, getSeasonList } from '@/services';
 import { Loading } from '@/components/Loading.tsx';
 import { useUserInfo } from '@/providers/UserInfoProvider.tsx';
+import { Loader2 } from 'lucide-react';
+import dayjs from 'dayjs';
+import useDocumentTap from '../../hooks/useDocumentTap';
 
 const RankPage: React.FC = () => {
   const { user } = useUserInfo();
-  const { data } = useQuery({
+  const { data, isFetching, refetch } = useQuery({
     queryKey: ['rank'],
-    queryFn: () => getRank()
+    queryFn: () => getRank(selectedSeason),
+    retry: false
   });
+
+  const { data: seasonList } = useQuery({
+    queryKey: ['season-list'],
+    queryFn: () => getSeasonList()
+  });
+
+  const [selectedSeason, setSelectedSeason] = useState<string>('');
+  const [showSeasonList, setShowSeasonList] = useState<boolean>(false);
+
+  const ref: LegacyRef<HTMLUListElement> = useRef<HTMLUListElement>(null);
+  useDocumentTap(ref, () => {
+    setShowSeasonList(false);
+  });
+
+  useEffect(() => {
+    const currentSeason = seasonList?.find((x) => x.isCurrent === true);
+    if (currentSeason) {
+      setSelectedSeason(currentSeason.seasonKey);
+    }
+  }, [seasonList]);
+
+  useEffect(() => {
+    refetch();
+  }, [selectedSeason]);
+
+  const handleClickSeasonList = (e: any) => {
+    e.stopPropagation();
+    setShowSeasonList(!showSeasonList);
+  };
+
+  const handleSeasonItemClick = (seasonKey: string) => {
+    setSelectedSeason(seasonKey);
+    setShowSeasonList(false);
+  };
 
   const userData = data?.rows?.map((it) => ({
     ...it,
@@ -30,6 +68,50 @@ const RankPage: React.FC = () => {
   const restUsers = userData.slice(3);
   return (
     <div className={'pt-0'}>
+      <div className={'text-left'}>
+        <div className="group mb-[16px]">
+          <div
+            className="bg-white rounded-[20px] w-[130px] h-[38px] text-center flex justify-center items-center"
+            onClick={handleClickSeasonList}
+          >
+            <span>{seasonList?.find((x) => x.seasonKey === selectedSeason)?.name}</span>
+            <img
+              className="w-[12px] h-[7px] ml-1"
+              src="https://sign-public-cdn.s3.us-east-1.amazonaws.com/Signie/selector-drop-icon_240718062129.webp"
+              alt=""
+            />
+          </div>
+          {showSeasonList && (
+            <ul ref={ref} className="absolute z-10 scale-100 group-hover:scale-100 bg-white rounded-[12px] w-[200px]">
+              {[...(seasonList || [])].reverse().map((season) => {
+                const isChecked = season.seasonKey === selectedSeason;
+                const endTimeDisplay = 'Ended ' + dayjs(season.endTime).format('MMMM DD');
+                const classList =
+                  'h-[38px] text-left leading-[38px] first:rounded-t-[12px] last:rounded-b-[12px] pl-[10px] text-[13px] font-medium ' +
+                  (isChecked ? 'bg-[#ECF2FF]' : 'bg-white');
+                return (
+                  <li
+                    key={season.seasonKey}
+                    className={classList}
+                    onClick={() => handleSeasonItemClick(season.seasonKey)}
+                  >
+                    <span>
+                      {season.name} {season.isCurrent ? ' Current' : endTimeDisplay}
+                    </span>
+                    {isChecked && (
+                      <img
+                        className="w-[12px] h-[7px] ml-1 float-right mr-[16px] mt-[15px]"
+                        src="https://sign-public-cdn.s3.us-east-1.amazonaws.com/Signie/check_240718061845.webp"
+                        alt=""
+                      />
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+        </div>
+      </div>
       {/*<div className={'px-2 text-right text-white'}>*/}
       {/*  <LotteryRulesModal />*/}
       {/*</div>*/}
@@ -118,6 +200,16 @@ const RankPage: React.FC = () => {
           );
         })}
       </div>
+
+      {isFetching && (
+        <div
+          className={
+            'fixed top-0 bottom-[79px] left-0 right-0 bg-white opacity-60 flex min-h-[200px] items-center justify-center'
+          }
+        >
+          <Loader2 className="animate-spin text-primary" size={32} />
+        </div>
+      )}
     </div>
   );
 };

@@ -42,20 +42,20 @@ export const LastSeasonEndedModal: React.FC<LastSeasonEndedModalProps> = (props)
       </div>
 
       <h1 className="text-center font-bold text-xl text-[#1C1C1C]">
-        EthSign Open Competition {titleCase(seasonInfo.name)} Ended
+        Signie Open Competition {titleCase(seasonInfo.name)} Ended
       </h1>
 
       <p className="text-center text-sm text-[#475467]">
         {seasonInfo.result?.hasGain ? (
           <>
             Your rank in {titleCase(seasonInfo.name)} is{' '}
-            <span className="text-[#0052FF]">{seasonInfo.result?.rank}</span>. Go to Rank tab to check your rewards.
+            <span className="text-[#0052FF]">{seasonInfo.result?.rank}</span>. Check your rewards now.
           </>
         ) : (
           <>
             Your rank in {titleCase(seasonInfo.name)} is{' '}
             <span className="text-[#0052FF]">{seasonInfo.result?.rank}</span>, We are looking forward to see you on the
-            leaderboard in {titleCase(seasonInfo.name)}!
+            leaderboard in the next season!
           </>
         )}
       </p>

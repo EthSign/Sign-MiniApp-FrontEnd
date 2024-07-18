@@ -163,7 +163,7 @@ export class TonWallet extends WalletBase {
 
   override async signin(statement?: string): Promise<ISignResult> {
     const fullMessage = {
-      statement: statement || 'Welcome to EthSign',
+      statement: statement || 'Welcome to Signie',
       issuedAt: new Date().toISOString(),
       nonce: getCustomNaNoId()
     };
