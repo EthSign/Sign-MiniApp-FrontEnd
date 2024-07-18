@@ -71,7 +71,7 @@ const RankPage: React.FC = () => {
         <div className="group mb-[16px]">
           <div
             className="bg-white rounded-[20px] w-[130px] h-[38px] text-center flex justify-center items-center"
-            onTouchStart={handleClickSeasonList}
+            onClick={handleClickSeasonList}
           >
             <span>{seasonList?.find((x) => x.seasonKey === selectedSeason)?.name}</span>
             <img
