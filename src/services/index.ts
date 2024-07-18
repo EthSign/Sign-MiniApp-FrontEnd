@@ -14,6 +14,7 @@ import {
   RaffleResult,
   RewardAnnouncement,
   RewardResponse,
+  SeasonInfo,
   SeasonInfoWithResult,
   TaskTypeEnum
 } from '@/types';
@@ -59,9 +60,14 @@ export const checkTask = async (data: { taskType: TaskTypeEnum; taskId?: string;
   }>('/mini/campaigns/lottery/task-check', data);
 };
 
+// GET mini/season
+export const getSeasonList = async () => {
+  return await apiClient.get<SeasonInfo[]>('/mini/season');
+};
+
 // GET /mini/rank
-export const getRank = async () => {
-  return await apiClient.get<IRankData>('/mini/rank');
+export const getRank = async (season: string) => {
+  return await apiClient.get<IRankData>(`/mini/rank/${season}`);
 };
 
 // GET /mini/quiz-info
