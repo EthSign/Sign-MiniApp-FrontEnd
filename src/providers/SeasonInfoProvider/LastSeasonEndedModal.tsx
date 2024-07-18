@@ -49,7 +49,7 @@ export const LastSeasonEndedModal: React.FC<LastSeasonEndedModalProps> = (props)
         {seasonInfo.result?.hasGain ? (
           <>
             Your rank in {titleCase(seasonInfo.name)} is{' '}
-            <span className="text-[#0052FF]">{seasonInfo.result?.rank}</span>. Go to Rank tab to check your rewards.
+            <span className="text-[#0052FF]">{seasonInfo.result?.rank}</span>. Check your rewards now.
           </>
         ) : (
           <>

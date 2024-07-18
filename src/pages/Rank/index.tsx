@@ -4,6 +4,7 @@ import { getRank, getSeasonList } from '@/services';
 import { Loading } from '@/components/Loading.tsx';
 import { useUserInfo } from '@/providers/UserInfoProvider.tsx';
 import { Loader2 } from 'lucide-react';
+import dayjs from 'dayjs';
 import useDocumentTap from '../../hooks/useDocumentTap';
 
 const RankPage: React.FC = () => {
@@ -84,8 +85,9 @@ const RankPage: React.FC = () => {
             <ul ref={ref} className="absolute z-10 scale-100 group-hover:scale-100 bg-white rounded-[12px] w-[200px]">
               {[...(seasonList || [])].reverse().map((season) => {
                 const isChecked = season.seasonKey === selectedSeason;
+                const endTimeDisplay = 'Ended ' + dayjs(season.endTime).format('MMMM DD');
                 const classList =
-                  'h-[38px] text-left leading-[38px] first:rounded-t-[12px] last:rounded-b-[12px] pl-[10px] ' +
+                  'h-[38px] text-left leading-[38px] first:rounded-t-[12px] last:rounded-b-[12px] pl-[10px] text-[13px] font-medium ' +
                   (isChecked ? 'bg-[#ECF2FF]' : 'bg-white');
                 return (
                   <li
@@ -94,7 +96,7 @@ const RankPage: React.FC = () => {
                     onClick={() => handleSeasonItemClick(season.seasonKey)}
                   >
                     <span>
-                      {season.name} {season.isCurrent ? ' Current' : ''}
+                      {season.name} {season.isCurrent ? ' Current' : endTimeDisplay}
                     </span>
                     {isChecked && (
                       <img
