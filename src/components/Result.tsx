@@ -160,7 +160,7 @@ export const ResultCard = React.forwardRef<
               <div className="flex items-center justify-center">
                 <img
                   className="w-[140px]"
-                  src="https://ethsign-public.s3.ap-east-1.amazonaws.com/telegram-miniapp/raffle-result-bg-1_240529030553.webp"
+                  src="https://sign-public-cdn.s3.us-east-1.amazonaws.com/Signie/raffle-result-bg-1_240723094054.webp"
                   alt=""
                 />
               </div>
@@ -220,7 +220,7 @@ export const ResultCard = React.forwardRef<
 
       <img
         className="pointer-events-none absolute inset-x-0 top-[59px] w-full object-contain"
-        src="https://ethsign-public.s3.ap-east-1.amazonaws.com/telegram-miniapp/raffle-result-bg-2_240529030553.webp"
+        src="https://sign-public-cdn.s3.us-east-1.amazonaws.com/Signie/raffle-result-bg-2_240723093931.webp"
         alt=""
       />
     </div>
