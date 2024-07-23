@@ -51,7 +51,7 @@ export const Header: React.FC = () => {
       >
         <img
           className="w-[78px] object-contain"
-          src="https://ethsign-public.s3.ap-east-1.amazonaws.com/telegram-miniapp/logo_240529091048.svg"
+          src="https://sign-public-cdn.s3.us-east-1.amazonaws.com/Signie/logo_240723092933.svg"
           alt=""
         />
 

@@ -144,7 +144,7 @@ export const Rewards: React.FC = () => {
             <div className="flex size-12 items-center justify-center rounded-full bg-[#ECF2FF]">
               <img
                 className="size-[30px]"
-                src="https://ethsign-public.s3.ap-east-1.amazonaws.com/telegram-miniapp/rewards-empty_240619025114.webp"
+                src="https://sign-public-cdn.s3.us-east-1.amazonaws.com/Signie/rewards-empty_240723094217.webp"
                 alt=""
               />
             </div>

@@ -17,7 +17,7 @@ export type PrizeCoversConfig = Record<string, Record<PrizeCoverVariant, React.R
 // eslint-disable-next-line react-refresh/only-export-components
 export const PRIZE_COVERS_CONFIG: PrizeCoversConfig = {
   // $NOT
-  c1: 'https://ethsign-public.s3.ap-east-1.amazonaws.com/telegram-miniapp/not-coin_240618073542.webp',
+  c1: 'https://sign-public-cdn.s3.us-east-1.amazonaws.com/Signie/not-coin_240723093313.webp',
   // SignPass
   p4: {
     [PrizeCoverVariant.Normal]:
