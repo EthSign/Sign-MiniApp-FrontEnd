@@ -63,6 +63,26 @@ export default function Tasks() {
   const oneTimeTasks = useMemo(() => {
     const tasks: TaskProps[] = [
       {
+        completed: taskData?.visitSign,
+        title: `Follow Sign's Twitter`,
+        rewardText: '500 pts',
+        rewardType: TaskRewardType.POINTS,
+        action: async () => {
+          WebApp.openLink('https://x.com/ethsign');
+          await checkTask(TaskTypeEnum.VisitSign);
+        }
+      },
+      {
+        completed: taskData?.visitSignCommunity,
+        title: `Join Sign Twitter community`,
+        rewardText: '500 pts',
+        rewardType: TaskRewardType.POINTS,
+        action: async () => {
+          WebApp.openLink('https://x.com/i/communities/1808883915714933045');
+          await checkTask(TaskTypeEnum.VisitSignCommunity);
+        }
+      },
+      {
         completed: taskData?.addressBound,
         title: 'Connect wallet',
         ref: bindingWalletDrawerRef,

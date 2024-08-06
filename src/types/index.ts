@@ -106,6 +106,8 @@ export interface ITaskData {
   visitSafepal: boolean;
   joinSafePalTgGroup: boolean;
   visitTriangleIncubator: boolean;
+  visitSign: boolean;
+  visitSignCommunity: boolean;
 }
 
 export enum TaskTypeEnum {
@@ -115,7 +117,9 @@ export enum TaskTypeEnum {
   VisitBalletCrypto = 'visit_ballet_crypto',
   VisitSafepal = 'visit_safepal',
   JoinSafePalTgGroup = 'join_safe_pal_tg_group',
-  VisitTriangle = 'visit_triangle_incubator'
+  VisitTriangle = 'visit_triangle_incubator',
+  VisitSign = 'visit_sign',
+  VisitSignCommunity = 'visit_sign_community'
 }
 
 export interface QuizInfoData {
