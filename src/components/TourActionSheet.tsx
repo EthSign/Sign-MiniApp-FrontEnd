@@ -71,28 +71,24 @@ const PageOne = () => {
   const { scrollNext } = useCarousel();
   const rewards = [
     {
-      img: 'https://ethsign-public.s3.ap-east-1.amazonaws.com/telegram-miniapp/Frame 2085654242_240603065354.webp',
+      img: 'https://sign-public-cdn.s3.us-east-1.amazonaws.com/Signie/tour-prize-phone_240808023039.webp',
       title: 'Phone'
     },
     {
-      img: 'https://ethsign-public.s3.ap-east-1.amazonaws.com/telegram-miniapp/Frame 2085654243_240603065354.webp',
+      img: 'https://sign-public-cdn.s3.us-east-1.amazonaws.com/Signie/tour-prize-ballet_240808023039.webp',
       title: 'Ballet Wallet'
     },
     {
-      img: 'https://ethsign-public.s3.ap-east-1.amazonaws.com/telegram-miniapp/Frame 2085654244_240603065354.webp',
+      img: 'https://sign-public-cdn.s3.us-east-1.amazonaws.com/Signie/tour-prize-signpass_240808023039.webp',
       title: 'SignPass'
     },
-    // {
-    //   img: 'https://ethsign-public.s3.ap-east-1.amazonaws.com/telegram-miniapp/Frame 2085654245_240528062557.webp',
-    //   title: '$TON Token'
-    // },
     {
-      img: 'https://ethsign-public.s3.ap-east-1.amazonaws.com/telegram-miniapp/Frame 2085654245_240603065354.webp',
+      img: 'https://sign-public-cdn.s3.us-east-1.amazonaws.com/Signie/tour-prize-not_240808023039.webp',
       title: '$NOT Token'
     }
   ];
   return (
-    <div className={'flex flex-col items-center justify-center h-[320px]'}>
+    <div className={'flex h-[320px] flex-col items-center justify-center'}>
       <DrawerHeader className={'p-0'}>
         <DrawerTitle className={'font-bold text-[25px]'}>What to win?</DrawerTitle>
         <DrawerDescription className={'space-y-2 text-left'}>
